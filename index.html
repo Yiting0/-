@@ -199,6 +199,52 @@ nav{
 .vc-a{border-left:2px solid var(--accent)}
 .vc-b{border-left:2px solid var(--accent2)}
 .vc-c{border-left:2px solid #7090a0}
+
+/* ══ MOBILE RESPONSIVE ══ */
+@media(max-width:640px){
+
+  /* nav: hide logo text short, shrink links */
+  nav{ padding:0 1rem; }
+  .nav-logo{ font-size:.7rem; letter-spacing:.08em; }
+  .nav-link{ padding:.4rem .55rem; font-size:.78rem; letter-spacing:0; }
+
+  /* pages: touch-friendly padding */
+  .pi{ padding:1.8rem 1.2rem 3rem; }
+  .hinner{ padding:2.5rem 1.2rem 2rem; }
+
+  /* home grid: single column */
+  .hgrid{ grid-template-columns:1fr; max-width:100%; }
+  .func-grid{ grid-template-columns:repeat(2,1fr); max-width:100%; }
+  .aoi-box{ max-width:100%; }
+  .hsub{ max-width:100%; }
+
+  /* imaging hero: single column */
+  .thero{ grid-template-columns:1fr; gap:1.2rem; }
+
+  /* shutter compare: single column on very small */
+  .mcmp{ grid-template-columns:1fr; }
+
+  /* pipeline: vertical stack */
+  .pipeline{ flex-direction:column; }
+  .ps{ min-width:unset; width:100%; }
+  .ps:not(:last-child)::after{ content:'▼'; right:unset; top:unset; bottom:-12px; left:50%; transform:translateX(-50%); }
+
+  /* light cards: single column */
+  .lcards{ grid-template-columns:1fr; }
+
+  /* report: single column */
+  .rl{ grid-template-columns:1fr; gap:1.5rem; }
+
+  /* arrows: bigger touch target */
+  .p-btn{ width:44px; height:44px; font-size:1.1rem; }
+  .p-nav{ bottom:1.2rem; right:1rem; }
+
+  /* expand cards: smaller padding */
+  .etrig{ padding:.85rem 1rem; }
+  .ecard.open .ebody{ padding:1rem 1.1rem; }
+  .etitle{ font-size:.92rem; }
+  .esum{ font-size:.8rem; }
+}
 </style>
 </head>
 <body>
@@ -495,6 +541,14 @@ document.addEventListener('keydown',e=>{
   if(e.key==='ArrowRight'||e.key==='ArrowDown')goTo(cur+1);
   if(e.key==='ArrowLeft'||e.key==='ArrowUp')goTo(cur-1);
 });
+
+// Touch swipe
+let tx=0;
+document.querySelector('.main').addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+document.querySelector('.main').addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>50){dx<0?goTo(cur+1):goTo(cur-1);}
+},{passive:true});
 </script>
 </body>
 </html>
