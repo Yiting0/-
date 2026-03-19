@@ -196,8 +196,49 @@ nav{
 .frv{font-size:.9rem;font-weight:600;color:var(--text)}
 
 /* shared vc border colors */
-.vc-a{border-left:2px solid var(--accent)}
-.vc-b{border-left:2px solid var(--accent2)}
+/* ── 照明按鈕 ── */
+.lb-btn.active{background:var(--accent)!important;color:#0d1117!important;border-color:var(--accent)!important}
+.lb-btn:not(.active){background:transparent!important;color:var(--dim)!important}
+
+/* ── 你知道嗎 ── */
+.dyk{background:linear-gradient(135deg,rgba(79,195,247,.1),rgba(0,229,204,.07));border:1px solid var(--accent);border-radius:8px;padding:1.1rem 1.4rem;margin:1.6rem 0;display:flex;gap:1rem;align-items:flex-start}
+.dyk-icon{font-size:1.5rem;flex-shrink:0;margin-top:.05rem}
+.dyk-label{font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.16em;color:var(--accent2);margin-bottom:.3rem}
+.dyk-text{font-size:.93rem;line-height:1.78;color:var(--text)}
+
+/* ── 設備圖片 ── */
+.img-card{border-radius:8px;overflow:hidden;border:1px solid var(--border);margin:1.6rem 0}
+.img-card img{width:100%;display:block;object-fit:cover;max-height:220px}
+.img-cap{padding:.7rem 1rem;font-size:.78rem;color:var(--dim);font-family:'Share Tech Mono',monospace;letter-spacing:.06em;background:var(--bg-light)}
+
+/* ── 互動式光圈示意 ── */
+.aperture-widget{background:var(--bg-light);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.6rem 0}
+.aw-title{font-size:.78rem;font-family:'Share Tech Mono',monospace;letter-spacing:.15em;color:var(--accent2);margin-bottom:1rem}
+.aw-display{display:flex;align-items:center;gap:2rem;flex-wrap:wrap}
+.aw-canvas-wrap{position:relative;width:140px;height:140px;flex-shrink:0}
+canvas#apCanvas{border-radius:50%}
+.aw-info{flex:1;min-width:180px}
+.aw-fnum{font-family:'Share Tech Mono',monospace;font-size:2rem;font-weight:700;color:var(--accent);line-height:1;margin-bottom:.4rem}
+.aw-desc{font-size:.9rem;line-height:1.7;color:var(--dim);margin-bottom:.8rem}
+.aw-slider{width:100%;accent-color:var(--accent)}
+.aw-labels{display:flex;justify-content:space-between;font-size:.72rem;color:var(--dim);font-family:'Share Tech Mono',monospace;margin-top:.25rem}
+.aw-tags{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.8rem}
+.aw-tag{font-size:.78rem;padding:.25rem .7rem;border-radius:4px;border:1px solid var(--border)}
+.aw-tag.good{color:#4ade80;border-color:rgba(74,222,128,.3);background:rgba(74,222,128,.07)}
+.aw-tag.warn{color:#fbbf24;border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.07)}
+
+/* ── 彩色成像技術對比 ── */
+.color-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;margin:1.2rem 0}
+@media(max-width:560px){.color-grid{grid-template-columns:1fr}}
+.cg-card{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:1rem 1.1rem}
+.cg-name{font-size:.88rem;font-weight:700;color:var(--accent);margin-bottom:.3rem}
+.cg-good{font-size:.82rem;color:#4ade80;margin-bottom:.2rem}
+.cg-bad{font-size:.82rem;color:#f87171}
+
+/* ── 黃金原則框 ── */
+.golden{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.3);border-radius:6px;padding:1rem 1.2rem;margin:1.2rem 0;font-size:.92rem;line-height:1.78;color:var(--text)}
+.golden strong{color:#fbbf24}
+
 .vc-c{border-left:2px solid #7090a0}
 
 /* ══ MOBILE RESPONSIVE ══ */
@@ -351,6 +392,73 @@ nav{
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🔌</span><div><div class="etitle">傳輸介面——速度快，還是距離遠？</div><div class="esum">GigE 可以拉很遠，USB3 速度快好安裝，CoaXPress 兩個都要就選這個</div></div></div><span class="earr">▼</span></div>
         <div class="ebody"><p>影像從相機傳到電腦就像水管送水——管子愈粗（頻寬愈大）每秒能傳的影像愈多，但管子拉得愈長阻力就愈大。</p><p><strong>GigE Vision</strong>：走一般網路線，最遠能拉 100 公尺，適合機台大、相機離電腦很遠的場合，但頻寬只有 1 Gbps，高速場合可能不夠用。</p><p><strong>USB3 Vision</strong>：就像電腦的 USB 插槽，佈線最簡單，速度也快（5 Gbps），缺點是距離只有 10 公尺，適合桌上型設備或實驗室快速建置。</p><p><strong>CoaXPress</strong>：高階選項，頻寬最高達 25 Gbps，距離也可以到 68 公尺，連接線本身還整合了電源，不用另外拉電線。速度快、距離遠都要就選這個，但成本最高。</p></div>
       </div>
+      <div class="ecard">
+        <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🎨</span><div><div class="etitle">彩色相機的四種感光技術</div><div class="esum">Bayer 最便宜但解析度打折，3CCD 最好但最貴，各有取捨</div></div></div><span class="earr">▼</span></div>
+        <div class="ebody">
+          <p>彩色相機不是把黑白影像染色——它的感光元件本身就設計成能分辨 RGB 三種顏色。但怎麼分辨，各家做法不同：</p>
+          <div class="color-grid">
+            <div class="cg-card"><div class="cg-name">🔲 Bayer Pattern</div><div class="cg-good">✓ 成本最低、最普遍</div><div class="cg-bad">✗ 解析度/銳利度下降（相鄰像素借色）</div></div>
+            <div class="cg-card"><div class="cg-name">🔷 3CCD / 3CMOS</div><div class="cg-good">✓ 成像品質最佳（稜鏡分光至三片元件）</div><div class="cg-bad">✗ 成本高、體積大、需精準對位</div></div>
+            <div class="cg-card"><div class="cg-name">⬛ Pixel Shift</div><div class="cg-good">✓ 解析度佳，可做大尺寸</div><div class="cg-bad">✗ 需移動元件，移動中物體會模糊</div></div>
+            <div class="cg-card"><div class="cg-name">🟣 Foveon</div><div class="cg-good">✓ 三層感光，解析度無損</div><div class="cg-bad">✗ 紅光感光差、夜拍效果不佳</div></div>
+          </div>
+          <p style="margin-top:.8rem">工業上最常用 <strong>Bayer Pattern</strong>，夠用且成本低。需要頂級色彩品質時才考慮 3CCD/3CMOS。注意：彩色相機不適合用來拍灰階影像轉換，靈敏度不如黑白相機。</p>
+        </div>
+      </div>
+      <div class="ecard">
+        <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">⚙️</span><div><div class="etitle">取像三大參數——光圈、曝光、增益</div><div class="esum">三個旋鈕控制影像亮度，但各有代價，順序很重要</div></div></div><span class="earr">▼</span></div>
+        <div class="ebody">
+          <div class="aperture-widget">
+            <div class="aw-title">// 互動示意：拖拉滑桿看光圈變化</div>
+            <div class="aw-display">
+              <div class="aw-canvas-wrap"><canvas id="apCanvas" width="140" height="140"></canvas></div>
+              <div class="aw-info">
+                <div class="aw-fnum" id="apFnum">F 5.6</div>
+                <div class="aw-desc" id="apDesc">工業建議範圍，畫質最穩定，景深適中。</div>
+                <input class="aw-slider" id="apSlider" type="range" min="1" max="8" step="1" value="4" oninput="updateAp(this.value)">
+                <div class="aw-labels"><span>F1.4（大）</span><span>F22（小）</span></div>
+                <div class="aw-tags" id="apTags"></div>
+              </div>
+            </div>
+          </div>
+          <p><strong>曝光時間（Exposure Time）</strong>：控制感測器感光的時間長短。時間愈長影像愈亮，但移動中的物體會模糊。工業用單位是 ms（毫秒）或 μs（微秒）。</p>
+          <p><strong>增益（Gain / ISO）</strong>：光圈和曝光都調好後，用來補充亮度的最後手段。Gain 愈大影像愈亮，但雜訊也愈多——優先調前兩個，增益越小越好。</p>
+          <div class="golden"><strong>🏆 黃金原則</strong>：寧可稍暗，絕不過曝。過曝的亮部細節永遠救不回來；偏暗的影像後製還有機會。拍攝順序：先調光圈 → 再調曝光 → 最後才動增益。</div>
+          <div class="dyk" style="margin-top:1rem">
+            <div class="dyk-icon">💡</div>
+            <div><div class="dyk-label">// 你知道嗎？</div><div class="dyk-text">SNR（訊號雜訊比）超過 <strong>39 dB</strong> 才算優質工業相機；動態範圍（DR）超過 <strong>58 dB</strong> 才能清晰呈現強烈明暗對比的場景。買相機前記得看這兩個數字！</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 真實設備圖：用 SVG placeholder 避免外部圖片失效 -->
+    <div class="img-card" style="margin-top:1.5rem">
+      <svg viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;background:#1d2535">
+        <!-- Camera body -->
+        <rect x="260" y="50" width="180" height="120" rx="8" fill="#263040" stroke="#4fc3f7" stroke-width="1.5"/>
+        <!-- Lens mount -->
+        <circle cx="350" cy="110" r="42" fill="#161c26" stroke="#4fc3f7" stroke-width="1.5"/>
+        <circle cx="350" cy="110" r="30" fill="#0d1117" stroke="rgba(79,195,247,.4)" stroke-width="1"/>
+        <circle cx="350" cy="110" r="12" fill="#263040"/>
+        <!-- LED indicator -->
+        <circle cx="295" cy="65" r="5" fill="#00e5cc" opacity=".8"/>
+        <!-- Connector back -->
+        <rect x="440" y="80" width="22" height="40" rx="3" fill="#1a2535" stroke="#4fc3f7" stroke-width="1"/>
+        <rect x="444" y="88" width="4" height="4" rx="1" fill="#4fc3f7"/>
+        <rect x="444" y="96" width="4" height="4" rx="1" fill="#4fc3f7"/>
+        <rect x="444" y="104" width="4" height="4" rx="1" fill="#4fc3f7"/>
+        <!-- Label -->
+        <text x="350" y="195" text-anchor="middle" fill="#b8cce0" font-family="Share Tech Mono,monospace" font-size="12">INDUSTRIAL CAMERA  //  C-MOUNT  •  GIGE VISION</text>
+        <!-- Screw corners -->
+        <circle cx="272" cy="62" r="4" fill="#2a3545" stroke="#4fc3f7" stroke-width=".8"/>
+        <circle cx="428" cy="62" r="4" fill="#2a3545" stroke="#4fc3f7" stroke-width=".8"/>
+        <circle cx="272" cy="158" r="4" fill="#2a3545" stroke="#4fc3f7" stroke-width=".8"/>
+        <circle cx="428" cy="158" r="4" fill="#2a3545" stroke="#4fc3f7" stroke-width=".8"/>
+        <!-- Sensor label -->
+        <text x="350" y="114" text-anchor="middle" fill="rgba(79,195,247,.5)" font-family="Share Tech Mono,monospace" font-size="9">SENSOR</text>
+      </svg>
+      <div class="img-cap">▲ 工業相機示意（C-Mount 接口、後方 GigE 傳輸介面與 I/O 連接器）</div>
     </div>
   </div>
 
@@ -382,6 +490,120 @@ nav{
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">📏</span><div><div class="etitle">焦距、工作距離、光圈、畸變</div><div class="esum">選鏡頭前必須確認的四個實際限制</div></div></div><span class="earr">▼</span></div>
         <div class="ebody"><p><strong>焦距 f</strong>：焦距愈長，在相同倍率下工作距離就愈遠——這反而是好事。機台裡如果有障礙物擋住相機，選長焦距鏡頭可以把相機「退到更遠的地方」，繞開障礙還能保持同樣的拍攝倍率。</p><p><strong>工作距離 WD</strong>：鏡頭前端到物件的距離。如果想讓鏡頭在更近的距離對焦，可以在相機和鏡頭之間夾入<em>近攝接寫環（Extension Tube）</em>，不換鏡頭就能實現近距離拍攝。</p><p><strong>光圈</strong>：光圈開大，進光量多、景深淺（只有一個平面清楚）；光圈縮小，景深加大（前後範圍都清楚），但影像變暗。檢測 3D 立體物件通常需要縮小光圈。</p><p><strong>畸變</strong>：便宜的鏡頭會讓直線看起來微微彎曲。多數外觀檢測不在意這個，但如果要量測尺寸，就必須選低畸變的鏡頭，否則量出來的數字會有誤差。</p></div>
       </div>
+      <div class="ecard">
+        <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🔬</span><div><div class="etitle">遠心鏡頭——量測用鏡頭的最高規格</div><div class="esum">沒有透視失真，景深內倍率完全一致，精密量測的首選</div></div></div><span class="earr">▼</span></div>
+        <div class="ebody">
+          <p>一般鏡頭有個無法避免的物理現象：近的東西看起來大、遠的東西看起來小。這在看照片時很正常，但在精密量測時就是致命缺陷——同一個零件放近一點和放遠一點，量出來的尺寸會不一樣。</p>
+          <p><strong>遠心鏡頭（Telecentric Lens）</strong>解決了這個問題。它的光路設計讓只有平行於光軸的光線才能進入，使得景深範圍內的所有物件，不管距離遠近，倍率都完全一致。</p>
+          <div class="mcmp">
+            <div class="mc"><div class="mct">一般鏡頭</div><div class="mcn">有透視效應</div><div class="mcb">物件靠近時看起來變大，離遠時變小。量測時必須確保工件放置高度完全一致，否則數字會跑掉。</div></div>
+            <div class="mc"><div class="mct">遠心鏡頭</div><div class="mcn">無透視失真</div><div class="mcb">景深內倍率一致，工件就算有輕微的高低誤差，量測結果也不受影響。邊緣成像清晰穩定。</div></div>
+          </div>
+          <p>適合場景：半導體元件、精密五金零件、電子元件的尺寸量測。缺點是體積大且價格昂貴，FOV 也受限於鏡頭尺寸無法做太大。</p>
+          <div class="dyk" style="margin-top:1rem">
+            <div class="dyk-icon">🤔</div>
+            <div><div class="dyk-label">// 你知道嗎？</div><div class="dyk-text">遠心鏡頭的「Telecentric」字面意思是「遠處的中心」——光線必須平行進入，就好像光源在無限遠處一樣。這讓它的成本是一般鏡頭的 5～20 倍，但在精密量測場合無可替代。</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="ecard">
+        <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">📡</span><div><div class="etitle">線掃描相機——高速連續物料的最佳解</div><div class="esum">一次只拍一條線，連續掃過去拼成完整影像，適合捲材和連續帶狀物件</div></div></div><span class="earr">▼</span></div>
+        <div class="ebody">
+          <p>一般面掃描相機（Area Camera）每次拍一張完整的矩形影像，適合靜態或低速物件。但如果要檢測連續移動的捲材——例如布料、薄膜、金屬板——面掃描相機就跟不上速度了。</p>
+          <p><strong>線掃描相機（Line Camera）</strong>的感光元件只有一行像素，每次拍攝只擷取一條線，然後隨著物件移動不斷累積，最終拼合成一張完整的長條影像。只要物件速度夠穩定，就能得到完整無縫的檢測影像。</p>
+          <div style="background:var(--bg);border-radius:6px;padding:1rem 1.1rem;border-left:2px solid var(--accent2);margin:.8rem 0">
+            <div style="font-size:.82rem;font-weight:700;color:var(--accent2);margin-bottom:.5rem">線掃描的三大優點</div>
+            <div style="font-size:.9rem;line-height:1.8;color:var(--dim)">
+              🔹 <strong>超高解析度</strong>：橫向像素數可達 8K 以上，細節遠超面掃描<br>
+              🔹 <strong>連續不間斷</strong>：物件多長就能拍多長，無需分段<br>
+              🔹 <strong>高速拍攝</strong>：線頻率可達數十 kHz，輕鬆跟上高速生產線
+            </div>
+          </div>
+          <p>適合場景：印刷品質、紡織布料、薄膜表面、面板和金屬板的外觀檢查。需要搭配穩定的物件移動速度，且光源設計要夠亮（因為曝光時間極短）。</p>
+        </div>
+      </div>
+      <!-- FOV 計算器 -->
+      <div class="ecard">
+        <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🧮</span><div><div class="etitle">FOV 計算器——輸入參數直接算出視野</div><div class="esum">Sensor 尺寸 ÷ 放大倍率 = FOV，試試看</div></div></div><span class="earr">▼</span></div>
+        <div class="ebody">
+          <div class="aperture-widget">
+            <div class="aw-title">// 互動計算：輸入你的參數</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1rem">
+              <div>
+                <div style="font-size:.78rem;color:var(--dim);margin-bottom:.3rem">Sensor 寬度 (mm)</div>
+                <input id="fovSW" type="number" value="8.4" step="0.1" min="1" max="50" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:.5rem .7rem;color:var(--text);font-size:.95rem" oninput="calcFOV()">
+              </div>
+              <div>
+                <div style="font-size:.78rem;color:var(--dim);margin-bottom:.3rem">Sensor 高度 (mm)</div>
+                <input id="fovSH" type="number" value="7.1" step="0.1" min="1" max="50" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:.5rem .7rem;color:var(--text);font-size:.95rem" oninput="calcFOV()">
+              </div>
+              <div>
+                <div style="font-size:.78rem;color:var(--dim);margin-bottom:.3rem">放大倍率 α (×)</div>
+                <input id="fovAlpha" type="number" value="0.5" step="0.05" min="0.05" max="5" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:.5rem .7rem;color:var(--text);font-size:.95rem" oninput="calcFOV()">
+              </div>
+              <div>
+                <div style="font-size:.78rem;color:var(--dim);margin-bottom:.3rem">Pixel Size (μm)</div>
+                <input id="fovPS" type="number" value="3.45" step="0.05" min="0.5" max="20" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:.5rem .7rem;color:var(--text);font-size:.95rem" oninput="calcFOV()">
+              </div>
+            </div>
+            <div style="background:var(--bg);border-radius:6px;padding:1rem 1.2rem;border:1px solid var(--accent)">
+              <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--accent2);letter-spacing:.14em;margin-bottom:.6rem">// 計算結果</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">
+                <div><div style="font-size:.78rem;color:var(--dim)">FOV 寬度</div><div class="aw-fnum" id="fovRW" style="font-size:1.4rem">16.8 mm</div></div>
+                <div><div style="font-size:.78rem;color:var(--dim)">FOV 高度</div><div class="aw-fnum" id="fovRH" style="font-size:1.4rem">14.2 mm</div></div>
+                <div><div style="font-size:.78rem;color:var(--dim)">像素解析度</div><div class="aw-fnum" id="fovRR" style="font-size:1.4rem;color:var(--accent2)">6.9 μm</div></div>
+                <div><div style="font-size:.78rem;color:var(--dim)">Sensor 對角線</div><div class="aw-fnum" id="fovRD" style="font-size:1.4rem;color:#a78bfa">11.0 mm</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 鏡頭示意 SVG -->
+    <div class="img-card" style="margin-top:1.5rem">
+      <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;background:#1d2535">
+        <!-- 一般鏡頭 -->
+        <text x="200" y="28" text-anchor="middle" fill="#b8cce0" font-family="Share Tech Mono,monospace" font-size="11">一般鏡頭（有透視效應）</text>
+        <ellipse cx="200" cy="100" rx="18" ry="55" fill="#263040" stroke="#4fc3f7" stroke-width="1.5"/>
+        <!-- 近物大 -->
+        <rect x="60" y="70" width="30" height="60" rx="3" fill="rgba(79,195,247,.2)" stroke="#4fc3f7" stroke-width="1.2"/>
+        <text x="75" y="148" text-anchor="middle" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="9">近</text>
+        <!-- 遠物小 -->
+        <rect x="100" y="82" width="18" height="36" rx="2" fill="rgba(79,195,247,.12)" stroke="rgba(79,195,247,.5)" stroke-width="1"/>
+        <text x="109" y="130" text-anchor="middle" fill="rgba(79,195,247,.6)" font-family="Share Tech Mono,monospace" font-size="9">遠</text>
+        <!-- 光線匯聚 -->
+        <line x1="90" y1="70" x2="200" y2="80" stroke="rgba(79,195,247,.4)" stroke-width=".8"/>
+        <line x1="90" y1="130" x2="200" y2="120" stroke="rgba(79,195,247,.4)" stroke-width=".8"/>
+        <!-- 感光元件 -->
+        <rect x="320" y="75" width="8" height="50" rx="2" fill="#4fc3f7" opacity=".7"/>
+        <text x="340" y="103" fill="#b8cce0" font-family="Share Tech Mono,monospace" font-size="9">Sensor</text>
+
+        <!-- 分隔線 -->
+        <line x1="420" y1="20" x2="420" y2="180" stroke="rgba(255,255,255,.08)" stroke-width="1" stroke-dasharray="4,4"/>
+
+        <!-- 遠心鏡頭 -->
+        <text x="610" y="28" text-anchor="middle" fill="#b8cce0" font-family="Share Tech Mono,monospace" font-size="11">遠心鏡頭（無透視失真）</text>
+        <ellipse cx="590" cy="100" rx="18" ry="55" fill="#263040" stroke="#00e5cc" stroke-width="1.5"/>
+        <rect x="540" y="40" width="12" height="120" rx="2" fill="rgba(79,195,247,.08)" stroke="rgba(79,195,247,.2)" stroke-width="1"/>
+        <!-- 近物 -->
+        <rect x="460" y="70" width="30" height="60" rx="3" fill="rgba(0,229,204,.2)" stroke="#00e5cc" stroke-width="1.2"/>
+        <text x="475" y="148" text-anchor="middle" fill="#00e5cc" font-family="Share Tech Mono,monospace" font-size="9">近</text>
+        <!-- 遠物（同大） -->
+        <rect x="500" y="70" width="30" height="60" rx="3" fill="rgba(0,229,204,.12)" stroke="rgba(0,229,204,.5)" stroke-width="1"/>
+        <text x="515" y="148" text-anchor="middle" fill="rgba(0,229,204,.7)" font-family="Share Tech Mono,monospace" font-size="9">遠</text>
+        <!-- 平行光線 -->
+        <line x1="475" y1="72" x2="590" y2="72" stroke="rgba(0,229,204,.5)" stroke-width=".9"/>
+        <line x1="475" y1="128" x2="590" y2="128" stroke="rgba(0,229,204,.5)" stroke-width=".9"/>
+        <line x1="515" y1="72" x2="590" y2="72" stroke="rgba(0,229,204,.3)" stroke-width=".9" stroke-dasharray="3,2"/>
+        <line x1="515" y1="128" x2="590" y2="128" stroke="rgba(0,229,204,.3)" stroke-width=".9" stroke-dasharray="3,2"/>
+        <!-- 感光元件 -->
+        <rect x="720" y="75" width="8" height="50" rx="2" fill="#00e5cc" opacity=".7"/>
+        <text x="740" y="103" fill="#b8cce0" font-family="Share Tech Mono,monospace" font-size="9">Sensor</text>
+        <!-- 等號標示 -->
+        <text x="611" y="175" text-anchor="middle" fill="#00e5cc" font-family="Share Tech Mono,monospace" font-size="10">近 = 遠（倍率一致）</text>
+      </svg>
+      <div class="img-cap">▲ 一般鏡頭 vs 遠心鏡頭：遠心鏡頭讓近處和遠處的物件在影像中保持相同大小</div>
     </div>
   </div>
 
@@ -400,12 +622,28 @@ nav{
         <div class="vwarn">💡 現代工業幾乎全用 LED——壽命長、亮度可精確控制，還能在快門瞬間閃出數倍亮度，凍結高速移動的物件。</div>
       </div>
     </div>
-    <p class="pdesc" style="margin-bottom:.9rem">打光的方向決定影像能呈現什麼資訊，三種核心方式各有適用場景：</p>
-    <div class="lcards">
-      <div class="lc"><div class="lci">☀️</div><div class="lcn">明視野</div><div class="lcd">正面打光，呈現反射率差異。適合表面顏色、印刷品質、電路板佈線。</div></div>
-      <div class="lc"><div class="lci">🌑</div><div class="lcn">暗視野</div><div class="lcd">低角度斜打，只收散射光。缺陷亮、背景黑，對比極強。刮痕、毛邊首選。</div></div>
-      <div class="lc"><div class="lci">🔦</div><div class="lcn">穿透光</div><div class="lcd">從背面打，物件形成剪影。適合輪廓量測、通孔檢測、透明物件。</div></div>
+    <p class="pdesc" style="margin-bottom:.9rem">打光的方向決定影像能呈現什麼資訊，點選下方模式看實際效果：</p>
+
+    <!-- 照明互動模擬 -->
+    <div class="aperture-widget" style="margin-bottom:1.8rem">
+      <div class="aw-title">// 互動示意：切換照明方式，看影像如何變化</div>
+      <div style="display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap">
+        <button class="lb-btn" data-mode="bright" onclick="setLight('bright')" style="padding:.5rem 1.1rem;border-radius:4px;border:1px solid var(--border);background:var(--accent);color:#0d1117;font-weight:700;font-size:.88rem;cursor:pointer">☀️ 明視野</button>
+        <button class="lb-btn" data-mode="dark" onclick="setLight('dark')" style="padding:.5rem 1.1rem;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--dim);font-weight:700;font-size:.88rem;cursor:pointer">🌑 暗視野</button>
+        <button class="lb-btn" data-mode="back" onclick="setLight('back')" style="padding:.5rem 1.1rem;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--dim);font-weight:700;font-size:.88rem;cursor:pointer">🔦 穿透光</button>
+      </div>
+      <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap">
+        <canvas id="lightCanvas" width="220" height="220" style="border-radius:8px;background:#0d1117;border:1px solid var(--border);flex-shrink:0"></canvas>
+        <div style="flex:1;min-width:180px">
+          <div id="ldDesc" style="font-size:.95rem;line-height:1.8;color:var(--dim);margin-bottom:.8rem"></div>
+          <div style="background:var(--bg);border-radius:5px;padding:.7rem 1rem;border-left:2px solid var(--accent2)">
+            <div style="font-size:.75rem;font-family:'Share Tech Mono',monospace;color:var(--accent2);letter-spacing:.1em;margin-bottom:.35rem">// 適合場景</div>
+            <div id="ldUse" style="font-size:.9rem;color:var(--text);line-height:1.7"></div>
+          </div>
+        </div>
+      </div>
     </div>
+
     <div class="elist">
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🔦</span><div><div class="etitle">LED 光源的形狀——不同形狀解決不同問題</div><div class="esum">環形光、條形光、背光板……形狀不同，打出來的效果完全不一樣</div></div></div><span class="earr">▼</span></div>
@@ -542,8 +780,161 @@ document.addEventListener('keydown',e=>{
   if(e.key==='ArrowLeft'||e.key==='ArrowUp')goTo(cur-1);
 });
 
-// Touch swipe
-let tx=0;
+// Aperture interactive widget
+const apSteps=[
+  {f:'F 1.4',desc:'光圈全開，進光量最多，景深極淺。工業上很少用——一點點對焦誤差就全模糊。',tags:['進光量最多','景深極淺'],warn:true},
+  {f:'F 2',desc:'光圈大，景深仍然很淺，適合極低光源環境，需要非常精準對焦。',tags:['進光量多','景深淺'],warn:true},
+  {f:'F 2.8',desc:'光圈稍小，景深略有改善，但仍偏淺。低光環境可選。',tags:['進光尚可','景深偏淺'],warn:false},
+  {f:'F 4',desc:'工業建議範圍的起點，畫質開始穩定，景深適中。',tags:['✓ 工業建議','畫質穩定'],warn:false},
+  {f:'F 5.6',desc:'工業最常用的設定，解析度與景深的最佳平衡點，畫質最穩定。',tags:['✓ 最佳平衡','工業首選'],warn:false},
+  {f:'F 8',desc:'工業建議範圍上限，景深很大，適合 3D 物件前後都要清楚的場合。',tags:['✓ 工業建議','景深充足'],warn:false},
+  {f:'F 11',desc:'光圈偏小，進光量減少，需拉長曝光時間補光。景深很大。',tags:['景深大','需補光'],warn:false},
+  {f:'F 22',desc:'光圈全縮，景深最大但繞射效應讓影像反而變模糊。工業上幾乎不用。',tags:['景深最大','⚠ 繞射模糊'],warn:true}
+];
+function drawAperture(idx){
+  const c=document.getElementById('apCanvas');if(!c)return;
+  const ctx=c.getContext('2d'),w=140,h=140,cx=w/2,cy=h/2;
+  const maxR=60,step=apSteps[idx];
+  // 光圈開口大小：idx 0=最大, 7=最小
+  const openR=maxR*(1-idx/8);
+  ctx.clearRect(0,0,w,h);
+  // 外圈
+  ctx.beginPath();ctx.arc(cx,cy,maxR,0,Math.PI*2);
+  ctx.fillStyle='#263040';ctx.fill();
+  ctx.strokeStyle='rgba(79,195,247,.3)';ctx.lineWidth=1.5;ctx.stroke();
+  // 光圈葉片（遮光區）用扇形填充表示
+  const blades=8;
+  for(let i=0;i<blades;i++){
+    const a=i/blades*Math.PI*2;
+    const a2=(i+0.5)/blades*Math.PI*2;
+    ctx.beginPath();ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,maxR,a,a2);ctx.closePath();
+    const alpha=0.15+0.65*(idx/7);
+    ctx.fillStyle=`rgba(22,28,38,${alpha})`;ctx.fill();
+  }
+  // 開口
+  ctx.beginPath();ctx.arc(cx,cy,openR,0,Math.PI*2);
+  const grad=ctx.createRadialGradient(cx,cy,0,cx,cy,openR);
+  grad.addColorStop(0,'rgba(79,195,247,0.35)');
+  grad.addColorStop(1,'rgba(79,195,247,0.05)');
+  ctx.fillStyle=grad;ctx.fill();
+  ctx.strokeStyle=step.warn?'rgba(251,191,36,.6)':'rgba(79,195,247,.7)';
+  ctx.lineWidth=1.5;ctx.stroke();
+  // F 數字在圓心
+  ctx.fillStyle='rgba(240,244,252,0.9)';
+  ctx.font='bold 13px Share Tech Mono,monospace';
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(step.f,cx,cy);
+}
+function updateAp(v){
+  const idx=parseInt(v)-1;
+  const step=apSteps[idx];
+  document.getElementById('apFnum').textContent=step.f;
+  document.getElementById('apDesc').textContent=step.desc;
+  const tagsEl=document.getElementById('apTags');
+  tagsEl.innerHTML=step.tags.map(t=>`<span class="aw-tag ${t.startsWith('✓')||t==='畫質穩定'||t==='工業首選'||t==='最佳平衡'||t==='景深充足'?'good':'warn'}">${t}</span>`).join('');
+  document.getElementById('apFnum').style.color=step.warn?'#fbbf24':'var(--accent)';
+  drawAperture(idx);
+}
+// init
+setTimeout(()=>{updateAp(4);},300);
+
+// FOV Calculator
+function calcFOV(){
+  const sw=parseFloat(document.getElementById('fovSW')?.value)||8.4;
+  const sh=parseFloat(document.getElementById('fovSH')?.value)||7.1;
+  const a=parseFloat(document.getElementById('fovAlpha')?.value)||0.5;
+  const ps=parseFloat(document.getElementById('fovPS')?.value)||3.45;
+  if(a<=0)return;
+  document.getElementById('fovRW').textContent=(sw/a).toFixed(1)+' mm';
+  document.getElementById('fovRH').textContent=(sh/a).toFixed(1)+' mm';
+  document.getElementById('fovRR').textContent=(ps/a).toFixed(2)+' μm';
+  document.getElementById('fovRD').textContent=Math.sqrt(sw*sw+sh*sh).toFixed(1)+' mm';
+}
+
+// Lighting simulator
+const lightModes={
+  bright:{name:'明視野',color:'rgba(255,255,200,0.9)',angle:0,desc:'正面均勻打光，整個表面亮起來，反射率差異形成對比。適合表面顏色、印刷、電路板檢測。',usecase:'✓ 印刷品質  ✓ 顏色檢測  ✓ PCB 外觀'},
+  dark:{name:'暗視野',color:'rgba(255,160,80,0.8)',angle:75,desc:'低角度斜打，只有邊緣和凹凸產生散射光，背景保持黑暗。缺陷對比極強，刮痕清晰可見。',usecase:'✓ 刮痕  ✓ 毛邊  ✓ 表面凹凸'},
+  back:{name:'穿透光',color:'rgba(200,230,255,0.9)',angle:180,desc:'從物件背後打光，物件形成清晰黑色剪影。輪廓邊緣銳利，適合量測外形尺寸。',usecase:'✓ 輪廓量測  ✓ 通孔檢測  ✓ 透明材質'}
+};
+let curLight='bright';
+function setLight(mode){
+  curLight=mode;
+  document.querySelectorAll('.lb-btn').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+  drawLight(mode);
+  const m=lightModes[mode];
+  document.getElementById('ldDesc').textContent=m.desc;
+  document.getElementById('ldUse').textContent=m.usecase;
+}
+function drawLight(mode){
+  const cv=document.getElementById('lightCanvas');if(!cv)return;
+  const ctx=cv.getContext('2d'),w=cv.width,h=cv.height;
+  const m=lightModes[mode];
+  ctx.clearRect(0,0,w,h);
+  // background
+  ctx.fillStyle=mode==='back'?'rgba(180,220,255,0.15)':'#0d1117';
+  ctx.fillRect(0,0,w,h);
+  // object (circle with scratch)
+  const ox=w/2,oy=h/2,or=48;
+  ctx.beginPath();ctx.arc(ox,oy,or,0,Math.PI*2);
+  if(mode==='back'){
+    ctx.fillStyle='#0d1117';
+  } else if(mode==='bright'){
+    ctx.fillStyle='#3a4a5a';
+  } else {
+    ctx.fillStyle='#1a2535';
+  }
+  ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=1;ctx.stroke();
+  // scratch/defect
+  ctx.beginPath();ctx.moveTo(ox-20,oy-15);ctx.lineTo(ox+18,oy+12);
+  if(mode==='dark'){
+    ctx.strokeStyle='rgba(255,200,100,0.95)';ctx.lineWidth=2.5;
+  } else if(mode==='bright'){
+    ctx.strokeStyle='rgba(180,180,180,0.5)';ctx.lineWidth=1.2;
+  } else {
+    ctx.strokeStyle='rgba(0,0,0,0)';ctx.lineWidth=0;
+  }
+  ctx.stroke();
+  // light source indicator
+  const lightR=95,la=(m.angle-90)*Math.PI/180;
+  const lx=ox+lightR*Math.cos(la),ly=oy+lightR*Math.sin(la);
+  if(mode!=='back'){
+    // rays
+    for(let i=-2;i<=2;i++){
+      const ra=la+i*0.12;
+      ctx.beginPath();
+      ctx.moveTo(lx,ly);
+      ctx.lineTo(ox+Math.cos(ra)*or*0.9,oy+Math.sin(ra)*or*0.9);
+      ctx.strokeStyle=`rgba(255,255,150,${0.15-Math.abs(i)*0.04})`;
+      ctx.lineWidth=1;ctx.stroke();
+    }
+    // light source circle
+    ctx.beginPath();ctx.arc(lx,ly,10,0,Math.PI*2);
+    const lg=ctx.createRadialGradient(lx,ly,0,lx,ly,10);
+    lg.addColorStop(0,'rgba(255,255,200,0.9)');lg.addColorStop(1,'rgba(255,200,50,0.2)');
+    ctx.fillStyle=lg;ctx.fill();
+  } else {
+    // backlight panel
+    ctx.beginPath();ctx.arc(ox,oy+100,40,0,Math.PI*2);
+    const bg=ctx.createRadialGradient(ox,oy+100,0,ox,oy+100,40);
+    bg.addColorStop(0,'rgba(200,230,255,0.8)');bg.addColorStop(1,'rgba(150,200,255,0.1)');
+    ctx.fillStyle=bg;ctx.fill();
+    // upward rays
+    for(let i=-2;i<=2;i++){
+      ctx.beginPath();ctx.moveTo(ox+i*12,oy+60);ctx.lineTo(ox+i*8,oy+or+5);
+      ctx.strokeStyle='rgba(200,230,255,0.25)';ctx.lineWidth=1;ctx.stroke();
+    }
+  }
+  // camera indicator (top)
+  ctx.beginPath();ctx.arc(ox,oy-110,8,0,Math.PI*2);
+  ctx.fillStyle='rgba(79,195,247,0.7)';ctx.fill();
+  ctx.fillStyle='rgba(240,244,252,0.8)';
+  ctx.font='9px Share Tech Mono,monospace';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('CAM',ox,oy-95);
+}
+setTimeout(()=>{setLight('bright');},400);
 document.querySelector('.main').addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
 document.querySelector('.main').addEventListener('touchend',e=>{
   const dx=e.changedTouches[0].clientX-tx;
