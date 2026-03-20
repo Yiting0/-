@@ -136,7 +136,7 @@ nav{
 .ebody{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .25s;padding:0 1.3rem;font-size:.96rem;line-height:1.86;color:var(--dim);background:var(--bg-mid)}
 .ebody p{margin-bottom:.82rem}
 .ebody p:last-child{margin-bottom:0}
-.ecard.open .ebody{max-height:900px;padding:1.2rem 1.4rem}
+.ecard.open .ebody{max-height:3000px;padding:1.2rem 1.4rem}
 .ebody strong{color:var(--text)}
 .ebody em{color:var(--accent2);font-style:normal}
 .mcmp{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.75rem}
@@ -265,6 +265,9 @@ canvas#apCanvas{border-radius:50%}
   /* shutter compare: single column on very small */
   .mcmp{ grid-template-columns:1fr; }
 
+  /* FOV diagrams: single column on mobile */
+  .ebody [style*="grid-template-columns:1fr 1fr"]{ grid-template-columns:1fr !important; }
+
   /* pipeline: vertical stack */
   .pipeline{ flex-direction:column; }
   .ps{ min-width:unset; width:100%; }
@@ -382,15 +385,90 @@ canvas#apCanvas{border-radius:50%}
     <div class="elist">
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">📐</span><div><div class="etitle">解析度與 Pixel Size——精細度的兩個面向</div><div class="esum">像素愈多看得愈細，但像素愈大反而感光更好——要看場景決定</div></div></div><span class="earr">▼</span></div>
-        <div class="ebody"><p>解析度就是影像的「格子數」，格子愈多、細節愈豐富。但格子多不代表每格就一定看得清楚——每個格子（像素）的實體大小（Pixel Size）決定它能收集多少光。像素愈大，低光環境下雜訊愈低、影像愈乾淨；像素愈小，同樣面積能塞進更多格子，解析度更高，但在光線不足時影像容易出現雜訊。</p><p>選型時先確認最小可偵測的缺陷大小，確保那個缺陷至少能佔到影像上的 5 個像素以上，不然演算法根本「看不見」它。</p></div>
+        <div class="ebody">
+          <p>解析度就是影像的「格子數」，格子愈多、細節愈豐富。但格子多不代表每格就一定看得清楚——每個格子（像素）的實體大小（Pixel Size）決定它能收集多少光。像素愈大，低光環境下雜訊愈低、影像愈乾淨；像素愈小，同樣面積能塞進更多格子，解析度更高，但在光線不足時影像容易出現雜訊。</p>
+          <p>選型時先確認最小可偵測的缺陷大小，確保那個缺陷至少能佔到影像上的 5 個像素以上，不然演算法根本「看不見」它。</p>
+          <div class="dyk" style="margin-top:1rem">
+            <div class="dyk-icon">💡</div>
+            <div><div class="dyk-label">// 你知道嗎？</div><div class="dyk-text">評估相機品質時要看兩個數字：<strong>SNR（訊號雜訊比）</strong>超過 39 dB 才算優質；<strong>DR（動態範圍）</strong>超過 58 dB 才能清晰呈現強烈明暗對比的場景。買之前記得確認規格表！</div></div>
+          </div>
+        </div>
       </div>
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">⚡</span><div><div class="etitle">Rolling Shutter vs Global Shutter——物件在動就一定要選對</div><div class="esum">拍移動中的物件，選錯快門類型，邊緣會歪掉</div></div></div><span class="earr">▼</span></div>
-        <div class="ebody"><p>想像你用掃描機掃一張紙——掃描頭從上往下一行一行掃。如果掃到一半紙張突然移動，掃出來的影像就會錯位變形。Rolling Shutter 的原理和這個一樣，感光元件逐列曝光，物件只要在移動，邊緣就會歪斜——這在生產線上是很嚴重的問題。</p><div class="mcmp"><div class="mc"><div class="mct">ROLLING SHUTTER</div><div class="mcn">逐列曝光</div><div class="mcb">成本低。靜止或慢速物件適用。物件移動時邊緣出現果凍變形，本來的直線會變成斜的。</div></div><div class="mc"><div class="mct">GLOBAL SHUTTER</div><div class="mcn">全幅同步曝光</div><div class="mcb">所有像素在同一瞬間同時曝光，物件怎麼動都不會變形。成本較高，是高速生產線的必要選擇。</div></div></div></div>
+        <div class="ebody"><p>想像你用掃描機掃一張紙——掃描頭從上往下一行一行掃。如果掃到一半紙張突然移動，掃出來的影像就會錯位變形。Rolling Shutter 的原理和這個一樣，感光元件逐列曝光，物件只要在移動，邊緣就會歪斜——這在生產線上是很嚴重的問題。</p>
+
+          <!-- 快門示意 SVG -->
+          <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;margin:.9rem 0;background:#161c26;border-radius:6px;border:1px solid rgba(79,195,247,.15)">
+            <!-- Rolling Shutter 區 -->
+            <text x="175" y="20" text-anchor="middle" fill="#f87171" font-family="Share Tech Mono,monospace" font-size="10" letter-spacing="1">ROLLING SHUTTER</text>
+            <!-- 感光元件格子（逐列掃描，顏色由上到下漸變） -->
+            <rect x="30" y="30" width="120" height="14" rx="1" fill="rgba(79,195,247,.55)"/>
+            <rect x="30" y="46" width="120" height="14" rx="1" fill="rgba(79,195,247,.48)"/>
+            <rect x="30" y="62" width="120" height="14" rx="1" fill="rgba(79,195,247,.38)"/>
+            <rect x="30" y="78" width="120" height="14" rx="1" fill="rgba(79,195,247,.28)"/>
+            <rect x="30" y="94" width="120" height="14" rx="1" fill="rgba(79,195,247,.18)"/>
+            <rect x="30" y="110" width="120" height="14" rx="1" fill="rgba(79,195,247,.10)"/>
+            <!-- 掃描線 -->
+            <rect x="28" y="94" width="124" height="2" rx="1" fill="#4fc3f7" opacity=".9"/>
+            <!-- 小箭頭示意掃描方向 -->
+            <line x1="160" y1="30" x2="160" y2="120" stroke="#4fc3f7" stroke-width="1" stroke-dasharray="3,2" opacity=".5"/>
+            <polygon points="160,125 156,115 164,115" fill="#4fc3f7" opacity=".7"/>
+            <text x="164" y="80" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="8" opacity=".7">逐列</text>
+
+            <!-- 物件移動示意（圓形，Rolling 下變形） -->
+            <text x="85" y="148" text-anchor="middle" fill="#b8cce0" font-family="Noto Sans TC,sans-serif" font-size="11">拍攝結果</text>
+            <!-- 變形的橢圓（skewX 模擬果凍效應） -->
+            <g transform="translate(85,172) skewX(-14)">
+              <ellipse cx="0" cy="0" rx="34" ry="16" fill="none" stroke="#f87171" stroke-width="1.5"/>
+              <text x="0" y="4" text-anchor="middle" fill="#f87171" font-family="Share Tech Mono,monospace" font-size="9">變形 ✗</text>
+            </g>
+
+            <!-- 分隔線 -->
+            <line x1="350" y1="10" x2="350" y2="190" stroke="rgba(255,255,255,.08)" stroke-width="1" stroke-dasharray="4,3"/>
+
+            <!-- Global Shutter 區 -->
+            <text x="525" y="20" text-anchor="middle" fill="#4ade80" font-family="Share Tech Mono,monospace" font-size="10" letter-spacing="1">GLOBAL SHUTTER</text>
+            <!-- 感光元件格子（全部同時曝光，同色） -->
+            <rect x="380" y="30" width="120" height="14" rx="1" fill="rgba(0,229,204,.5)"/>
+            <rect x="380" y="46" width="120" height="14" rx="1" fill="rgba(0,229,204,.5)"/>
+            <rect x="380" y="62" width="120" height="14" rx="1" fill="rgba(0,229,204,.5)"/>
+            <rect x="380" y="78" width="120" height="14" rx="1" fill="rgba(0,229,204,.5)"/>
+            <rect x="380" y="94" width="120" height="14" rx="1" fill="rgba(0,229,204,.5)"/>
+            <rect x="380" y="110" width="120" height="14" rx="1" fill="rgba(0,229,204,.5)"/>
+            <!-- 同時曝光標示 -->
+            <text x="530" y="75" fill="#00e5cc" font-family="Share Tech Mono,monospace" font-size="8" opacity=".8">同時</text>
+            <line x1="519" y1="30" x2="519" y2="124" stroke="#00e5cc" stroke-width="1" opacity=".4"/>
+            <line x1="523" y1="30" x2="523" y2="124" stroke="#00e5cc" stroke-width="1" opacity=".3"/>
+            <line x1="527" y1="30" x2="527" y2="124" stroke="#00e5cc" stroke-width="1" opacity=".2"/>
+
+            <!-- 物件移動示意（圓形，Global 下正常） -->
+            <text x="455" y="148" text-anchor="middle" fill="#b8cce0" font-family="Noto Sans TC,sans-serif" font-size="11">拍攝結果</text>
+            <circle cx="455" cy="172" r="18" fill="none" stroke="#4ade80" stroke-width="1.5"/>
+            <text x="455" y="176" text-anchor="middle" fill="#4ade80" font-family="Share Tech Mono,monospace" font-size="9">正常 ✓</text>
+          </svg>
+
+          <div class="mcmp"><div class="mc"><div class="mct">ROLLING SHUTTER</div><div class="mcn">逐列曝光</div><div class="mcb">成本低。靜止或慢速物件適用。物件移動時邊緣出現果凍變形，本來的直線會變成斜的。</div></div><div class="mc"><div class="mct">GLOBAL SHUTTER</div><div class="mcn">全幅同步曝光</div><div class="mcb">所有像素在同一瞬間同時曝光，物件怎麼動都不會變形。成本較高，是高速生產線的必要選擇。</div></div></div></div>
       </div>
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🔌</span><div><div class="etitle">傳輸介面——速度快，還是距離遠？</div><div class="esum">GigE 可以拉很遠，USB3 速度快好安裝，CoaXPress 兩個都要就選這個</div></div></div><span class="earr">▼</span></div>
         <div class="ebody"><p>影像從相機傳到電腦就像水管送水——管子愈粗（頻寬愈大）每秒能傳的影像愈多，但管子拉得愈長阻力就愈大。</p><p><strong>GigE Vision</strong>：走一般網路線，最遠能拉 100 公尺，適合機台大、相機離電腦很遠的場合，但頻寬只有 1 Gbps，高速場合可能不夠用。</p><p><strong>USB3 Vision</strong>：就像電腦的 USB 插槽，佈線最簡單，速度也快（5 Gbps），缺點是距離只有 10 公尺，適合桌上型設備或實驗室快速建置。</p><p><strong>CoaXPress</strong>：高階選項，頻寬最高達 25 Gbps，距離也可以到 68 公尺，連接線本身還整合了電源，不用另外拉電線。速度快、距離遠都要就選這個，但成本最高。</p></div>
+      </div>
+      <div class="ecard">
+        <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">📡</span><div><div class="etitle">線掃描相機——高速連續物料的最佳解</div><div class="esum">一次只拍一條線，連續掃過去拼成完整影像，適合捲材和連續帶狀物件</div></div></div><span class="earr">▼</span></div>
+        <div class="ebody">
+          <p>一般面掃描相機（Area Camera）每次拍一張完整的矩形影像，適合靜態或低速物件。但如果要檢測連續移動的捲材——例如布料、薄膜、金屬板——面掃描相機就跟不上速度了。</p>
+          <p><strong>線掃描相機（Line Camera）</strong>的感光元件只有一行像素，每次拍攝只擷取一條線，然後隨著物件移動不斷累積，最終拼合成一張完整的長條影像。只要物件速度夠穩定，就能得到完整無縫的檢測影像。</p>
+          <div style="background:var(--bg);border-radius:6px;padding:1rem 1.1rem;border-left:2px solid var(--accent2);margin:.8rem 0">
+            <div style="font-size:.82rem;font-weight:700;color:var(--accent2);margin-bottom:.5rem">線掃描的三大優點</div>
+            <div style="font-size:.9rem;line-height:1.8;color:var(--dim)">
+              🔹 <strong>超高解析度</strong>：橫向像素數可達 8K 以上，細節遠超面掃描<br>
+              🔹 <strong>連續不間斷</strong>：物件多長就能拍多長，無需分段<br>
+              🔹 <strong>高速拍攝</strong>：線頻率可達數十 kHz，輕鬆跟上高速生產線
+            </div>
+          </div>
+          <p>適合場景：印刷品質、紡織布料、薄膜表面、面板和金屬板的外觀檢查。需要搭配穩定的物件移動速度，且光源設計要夠亮（因為曝光時間極短）。</p>
+        </div>
       </div>
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🎨</span><div><div class="etitle">彩色相機的四種感光技術</div><div class="esum">Bayer 最便宜但解析度打折，3CCD 最好但最貴，各有取捨</div></div></div><span class="earr">▼</span></div>
@@ -424,41 +502,123 @@ canvas#apCanvas{border-radius:50%}
           <p><strong>曝光時間（Exposure Time）</strong>：控制感測器感光的時間長短。時間愈長影像愈亮，但移動中的物體會模糊。工業用單位是 ms（毫秒）或 μs（微秒）。</p>
           <p><strong>增益（Gain / ISO）</strong>：光圈和曝光都調好後，用來補充亮度的最後手段。Gain 愈大影像愈亮，但雜訊也愈多——優先調前兩個，增益越小越好。</p>
           <div class="golden"><strong>🏆 黃金原則</strong>：寧可稍暗，絕不過曝。過曝的亮部細節永遠救不回來；偏暗的影像後製還有機會。拍攝順序：先調光圈 → 再調曝光 → 最後才動增益。</div>
-          <div class="dyk" style="margin-top:1rem">
-            <div class="dyk-icon">💡</div>
-            <div><div class="dyk-label">// 你知道嗎？</div><div class="dyk-text">SNR（訊號雜訊比）超過 <strong>39 dB</strong> 才算優質工業相機；動態範圍（DR）超過 <strong>58 dB</strong> 才能清晰呈現強烈明暗對比的場景。買相機前記得看這兩個數字！</div></div>
-          </div>
         </div>
       </div>
     </div>
 
-    <!-- 真實設備圖：用 SVG placeholder 避免外部圖片失效 -->
+    <!-- 工業相機示意：正面 + 背面 -->
     <div class="img-card" style="margin-top:1.5rem">
-      <svg viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;background:#1d2535">
-        <!-- Camera body -->
-        <rect x="260" y="50" width="180" height="120" rx="8" fill="#263040" stroke="#4fc3f7" stroke-width="1.5"/>
-        <!-- Lens mount -->
-        <circle cx="350" cy="110" r="42" fill="#161c26" stroke="#4fc3f7" stroke-width="1.5"/>
-        <circle cx="350" cy="110" r="30" fill="#0d1117" stroke="rgba(79,195,247,.4)" stroke-width="1"/>
-        <circle cx="350" cy="110" r="12" fill="#263040"/>
-        <!-- LED indicator -->
-        <circle cx="295" cy="65" r="5" fill="#00e5cc" opacity=".8"/>
-        <!-- Connector back -->
-        <rect x="440" y="80" width="22" height="40" rx="3" fill="#1a2535" stroke="#4fc3f7" stroke-width="1"/>
-        <rect x="444" y="88" width="4" height="4" rx="1" fill="#4fc3f7"/>
-        <rect x="444" y="96" width="4" height="4" rx="1" fill="#4fc3f7"/>
-        <rect x="444" y="104" width="4" height="4" rx="1" fill="#4fc3f7"/>
-        <!-- Label -->
-        <text x="350" y="195" text-anchor="middle" fill="#b8cce0" font-family="Share Tech Mono,monospace" font-size="12">INDUSTRIAL CAMERA  //  C-MOUNT  •  GIGE VISION</text>
-        <!-- Screw corners -->
-        <circle cx="272" cy="62" r="4" fill="#2a3545" stroke="#4fc3f7" stroke-width=".8"/>
-        <circle cx="428" cy="62" r="4" fill="#2a3545" stroke="#4fc3f7" stroke-width=".8"/>
-        <circle cx="272" cy="158" r="4" fill="#2a3545" stroke="#4fc3f7" stroke-width=".8"/>
-        <circle cx="428" cy="158" r="4" fill="#2a3545" stroke="#4fc3f7" stroke-width=".8"/>
-        <!-- Sensor label -->
-        <text x="350" y="114" text-anchor="middle" fill="rgba(79,195,247,.5)" font-family="Share Tech Mono,monospace" font-size="9">SENSOR</text>
+      <svg viewBox="0 0 860 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;background:#1a2232">
+
+        <!-- ══ 正面 ══ -->
+        <text x="175" y="22" text-anchor="middle" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="11" letter-spacing="1">正面（鏡頭側）</text>
+
+        <!-- 機身 -->
+        <rect x="55" y="35" width="240" height="170" rx="10" fill="#2e3d50" stroke="#4a5a70" stroke-width="1.5"/>
+        <rect x="55" y="35" width="240" height="38" rx="10" fill="#1e2e42"/>
+        <rect x="55" y="59" width="240" height="14" fill="#1e2e42"/>
+
+        <!-- 四個角螺絲 -->
+        <circle cx="74" cy="53" r="6" fill="#1a2535" stroke="#5a7090" stroke-width="1.2"/>
+        <line x1="71" y1="53" x2="77" y2="53" stroke="#5a7090" stroke-width=".8"/>
+        <line x1="74" y1="50" x2="74" y2="56" stroke="#5a7090" stroke-width=".8"/>
+        <circle cx="276" cy="53" r="6" fill="#1a2535" stroke="#5a7090" stroke-width="1.2"/>
+        <line x1="273" y1="53" x2="279" y2="53" stroke="#5a7090" stroke-width=".8"/>
+        <line x1="276" y1="50" x2="276" y2="56" stroke="#5a7090" stroke-width=".8"/>
+        <circle cx="74" cy="187" r="6" fill="#1a2535" stroke="#5a7090" stroke-width="1.2"/>
+        <line x1="71" y1="187" x2="77" y2="187" stroke="#5a7090" stroke-width=".8"/>
+        <line x1="74" y1="184" x2="74" y2="190" stroke="#5a7090" stroke-width=".8"/>
+        <circle cx="276" cy="187" r="6" fill="#1a2535" stroke="#5a7090" stroke-width="1.2"/>
+        <line x1="273" y1="187" x2="279" y2="187" stroke="#5a7090" stroke-width=".8"/>
+        <line x1="276" y1="184" x2="276" y2="190" stroke="#5a7090" stroke-width=".8"/>
+
+        <!-- C-Mount 外圈 -->
+        <circle cx="175" cy="122" r="64" fill="#1a2535" stroke="#3d5065" stroke-width="2"/>
+        <circle cx="175" cy="122" r="58" fill="none" stroke="#4a6070" stroke-width="1" stroke-dasharray="6,4"/>
+        <!-- 感光元件框 -->
+        <rect x="145" y="92" width="60" height="60" rx="3" fill="#0d1520" stroke="#4fc3f7" stroke-width="1.5"/>
+        <rect x="152" y="99" width="46" height="46" rx="2" fill="#101c2a" stroke="rgba(79,195,247,.3)" stroke-width="1"/>
+        <rect x="155" y="102" width="16" height="12" rx="1" fill="rgba(79,195,247,.08)"/>
+
+        <!-- 箭頭：接口 → 往右上指向 C-Mount 螺紋環 -->
+        <line x1="90" y1="205" x2="130" y2="180" stroke="#ef4444" stroke-width="1.4" marker-end="url(#arr)"/>
+        <text x="55" y="222" fill="#f0f4fc" font-family="Noto Sans TC,sans-serif" font-size="14" font-weight="700">接口</text>
+
+        <!-- 箭頭：感光元件 → 往上指向感光元件中心 -->
+        <line x1="175" y1="225" x2="175" y2="158" stroke="#ef4444" stroke-width="1.4" marker-end="url(#arr)"/>
+        <text x="138" y="242" fill="#f0f4fc" font-family="Noto Sans TC,sans-serif" font-size="14" font-weight="700">感光元件</text>
+
+        <!-- ══ 背面 ══ -->
+        <text x="650" y="22" text-anchor="middle" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="11" letter-spacing="1">背面（接口側）</text>
+
+        <!-- 機身 -->
+        <rect x="525" y="35" width="250" height="170" rx="10" fill="#2e3d50" stroke="#4a5a70" stroke-width="1.5"/>
+        <rect x="525" y="35" width="250" height="38" rx="10" fill="#1e2e42"/>
+        <rect x="525" y="59" width="250" height="14" fill="#1e2e42"/>
+
+        <!-- 四個角螺絲 -->
+        <circle cx="544" cy="53" r="6" fill="#1a2535" stroke="#5a7090" stroke-width="1.2"/>
+        <line x1="541" y1="53" x2="547" y2="53" stroke="#5a7090" stroke-width=".8"/>
+        <line x1="544" y1="50" x2="544" y2="56" stroke="#5a7090" stroke-width=".8"/>
+        <circle cx="756" cy="53" r="6" fill="#1a2535" stroke="#5a7090" stroke-width="1.2"/>
+        <line x1="753" y1="53" x2="759" y2="53" stroke="#5a7090" stroke-width=".8"/>
+        <line x1="756" y1="50" x2="756" y2="56" stroke="#5a7090" stroke-width=".8"/>
+        <circle cx="544" cy="187" r="6" fill="#1a2535" stroke="#5a7090" stroke-width="1.2"/>
+        <line x1="541" y1="187" x2="547" y2="187" stroke="#5a7090" stroke-width=".8"/>
+        <line x1="544" y1="184" x2="544" y2="190" stroke="#5a7090" stroke-width=".8"/>
+        <circle cx="756" cy="187" r="6" fill="#1a2535" stroke="#5a7090" stroke-width="1.2"/>
+        <line x1="753" y1="187" x2="759" y2="187" stroke="#5a7090" stroke-width=".8"/>
+        <line x1="756" y1="184" x2="756" y2="190" stroke="#5a7090" stroke-width=".8"/>
+
+        <!-- GigE 網口 -->
+        <rect x="578" y="82" width="70" height="54" rx="4" fill="#1a2535" stroke="#4fc3f7" stroke-width="1.5"/>
+        <rect x="583" y="87" width="60" height="44" rx="2" fill="#0d1520"/>
+        <rect x="587" y="91" width="5" height="18" rx="1" fill="#3a5060"/>
+        <rect x="595" y="91" width="5" height="18" rx="1" fill="#3a5060"/>
+        <rect x="603" y="91" width="5" height="18" rx="1" fill="#3a5060"/>
+        <rect x="611" y="91" width="5" height="18" rx="1" fill="#3a5060"/>
+        <rect x="619" y="91" width="5" height="18" rx="1" fill="#3a5060"/>
+        <rect x="627" y="91" width="5" height="18" rx="1" fill="#3a5060"/>
+        <circle cx="589" cy="124" r="3" fill="#00e5cc" opacity=".9"/>
+        <circle cx="634" cy="124" r="3" fill="#fbbf24" opacity=".7"/>
+
+        <!-- I/O Power 連接器 -->
+        <rect x="680" y="75" width="32" height="92" rx="3" fill="#1a2535" stroke="#a78bfa" stroke-width="1.5"/>
+        <rect x="685" y="81" width="22" height="80" rx="2" fill="#0d1520"/>
+        <rect x="688" y="86" width="4" height="5" rx="1" fill="#7060a0"/>
+        <rect x="695" y="86" width="4" height="5" rx="1" fill="#7060a0"/>
+        <rect x="688" y="95" width="4" height="5" rx="1" fill="#7060a0"/>
+        <rect x="695" y="95" width="4" height="5" rx="1" fill="#7060a0"/>
+        <rect x="688" y="104" width="4" height="5" rx="1" fill="#7060a0"/>
+        <rect x="695" y="104" width="4" height="5" rx="1" fill="#7060a0"/>
+        <rect x="688" y="113" width="4" height="5" rx="1" fill="#7060a0"/>
+        <rect x="695" y="113" width="4" height="5" rx="1" fill="#7060a0"/>
+        <rect x="688" y="122" width="4" height="5" rx="1" fill="#7060a0"/>
+        <rect x="695" y="122" width="4" height="5" rx="1" fill="#7060a0"/>
+        <rect x="688" y="131" width="4" height="5" rx="1" fill="#7060a0"/>
+        <rect x="695" y="131" width="4" height="5" rx="1" fill="#7060a0"/>
+        <rect x="688" y="140" width="4" height="5" rx="1" fill="#7060a0"/>
+        <rect x="695" y="140" width="4" height="5" rx="1" fill="#7060a0"/>
+
+        <!-- 箭頭：傳輸介面 -->
+        <line x1="613" y1="225" x2="613" y2="137" stroke="#ef4444" stroke-width="1.4" marker-end="url(#arr)"/>
+        <text x="555" y="242" fill="#f0f4fc" font-family="Noto Sans TC,sans-serif" font-size="14" font-weight="700">傳輸介面</text>
+
+        <!-- 箭頭：I/O Power -->
+        <line x1="730" y1="225" x2="714" y2="170" stroke="#ef4444" stroke-width="1.4" marker-end="url(#arr)"/>
+        <text x="700" y="242" fill="#f0f4fc" font-family="Noto Sans TC,sans-serif" font-size="14" font-weight="700">I/O, Power</text>
+
+        <!-- 箭頭定義 -->
+        <defs>
+          <marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+            <polygon points="0,0 8,4 0,8" fill="#ef4444"/>
+          </marker>
+        </defs>
+
+        <!-- 分隔線 -->
+        <line x1="430" y1="15" x2="430" y2="275" stroke="rgba(255,255,255,.07)" stroke-width="1" stroke-dasharray="5,4"/>
       </svg>
-      <div class="img-cap">▲ 工業相機示意（C-Mount 接口、後方 GigE 傳輸介面與 I/O 連接器）</div>
+      <div class="img-cap">▲ 工業相機結構示意：正面為 C-Mount 接口與感光元件；背面為傳輸介面（GigE）與 I/O、Power 連接器</div>
     </div>
   </div>
 
@@ -506,26 +666,98 @@ canvas#apCanvas{border-radius:50%}
           </div>
         </div>
       </div>
-      <div class="ecard">
-        <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">📡</span><div><div class="etitle">線掃描相機——高速連續物料的最佳解</div><div class="esum">一次只拍一條線，連續掃過去拼成完整影像，適合捲材和連續帶狀物件</div></div></div><span class="earr">▼</span></div>
-        <div class="ebody">
-          <p>一般面掃描相機（Area Camera）每次拍一張完整的矩形影像，適合靜態或低速物件。但如果要檢測連續移動的捲材——例如布料、薄膜、金屬板——面掃描相機就跟不上速度了。</p>
-          <p><strong>線掃描相機（Line Camera）</strong>的感光元件只有一行像素，每次拍攝只擷取一條線，然後隨著物件移動不斷累積，最終拼合成一張完整的長條影像。只要物件速度夠穩定，就能得到完整無縫的檢測影像。</p>
-          <div style="background:var(--bg);border-radius:6px;padding:1rem 1.1rem;border-left:2px solid var(--accent2);margin:.8rem 0">
-            <div style="font-size:.82rem;font-weight:700;color:var(--accent2);margin-bottom:.5rem">線掃描的三大優點</div>
-            <div style="font-size:.9rem;line-height:1.8;color:var(--dim)">
-              🔹 <strong>超高解析度</strong>：橫向像素數可達 8K 以上，細節遠超面掃描<br>
-              🔹 <strong>連續不間斷</strong>：物件多長就能拍多長，無需分段<br>
-              🔹 <strong>高速拍攝</strong>：線頻率可達數十 kHz，輕鬆跟上高速生產線
-            </div>
-          </div>
-          <p>適合場景：印刷品質、紡織布料、薄膜表面、面板和金屬板的外觀檢查。需要搭配穩定的物件移動速度，且光源設計要夠亮（因為曝光時間極短）。</p>
-        </div>
-      </div>
       <!-- FOV 計算器 -->
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🧮</span><div><div class="etitle">FOV 計算器——輸入參數直接算出視野</div><div class="esum">Sensor 尺寸 ÷ 放大倍率 = FOV，試試看</div></div></div><span class="earr">▼</span></div>
         <div class="ebody">
+
+          <!-- 兩張示意圖並排 -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem">
+
+            <!-- 圖一：成像原理 物距/像距/焦距 -->
+            <div>
+              <div style="font-size:.75rem;font-family:'Share Tech Mono',monospace;color:var(--accent2);letter-spacing:.1em;margin-bottom:.5rem">// 成像原理</div>
+              <svg viewBox="0 0 240 245" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;display:block;background:#161c26;border-radius:6px;border:1px solid var(--border)">
+                <!-- 像面（上，小） -->
+                <ellipse cx="120" cy="32" rx="34" ry="10" fill="rgba(255,230,150,.12)" stroke="#e8b84b" stroke-width="1.5"/>
+                <text x="158" y="36" fill="#e8b84b" font-family="Noto Sans TC,sans-serif" font-size="10" font-weight="700">像面</text>
+                <!-- d 標示（像面寬度） -->
+                <line x1="86" y1="22" x2="154" y2="22" stroke="#4fc3f7" stroke-width="1"/>
+                <line x1="86" y1="18" x2="86" y2="26" stroke="#4fc3f7" stroke-width="1"/>
+                <line x1="154" y1="18" x2="154" y2="26" stroke="#4fc3f7" stroke-width="1"/>
+                <text x="120" y="18" text-anchor="middle" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="10" font-style="italic">d</text>
+                <!-- 像面內的 L 形（180度旋轉，比物面小） -->
+                <g transform="rotate(180, 120, 33)">
+                  <rect x="114" y="27" width="6" height="11" fill="#e8b84b" opacity=".85"/>
+                  <rect x="120" y="33" width="11" height="5" fill="#e8b84b" opacity=".85"/>
+                </g>
+
+                <!-- 鏡頭（中） -->
+                <ellipse cx="120" cy="120" rx="16" ry="24" fill="#263040" stroke="#4fc3f7" stroke-width="1.8"/>
+                <text x="142" y="114" fill="#4fc3f7" font-family="Noto Sans TC,sans-serif" font-size="9" font-weight="700">鏡頭</text>
+                <text x="142" y="126" fill="#b8cce0" font-family="Noto Sans TC,sans-serif" font-size="8">(焦距f)</text>
+
+                <!-- 物面（下，大） -->
+                <ellipse cx="120" cy="208" rx="56" ry="14" fill="rgba(100,200,100,.12)" stroke="#4ade80" stroke-width="1.5"/>
+                <text x="180" y="212" fill="#4ade80" font-family="Noto Sans TC,sans-serif" font-size="10" font-weight="700">物面</text>
+                <!-- D 標示（物面寬度） -->
+                <line x1="64" y1="226" x2="176" y2="226" stroke="#4fc3f7" stroke-width="1"/>
+                <line x1="64" y1="222" x2="64" y2="230" stroke="#4fc3f7" stroke-width="1"/>
+                <line x1="176" y1="222" x2="176" y2="230" stroke="#4fc3f7" stroke-width="1"/>
+                <text x="120" y="238" text-anchor="middle" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="10" font-style="italic">D</text>
+                <!-- 物面內的 L 形（正向，直角在左上，大） -->
+                <rect x="100" y="196" width="10" height="18" fill="#4ade80" opacity=".7"/>
+                <rect x="110" y="207" width="18" height="8" fill="#4ade80" opacity=".7"/>
+
+                <!-- 投影虛線 -->
+                <line x1="86" y1="42" x2="104" y2="96" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+                <line x1="154" y1="42" x2="136" y2="96" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+                <line x1="104" y1="144" x2="64" y2="194" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+                <line x1="136" y1="144" x2="176" y2="194" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+
+                <!-- 像距 v -->
+                <line x1="200" y1="32" x2="200" y2="120" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2"/>
+                <line x1="195" y1="32" x2="205" y2="32" stroke="#ef4444" stroke-width="1"/>
+                <line x1="195" y1="120" x2="205" y2="120" stroke="#ef4444" stroke-width="1"/>
+                <text x="208" y="82" fill="#ef4444" font-family="Noto Sans TC,sans-serif" font-size="10" font-weight="700">像距v</text>
+
+                <!-- 物距 u -->
+                <line x1="200" y1="120" x2="200" y2="208" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2"/>
+                <line x1="195" y1="208" x2="205" y2="208" stroke="#ef4444" stroke-width="1"/>
+                <text x="208" y="170" fill="#ef4444" font-family="Noto Sans TC,sans-serif" font-size="10" font-weight="700">物距u</text>
+              </svg>
+            </div>
+
+            <!-- 圖二：FOV 與感光元件對應關係 -->
+            <div>
+              <div style="font-size:.75rem;font-family:'Share Tech Mono',monospace;color:var(--accent2);letter-spacing:.1em;margin-bottom:.5rem">// FOV 與感光元件</div>
+              <svg viewBox="0 0 180 245" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:240px;display:block;background:#161c26;border-radius:6px;border:1px solid var(--border)">
+                <!-- 感光元件（上，小） -->
+                <rect x="55" y="18" width="70" height="46" rx="4" fill="rgba(0,229,204,.15)" stroke="#00e5cc" stroke-width="1.8"/>
+                <text x="90" y="39" text-anchor="middle" fill="#00e5cc" font-family="Noto Sans TC,sans-serif" font-size="10" font-weight="700">感光元件</text>
+                <text x="90" y="53" text-anchor="middle" fill="rgba(0,229,204,.6)" font-family="Share Tech Mono,monospace" font-size="8">Sensor</text>
+
+                <!-- 鏡頭（中） -->
+                <ellipse cx="90" cy="124" rx="18" ry="14" fill="#263040" stroke="#4fc3f7" stroke-width="1.8"/>
+                <ellipse cx="90" cy="124" rx="10" ry="8" fill="#1a2535" stroke="rgba(79,195,247,.4)" stroke-width="1"/>
+                <text x="115" y="128" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="8">LENS</text>
+
+                <!-- FOV 面（下，大） -->
+                <rect x="12" y="185" width="156" height="40" rx="4" fill="rgba(79,195,247,.12)" stroke="#4fc3f7" stroke-width="1.8"/>
+                <text x="90" y="210" text-anchor="middle" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="13" font-weight="700" letter-spacing="1">FOV</text>
+
+                <!-- 投影虛線 -->
+                <line x1="55" y1="64" x2="72" y2="110" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+                <line x1="125" y1="64" x2="108" y2="110" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+                <line x1="72" y1="138" x2="12" y2="185" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+                <line x1="108" y1="138" x2="168" y2="185" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+
+                <!-- 公式 -->
+                <text x="90" y="238" text-anchor="middle" fill="rgba(0,229,204,.65)" font-family="Share Tech Mono,monospace" font-size="8">FOV = Sensor ÷ α</text>
+              </svg>
+            </div>
+          </div>
+
           <div class="aperture-widget">
             <div class="aw-title">// 互動計算：輸入你的參數</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1rem">
