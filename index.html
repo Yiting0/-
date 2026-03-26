@@ -9,57 +9,43 @@
 :root{--bg:#161c26;--bg-mid:#1d2535;--bg-light:#263040;--accent:#4fc3f7;--accent2:#00e5cc;--text:#f0f4fc;--dim:#b8cce0;--border:rgba(79,195,247,0.22);--nav-h:56px}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden;font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);font-size:16px}
+body{position:relative}
+/* Put the grain layer BEHIND all content to avoid blocking interactions. */
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.038;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px 180px;background-repeat:repeat;}
+body > *{position:relative;z-index:1}
+.page{position:relative}
+.page::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 15% 10%, rgba(79,195,247,.04) 0%, transparent 60%),radial-gradient(ellipse 60% 40% at 85% 90%, rgba(0,229,204,.03) 0%, transparent 55%);z-index:0;}
+.page > *{position:relative;z-index:1}
+#ph{background:linear-gradient(145deg,#111820 0%,#161c26 55%,#1a2535 100%)}
+#ph::after{background:radial-gradient(ellipse 70% 60% at 20% 30%, rgba(79,195,247,.07) 0%, transparent 60%),radial-gradient(ellipse 50% 40% at 80% 70%, rgba(0,229,204,.05) 0%, transparent 55%);}
+#pi{background:radial-gradient(ellipse 100% 80% at 50% 0%, #1f2d40 0%, #1d2535 40%, #1a2332 100%)}
+#pp{background:radial-gradient(ellipse 100% 70% at 30% 100%, #1a2030 0%, #161c26 50%)}
+#pa{background:radial-gradient(ellipse 80% 60% at 70% 20%, #1e2d3a 0%, #1d2535 50%)}
+#pr{background:radial-gradient(ellipse 90% 60% at 20% 80%, #181e2c 0%, #161c26 50%)}
 
-/* TOP NAV */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 2.5rem;height:var(--nav-h);
-  background:rgba(22,28,38,.92);
-  backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--border);
-}
-.nav-logo{
-  font-family:'Share Tech Mono',monospace;
-  font-size:.85rem;letter-spacing:.15em;color:var(--accent);
-  white-space:nowrap;
-}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:var(--nav-h);background:rgba(22,28,38,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Share Tech Mono',monospace;font-size:.85rem;letter-spacing:.15em;color:var(--accent);white-space:nowrap;}
 .nav-links{display:flex;gap:0}
-.nav-link{
-  padding:.4rem 1.1rem;cursor:pointer;
-  color:var(--dim);font-size:.88rem;letter-spacing:.05em;
-  transition:color .2s;position:relative;
-  background:transparent;border:none;font-family:inherit;
-  white-space:nowrap;
-}
-.nav-link::after{
-  content:'';position:absolute;bottom:-1px;left:.8rem;right:.8rem;
-  height:2px;background:var(--accent);
-  transform:scaleX(0);transform-origin:center;
-  transition:transform .22s;
-}
+.nav-link{padding:.4rem 1.1rem;cursor:pointer;color:var(--dim);font-size:.88rem;letter-spacing:.05em;transition:color .2s;position:relative;background:transparent;border:none;font-family:inherit;white-space:nowrap;}
+.nav-link::after{content:'';position:absolute;bottom:-1px;left:.8rem;right:.8rem;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:center;transition:transform .22s;}
 .nav-link:hover{color:var(--text)}
 .nav-link.active{color:var(--text)}
 .nav-link.active::after{transform:scaleX(1)}
 
-/* PROGRESS */
 .prog-bar{position:fixed;top:var(--nav-h);left:0;right:0;height:2px;background:rgba(255,255,255,.05);z-index:300}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .45s cubic-bezier(.4,0,.2,1)}
 
-/* MAIN */
 .main{margin-top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow:hidden;position:relative}
 .track{display:flex;width:500%;height:100%;transition:transform .45s cubic-bezier(.4,0,.2,1);will-change:transform}
 .page{width:20%;height:100%;overflow-y:auto;flex-shrink:0}
 .page::-webkit-scrollbar{width:4px}
 .page::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 
-/* PAGE ARROWS */
 .p-nav{position:fixed;bottom:1.8rem;right:1.8rem;display:flex;gap:.45rem;z-index:200}
 .p-btn{width:38px;height:38px;border-radius:50%;background:var(--bg-mid);border:1px solid var(--border);color:var(--dim);font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s}
 .p-btn:hover{border-color:var(--accent);color:var(--accent)}
 .p-btn:disabled{opacity:.2;cursor:default}
 
-/* SHARED */
 .pi{padding:3.2rem 5% 4rem;max-width:1100px;margin:0 auto}
 .ptag{font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.22em;color:var(--accent2);margin-bottom:.65rem}
 .ptitle{font-size:clamp(1.8rem,3vw,2.5rem);font-weight:700;line-height:1.15;margin-bottom:.75rem}
@@ -69,7 +55,6 @@ nav{
 .pnote{font-size:.9rem;line-height:1.8;color:#708898;max-width:680px;margin-bottom:1.8rem;padding-left:.9rem;border-left:2px solid var(--border)}
 
 /* HOME */
-#ph{background:linear-gradient(145deg,#111820 0%,#161c26 55%,#1a2535 100%)}
 .hgeo{position:absolute;inset:0;opacity:.11;pointer-events:none;background-image:linear-gradient(60deg,transparent 40%,rgba(79,195,247,.2) 41%,rgba(79,195,247,.2) 59%,transparent 60%),linear-gradient(120deg,transparent 40%,rgba(0,229,204,.12) 41%,rgba(0,229,204,.12) 59%,transparent 60%);background-size:70px 70px}
 .hscan{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.3;animation:scan 5s linear infinite;pointer-events:none}
 @keyframes scan{from{top:5%}to{top:95%}}
@@ -99,7 +84,6 @@ nav{
 .tt-b{background:rgba(0,229,204,.08);border:1px solid rgba(0,229,204,.22);color:var(--accent2)}
 
 /* IMAGING MODULE */
-#pi{background:var(--bg-mid)}
 .mtabs{display:flex;gap:.45rem;margin-bottom:1.8rem;flex-wrap:wrap}
 .mtab{padding:.5rem 1.25rem;border-radius:3px;cursor:pointer;font-size:.9rem;font-weight:700;border:1px solid var(--border);color:var(--dim);background:transparent;transition:all .18s}
 .mtab:hover{color:var(--text);border-color:var(--accent)}
@@ -136,7 +120,7 @@ nav{
 .ebody{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .25s;padding:0 1.3rem;font-size:.96rem;line-height:1.86;color:var(--dim);background:var(--bg-mid)}
 .ebody p{margin-bottom:.82rem}
 .ebody p:last-child{margin-bottom:0}
-.ecard.open .ebody{max-height:3000px;padding:1.2rem 1.4rem}
+.ecard.open .ebody{max-height:6000px;padding:1.2rem 1.4rem}
 .ebody strong{color:var(--text)}
 .ebody em{color:var(--accent2);font-style:normal}
 .mcmp{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.75rem}
@@ -155,7 +139,6 @@ nav{
 .lcd{font-size:.86rem;line-height:1.75;color:var(--dim)}
 
 /* PIPELINE */
-#pp{background:var(--bg)}
 .pipeline{display:flex;flex-wrap:wrap;gap:0;margin-top:1.1rem}
 .ps{flex:1;min-width:148px;background:var(--bg-light);border:1px solid var(--border);padding:1.3rem 1.1rem;position:relative;transition:background .2s}
 .ps:not(:last-child)::after{content:'▶';position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:var(--accent);font-size:.72rem;z-index:2}
@@ -165,7 +148,6 @@ nav{
 .psb{font-size:.86rem;line-height:1.7;color:var(--dim)}
 
 /* APP */
-#pa{background:var(--bg-mid)}
 .agrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:1.4rem;margin-top:.9rem}
 .ac{border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:transform .22s,border-color .22s}
 .ac:hover{transform:translateY(-4px);border-color:var(--accent2)}
@@ -179,7 +161,6 @@ nav{
 .h4{background:linear-gradient(90deg,#302010,#1d2535);border-bottom:2px solid #ffb74d}
 
 /* REPORT */
-#pr{background:var(--bg)}
 .rl{display:grid;grid-template-columns:1fr 1.3fr;gap:2.5rem;align-items:start}
 @media(max-width:660px){.rl{grid-template-columns:1fr}}
 .rcl{display:flex;flex-direction:column;gap:.85rem}
@@ -195,23 +176,20 @@ nav{
 .frl{font-size:.9rem;color:var(--dim)}
 .frv{font-size:.9rem;font-weight:600;color:var(--text)}
 
-/* shared vc border colors */
-/* ── 照明按鈕 ── */
+.lb-btn{padding:.5rem 1.1rem;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--dim);font-weight:700;font-size:.88rem;cursor:pointer}
+.lb-btn:hover{border-color:var(--accent);color:var(--text)}
 .lb-btn.active{background:var(--accent)!important;color:#0d1117!important;border-color:var(--accent)!important}
 .lb-btn:not(.active){background:transparent!important;color:var(--dim)!important}
 
-/* ── 你知道嗎 ── */
 .dyk{background:linear-gradient(135deg,rgba(79,195,247,.1),rgba(0,229,204,.07));border:1px solid var(--accent);border-radius:8px;padding:1.1rem 1.4rem;margin:1.6rem 0;display:flex;gap:1rem;align-items:flex-start}
 .dyk-icon{font-size:1.5rem;flex-shrink:0;margin-top:.05rem}
 .dyk-label{font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.16em;color:var(--accent2);margin-bottom:.3rem}
 .dyk-text{font-size:.93rem;line-height:1.78;color:var(--text)}
 
-/* ── 設備圖片 ── */
 .img-card{border-radius:8px;overflow:hidden;border:1px solid var(--border);margin:1.6rem 0}
 .img-card img{width:100%;display:block;object-fit:cover;max-height:220px}
 .img-cap{padding:.7rem 1rem;font-size:.78rem;color:var(--dim);font-family:'Share Tech Mono',monospace;letter-spacing:.06em;background:var(--bg-light)}
 
-/* ── 互動式光圈示意 ── */
 .aperture-widget{background:var(--bg-light);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.6rem 0}
 .aw-title{font-size:.78rem;font-family:'Share Tech Mono',monospace;letter-spacing:.15em;color:var(--accent2);margin-bottom:1rem}
 .aw-display{display:flex;align-items:center;gap:2rem;flex-wrap:wrap}
@@ -227,7 +205,6 @@ canvas#apCanvas{border-radius:50%}
 .aw-tag.good{color:#4ade80;border-color:rgba(74,222,128,.3);background:rgba(74,222,128,.07)}
 .aw-tag.warn{color:#fbbf24;border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.07)}
 
-/* ── 彩色成像技術對比 ── */
 .color-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;margin:1.2rem 0}
 @media(max-width:560px){.color-grid{grid-template-columns:1fr}}
 .cg-card{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:1rem 1.1rem}
@@ -235,59 +212,131 @@ canvas#apCanvas{border-radius:50%}
 .cg-good{font-size:.82rem;color:#4ade80;margin-bottom:.2rem}
 .cg-bad{font-size:.82rem;color:#f87171}
 
-/* ── 黃金原則框 ── */
 .golden{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.3);border-radius:6px;padding:1rem 1.2rem;margin:1.2rem 0;font-size:.92rem;line-height:1.78;color:var(--text)}
 .golden strong{color:#fbbf24}
-
 .vc-c{border-left:2px solid #7090a0}
 
-/* ══ MOBILE RESPONSIVE ══ */
+/* ══════════════════════════════
+   IMAGE PROCESSING PAGE STYLES
+══════════════════════════════ */
+
+/* Section tabs for processing page */
+.pp-tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:2rem}
+.pp-tab{padding:.55rem 1.2rem;border-radius:4px;cursor:pointer;font-size:.88rem;font-weight:700;border:1px solid var(--border);color:var(--dim);background:transparent;transition:all .18s;font-family:'Noto Sans TC',sans-serif;}
+.pp-tab:hover{color:var(--text);border-color:rgba(79,195,247,.5)}
+.pp-tab.active{background:var(--accent);color:#0d1117;border-color:var(--accent)}
+.pp-section{display:none}
+.pp-section.active{display:block}
+
+/* Section header with step number */
+.sec-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
+.sec-num{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.2em;color:var(--accent2);background:rgba(0,229,204,.1);border:1px solid rgba(0,229,204,.3);border-radius:3px;padding:.3rem .7rem}
+.sec-title{font-size:1.3rem;font-weight:700}
+
+/* Kernel grid display */
+.kernel-demo{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:1.2rem;margin:.8rem 0}
+.kernel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;width:120px;flex-shrink:0}
+.kernel-grid.g2{grid-template-columns:repeat(2,1fr);width:80px}
+.kc{background:var(--bg-mid);border:1px solid rgba(79,195,247,.2);border-radius:3px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:.9rem;color:var(--text);transition:background .2s}
+.kc.kh{background:rgba(79,195,247,.15);color:var(--accent);font-weight:700}
+.kc.kp{background:rgba(0,229,204,.12);color:var(--accent2)}
+.kc.kn{background:rgba(248,113,113,.1);color:#f87171}
+.kernel-info{flex:1;min-width:160px}
+.kernel-name{font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:.3rem;font-family:'Share Tech Mono',monospace;letter-spacing:.06em}
+.kernel-desc{font-size:.88rem;line-height:1.75;color:var(--dim)}
+.kernel-label{font-size:.7rem;color:var(--accent2);font-family:'Share Tech Mono',monospace;letter-spacing:.1em;margin-bottom:.5rem}
+
+/* Interactive filter demo */
+.filter-widget{background:var(--bg-light);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.2rem 0}
+.filter-widget .aw-title{margin-bottom:1rem}
+.filter-btns{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.2rem}
+.f-btn{padding:.45rem 1rem;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--dim);font-size:.85rem;font-weight:700;cursor:pointer;transition:all .18s;font-family:'Noto Sans TC',sans-serif;}
+.f-btn:hover{border-color:var(--accent);color:var(--text)}
+.f-btn.active{background:var(--accent2);color:#0d1117;border-color:var(--accent2)}
+.filter-display{display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap}
+.canvas-pair{display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-start}
+.canvas-wrap{display:flex;flex-direction:column;align-items:center;gap:.4rem}
+.canvas-label{font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--dim);letter-spacing:.1em}
+.filter-info-panel{flex:1;min-width:200px}
+
+/* Process pipeline enhanced */
+.proc-pipeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0;margin:1.2rem 0;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.proc-step{padding:1.2rem 1rem;background:var(--bg-light);border-right:1px solid var(--border);position:relative;cursor:pointer;transition:background .2s}
+.proc-step:last-child{border-right:none}
+.proc-step:hover,.proc-step.active{background:#2a3545}
+.proc-step.active{background:rgba(79,195,247,.08)}
+.proc-step.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent)}
+.proc-sn{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.15em;color:var(--accent2);margin-bottom:.4rem}
+.proc-st{font-size:.9rem;font-weight:700;margin-bottom:.3rem}
+.proc-sb{font-size:.8rem;color:var(--dim);line-height:1.6}
+
+/* Comparison image blocks */
+.img-compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.8rem;margin:.8rem 0}
+.img-compare-item{display:flex;flex-direction:column;align-items:center;gap:.4rem}
+.img-compare-label{font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--dim);letter-spacing:.08em}
+
+/* Intensity transform interactive */
+.transform-widget{background:var(--bg-light);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.2rem 0}
+.transform-btns{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
+.t-btn{padding:.4rem .9rem;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--dim);font-size:.82rem;font-weight:700;cursor:pointer;transition:all .18s;font-family:'Noto Sans TC',sans-serif;}
+.t-btn:hover{border-color:var(--accent);color:var(--text)}
+.t-btn.active{background:#5a3fa8;color:#f0f4fc;border-color:#7c5cc8}
+.transform-display{display:flex;gap:1.5rem;flex-wrap:wrap;align-items:flex-start}
+
+/* Edge detection result comparison */
+.edge-compare{display:flex;gap:1rem;flex-wrap:wrap;margin:1rem 0}
+.edge-canvas-block{display:flex;flex-direction:column;align-items:center;gap:.3rem}
+.edge-label{font-size:.75rem;font-family:'Share Tech Mono',monospace;color:var(--dim);letter-spacing:.06em}
+
+/* Frequency domain */
+.freq-diagram{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:1rem;margin:.8rem 0;display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
+
+/* Info box variants */
+.info-box{border-radius:6px;padding:1rem 1.2rem;margin:.8rem 0;font-size:.9rem;line-height:1.78}
+.info-box.blue{background:rgba(79,195,247,.07);border:1px solid rgba(79,195,247,.25);color:var(--text)}
+.info-box.green{background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.25);color:var(--text)}
+.info-box.yellow{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.3);color:var(--text)}
+.info-box.purple{background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.3);color:var(--text)}
+.info-box strong{color:var(--accent)}
+
+/* Histogram bar chart */
+.hist-bars{display:flex;align-items:flex-end;gap:1px;height:60px;width:100%;margin:.4rem 0}
+.hist-bar{flex:1;background:var(--accent);opacity:.6;border-radius:1px 1px 0 0;transition:height .3s}
+
+/* Comparison table */
+.cmp-table{width:100%;border-collapse:collapse;font-size:.87rem;margin:.8rem 0}
+.cmp-table th{background:var(--bg-light);color:var(--accent2);font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.1em;padding:.6rem .8rem;text-align:left;border-bottom:2px solid var(--border)}
+.cmp-table td{padding:.6rem .8rem;border-bottom:1px solid rgba(255,255,255,.05);color:var(--dim);line-height:1.6}
+.cmp-table tr:hover td{background:rgba(255,255,255,.02)}
+.cmp-table .good{color:#4ade80}
+.cmp-table .warn{color:#fbbf24}
+.cmp-table .bad{color:#f87171}
+
+/* Section divider */
+.sec-divider{height:1px;background:var(--border);margin:2rem 0;opacity:.5}
+
 @media(max-width:640px){
-
-  /* nav: hide logo text short, shrink links */
-  nav{ padding:0 1rem; }
-  .nav-logo{ font-size:.7rem; letter-spacing:.08em; }
-  .nav-link{ padding:.4rem .55rem; font-size:.78rem; letter-spacing:0; }
-
-  /* pages: touch-friendly padding */
-  .pi{ padding:1.8rem 1.2rem 3rem; }
-  .hinner{ padding:2.5rem 1.2rem 2rem; }
-
-  /* home grid: single column */
-  .hgrid{ grid-template-columns:1fr; max-width:100%; }
-  .func-grid{ grid-template-columns:repeat(2,1fr); max-width:100%; }
-  .aoi-box{ max-width:100%; }
-  .hsub{ max-width:100%; }
-
-  /* imaging hero: single column */
-  .thero{ grid-template-columns:1fr; gap:1.2rem; }
-
-  /* shutter compare: single column on very small */
-  .mcmp{ grid-template-columns:1fr; }
-
-  /* FOV diagrams: single column on mobile */
-  .ebody [style*="grid-template-columns:1fr 1fr"]{ grid-template-columns:1fr !important; }
-
-  /* pipeline: vertical stack */
-  .pipeline{ flex-direction:column; }
-  .ps{ min-width:unset; width:100%; }
-  .ps:not(:last-child)::after{ content:'▼'; right:unset; top:unset; bottom:-12px; left:50%; transform:translateX(-50%); }
-
-  /* light cards: single column */
-  .lcards{ grid-template-columns:1fr; }
-
-  /* report: single column */
-  .rl{ grid-template-columns:1fr; gap:1.5rem; }
-
-  /* arrows: bigger touch target */
-  .p-btn{ width:44px; height:44px; font-size:1.1rem; }
-  .p-nav{ bottom:1.2rem; right:1rem; }
-
-  /* expand cards: smaller padding */
-  .etrig{ padding:.85rem 1rem; }
-  .ecard.open .ebody{ padding:1rem 1.1rem; }
-  .etitle{ font-size:.92rem; }
-  .esum{ font-size:.8rem; }
+  nav{padding:0 1rem}
+  .nav-logo{font-size:.7rem;letter-spacing:.08em}
+  .nav-link{padding:.4rem .55rem;font-size:.78rem;letter-spacing:0}
+  .pi{padding:1.8rem 1.2rem 3rem}
+  .hinner{padding:2.5rem 1.2rem 2rem}
+  .hgrid{grid-template-columns:1fr;max-width:100%}
+  .func-grid{grid-template-columns:repeat(2,1fr);max-width:100%}
+  .thero{grid-template-columns:1fr;gap:1.2rem}
+  .mcmp{grid-template-columns:1fr}
+  .pipeline{flex-direction:column}
+  .ps{min-width:unset;width:100%}
+  .ps:not(:last-child)::after{content:'▼';right:unset;top:unset;bottom:-12px;left:50%;transform:translateX(-50%)}
+  .rl{grid-template-columns:1fr;gap:1.5rem}
+  .p-btn{width:44px;height:44px;font-size:1.1rem}
+  .p-nav{bottom:1.2rem;right:1rem}
+  .etrig{padding:.85rem 1rem}
+  .ecard.open .ebody{padding:1rem 1.1rem}
+  .proc-pipeline{grid-template-columns:1fr}
+  .proc-step{border-right:none;border-bottom:1px solid var(--border)}
+  .pp-tabs{gap:.3rem}
+  .pp-tab{padding:.45rem .8rem;font-size:.8rem}
 }
 </style>
 </head>
@@ -316,12 +365,10 @@ canvas#apCanvas{border-radius:50%}
     <div class="hlabel">// AUTOMATED OPTICAL INSPECTION</div>
     <h1 class="htitle">機器<em>視覺</em><br>檢測系統</h1>
     <p class="hsub">讓機器看懂世界，取代人眼在生產線上重複、高速、長時間的品質判斷工作。</p>
-
     <div class="aoi-box">
       <div class="abl">// AOI 定義</div>
       <div class="abt">以<strong>非接觸</strong>的方式自動擷取影像，並透過自動分析，從中抽取資料以<strong>控制程序或動作</strong>——這就是機器視覺檢測（AOI）的本質。</div>
     </div>
-
     <div class="ptag" style="margin-top:0">// 為什麼需要它？</div>
     <div class="hgrid" style="margin-top:.8rem">
       <div class="hcard"><div class="hci">😓</div><div class="hct">人工檢測的極限</div><div class="hcd">速度慢、容易疲勞、判斷標準因人而異——在高速大量生產下根本跟不上。</div></div>
@@ -329,7 +376,6 @@ canvas#apCanvas{border-radius:50%}
       <div class="hcard"><div class="hci">🏭</div><div class="hct">自動化大量生產</div><div class="hcd">現代製造業需要在高速產線上同時確認品質，人眼已經跟不上這個速度。</div></div>
       <div class="hcard"><div class="hci">👁️</div><div class="hct">人類 vs 機器視覺</div><div class="hcd">人類視覺擅長複雜判斷；機器視覺擅長重複性工作——兩者各有最適合的場域。</div></div>
     </div>
-
     <div class="ptag" style="margin-top:2.2rem">// 機器視覺的六大功能</div>
     <div class="func-grid">
       <div class="fi"><div class="fi-n">定位</div><div class="fi-e">Positioning</div></div>
@@ -339,7 +385,6 @@ canvas#apCanvas{border-radius:50%}
       <div class="fi"><div class="fi-n">驗證</div><div class="fi-e">Verification</div></div>
       <div class="fi"><div class="fi-n">量測</div><div class="fi-e">Measurement</div></div>
     </div>
-
     <div class="ptag" style="margin-top:2rem">// AOI 所需的技術領域</div>
     <div class="tech-tags" style="margin-top:.8rem">
       <span class="tt tt-a">光學設計</span><span class="tt tt-a">機台設計</span><span class="tt tt-a">運動控制</span><span class="tt tt-a">系統整合</span>
@@ -355,7 +400,6 @@ canvas#apCanvas{border-radius:50%}
   <h2 class="ptitle">取像模組</h2>
   <div class="divider"></div>
   <p class="pdesc">機器視覺系統的眼睛。相機、鏡頭、光源三者缺一不可，任何一個選錯，後端再強的演算法也無法補救。</p>
-
   <div class="mtabs">
     <button class="mtab active" onclick="swTab(event,'cam')">📷 相機</button>
     <button class="mtab" onclick="swTab(event,'lens')">🔭 鏡頭</button>
@@ -396,64 +440,49 @@ canvas#apCanvas{border-radius:50%}
       </div>
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">⚡</span><div><div class="etitle">Rolling Shutter vs Global Shutter——物件在動就一定要選對</div><div class="esum">拍移動中的物件，選錯快門類型，邊緣會歪掉</div></div></div><span class="earr">▼</span></div>
-        <div class="ebody"><p>想像你用掃描機掃一張紙——掃描頭從上往下一行一行掃。如果掃到一半紙張突然移動，掃出來的影像就會錯位變形。Rolling Shutter 的原理和這個一樣，感光元件逐列曝光，物件只要在移動，邊緣就會歪斜——這在生產線上是很嚴重的問題。</p>
-
-          <!-- 快門示意 SVG -->
+        <div class="ebody">
+          <p>想像你用掃描機掃一張紙——掃描頭從上往下一行一行掃。如果掃到一半紙張突然移動，掃出來的影像就會錯位變形。Rolling Shutter 的原理和這個一樣，感光元件逐列曝光，物件只要在移動，邊緣就會歪斜——這在生產線上是很嚴重的問題。</p>
           <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;margin:.9rem 0;background:#161c26;border-radius:6px;border:1px solid rgba(79,195,247,.15)">
-            <!-- Rolling Shutter 區 -->
             <text x="175" y="20" text-anchor="middle" fill="#f87171" font-family="Share Tech Mono,monospace" font-size="10" letter-spacing="1">ROLLING SHUTTER</text>
-            <!-- 感光元件格子（逐列掃描，顏色由上到下漸變） -->
             <rect x="30" y="30" width="120" height="14" rx="1" fill="rgba(79,195,247,.55)"/>
             <rect x="30" y="46" width="120" height="14" rx="1" fill="rgba(79,195,247,.48)"/>
             <rect x="30" y="62" width="120" height="14" rx="1" fill="rgba(79,195,247,.38)"/>
             <rect x="30" y="78" width="120" height="14" rx="1" fill="rgba(79,195,247,.28)"/>
             <rect x="30" y="94" width="120" height="14" rx="1" fill="rgba(79,195,247,.18)"/>
             <rect x="30" y="110" width="120" height="14" rx="1" fill="rgba(79,195,247,.10)"/>
-            <!-- 掃描線 -->
             <rect x="28" y="94" width="124" height="2" rx="1" fill="#4fc3f7" opacity=".9"/>
-            <!-- 小箭頭示意掃描方向 -->
             <line x1="160" y1="30" x2="160" y2="120" stroke="#4fc3f7" stroke-width="1" stroke-dasharray="3,2" opacity=".5"/>
             <polygon points="160,125 156,115 164,115" fill="#4fc3f7" opacity=".7"/>
             <text x="164" y="80" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="8" opacity=".7">逐列</text>
-
-            <!-- 物件移動示意（圓形，Rolling 下變形） -->
             <text x="85" y="148" text-anchor="middle" fill="#b8cce0" font-family="Noto Sans TC,sans-serif" font-size="11">拍攝結果</text>
-            <!-- 變形的橢圓（skewX 模擬果凍效應） -->
             <g transform="translate(85,172) skewX(-14)">
               <ellipse cx="0" cy="0" rx="34" ry="16" fill="none" stroke="#f87171" stroke-width="1.5"/>
               <text x="0" y="4" text-anchor="middle" fill="#f87171" font-family="Share Tech Mono,monospace" font-size="9">變形 ✗</text>
             </g>
-
-            <!-- 分隔線 -->
             <line x1="350" y1="10" x2="350" y2="190" stroke="rgba(255,255,255,.08)" stroke-width="1" stroke-dasharray="4,3"/>
-
-            <!-- Global Shutter 區 -->
             <text x="525" y="20" text-anchor="middle" fill="#4ade80" font-family="Share Tech Mono,monospace" font-size="10" letter-spacing="1">GLOBAL SHUTTER</text>
-            <!-- 感光元件格子（全部同時曝光，同色） -->
             <rect x="380" y="30" width="120" height="14" rx="1" fill="rgba(0,229,204,.5)"/>
             <rect x="380" y="46" width="120" height="14" rx="1" fill="rgba(0,229,204,.5)"/>
             <rect x="380" y="62" width="120" height="14" rx="1" fill="rgba(0,229,204,.5)"/>
             <rect x="380" y="78" width="120" height="14" rx="1" fill="rgba(0,229,204,.5)"/>
             <rect x="380" y="94" width="120" height="14" rx="1" fill="rgba(0,229,204,.5)"/>
             <rect x="380" y="110" width="120" height="14" rx="1" fill="rgba(0,229,204,.5)"/>
-            <!-- 同時曝光標示 -->
             <text x="530" y="75" fill="#00e5cc" font-family="Share Tech Mono,monospace" font-size="8" opacity=".8">同時</text>
             <line x1="519" y1="30" x2="519" y2="124" stroke="#00e5cc" stroke-width="1" opacity=".4"/>
             <line x1="523" y1="30" x2="523" y2="124" stroke="#00e5cc" stroke-width="1" opacity=".3"/>
             <line x1="527" y1="30" x2="527" y2="124" stroke="#00e5cc" stroke-width="1" opacity=".2"/>
-
-            <!-- 物件移動示意（圓形，Global 下正常） -->
             <text x="455" y="148" text-anchor="middle" fill="#b8cce0" font-family="Noto Sans TC,sans-serif" font-size="11">拍攝結果</text>
             <circle cx="455" cy="172" r="18" fill="none" stroke="#4ade80" stroke-width="1.5"/>
             <text x="455" y="176" text-anchor="middle" fill="#4ade80" font-family="Share Tech Mono,monospace" font-size="9">正常 ✓</text>
           </svg>
-
-          <div class="mcmp"><div class="mc"><div class="mct">ROLLING SHUTTER</div><div class="mcn">逐列曝光</div><div class="mcb">成本低。靜止或慢速物件適用。物件移動時邊緣出現果凍變形，本來的直線會變成斜的。</div></div><div class="mc"><div class="mct">GLOBAL SHUTTER</div><div class="mcn">全幅同步曝光</div><div class="mcb">所有像素在同一瞬間同時曝光，物件怎麼動都不會變形。成本較高，是高速生產線的必要選擇。</div></div></div></div>
+          <div class="mcmp"><div class="mc"><div class="mct">ROLLING SHUTTER</div><div class="mcn">逐列曝光</div><div class="mcb">成本低。靜止或慢速物件適用。物件移動時邊緣出現果凍變形，本來的直線會變成斜的。</div></div><div class="mc"><div class="mct">GLOBAL SHUTTER</div><div class="mcn">全幅同步曝光</div><div class="mcb">所有像素在同一瞬間同時曝光，物件怎麼動都不會變形。成本較高，是高速生產線的必要選擇。</div></div></div>
+        </div>
       </div>
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🔌</span><div><div class="etitle">傳輸介面——速度快，還是距離遠？</div><div class="esum">GigE 可以拉很遠，USB3 速度快好安裝，CoaXPress 兩個都要就選這個</div></div></div><span class="earr">▼</span></div>
-        <div class="ebody"><p>影像從相機傳到電腦就像水管送水——管子愈粗（頻寬愈大）每秒能傳的影像愈多，但管子拉得愈長阻力就愈大。</p><p><strong>GigE Vision</strong>：走一般網路線，最遠能拉 100 公尺，適合機台大、相機離電腦很遠的場合，但頻寬只有 1 Gbps，高速場合可能不夠用。</p><p><strong>USB3 Vision</strong>：就像電腦的 USB 插槽，佈線最簡單，速度也快（5 Gbps），缺點是距離只有 10 公尺，適合桌上型設備或實驗室快速建置。</p><p><strong>CoaXPress</strong>：高階選項，頻寬最高達 25 Gbps，距離也可以到 68 公尺，連接線本身還整合了電源，不用另外拉電線。速度快、距離遠都要就選這個，但成本最高。</p></div>
+        <div class="ebody"><p><strong>GigE Vision</strong>：走一般網路線，最遠能拉 100 公尺，適合機台大的場合，但頻寬只有 1 Gbps。</p><p><strong>USB3 Vision</strong>：佈線最簡單，速度快（5 Gbps），缺點是距離只有 10 公尺。</p><p><strong>CoaXPress</strong>：頻寬最高達 25 Gbps，距離也可到 68 公尺，連接線整合電源。速度快、距離遠都要就選這個。</p></div>
       </div>
+
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">📡</span><div><div class="etitle">線掃描相機——高速連續物料的最佳解</div><div class="esum">一次只拍一條線，連續掃過去拼成完整影像，適合捲材和連續帶狀物件</div></div></div><span class="earr">▼</span></div>
         <div class="ebody">
@@ -470,6 +499,7 @@ canvas#apCanvas{border-radius:50%}
           <p>適合場景：印刷品質、紡織布料、薄膜表面、面板和金屬板的外觀檢查。需要搭配穩定的物件移動速度，且光源設計要夠亮（因為曝光時間極短）。</p>
         </div>
       </div>
+
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🎨</span><div><div class="etitle">彩色相機的四種感光技術</div><div class="esum">Bayer 最便宜但解析度打折，3CCD 最好但最貴，各有取捨</div></div></div><span class="earr">▼</span></div>
         <div class="ebody">
@@ -483,6 +513,7 @@ canvas#apCanvas{border-radius:50%}
           <p style="margin-top:.8rem">工業上最常用 <strong>Bayer Pattern</strong>，夠用且成本低。需要頂級色彩品質時才考慮 3CCD/3CMOS。注意：彩色相機不適合用來拍灰階影像轉換，靈敏度不如黑白相機。</p>
         </div>
       </div>
+
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">⚙️</span><div><div class="etitle">取像三大參數——光圈、曝光、增益</div><div class="esum">三個旋鈕控制影像亮度，但各有代價，順序很重要</div></div></div><span class="earr">▼</span></div>
         <div class="ebody">
@@ -506,19 +537,14 @@ canvas#apCanvas{border-radius:50%}
       </div>
     </div>
 
-    <!-- 工業相機示意：正面 + 背面 -->
     <div class="img-card" style="margin-top:1.5rem">
       <svg viewBox="0 0 860 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;background:#1a2232">
-
-        <!-- ══ 正面 ══ -->
         <text x="175" y="22" text-anchor="middle" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="11" letter-spacing="1">正面（鏡頭側）</text>
 
-        <!-- 機身 -->
         <rect x="55" y="35" width="240" height="170" rx="10" fill="#2e3d50" stroke="#4a5a70" stroke-width="1.5"/>
         <rect x="55" y="35" width="240" height="38" rx="10" fill="#1e2e42"/>
         <rect x="55" y="59" width="240" height="14" fill="#1e2e42"/>
 
-        <!-- 四個角螺絲 -->
         <circle cx="74" cy="53" r="6" fill="#1a2535" stroke="#5a7090" stroke-width="1.2"/>
         <line x1="71" y1="53" x2="77" y2="53" stroke="#5a7090" stroke-width=".8"/>
         <line x1="74" y1="50" x2="74" y2="56" stroke="#5a7090" stroke-width=".8"/>
@@ -532,31 +558,24 @@ canvas#apCanvas{border-radius:50%}
         <line x1="273" y1="187" x2="279" y2="187" stroke="#5a7090" stroke-width=".8"/>
         <line x1="276" y1="184" x2="276" y2="190" stroke="#5a7090" stroke-width=".8"/>
 
-        <!-- C-Mount 外圈 -->
         <circle cx="175" cy="122" r="64" fill="#1a2535" stroke="#3d5065" stroke-width="2"/>
         <circle cx="175" cy="122" r="58" fill="none" stroke="#4a6070" stroke-width="1" stroke-dasharray="6,4"/>
-        <!-- 感光元件框 -->
         <rect x="145" y="92" width="60" height="60" rx="3" fill="#0d1520" stroke="#4fc3f7" stroke-width="1.5"/>
         <rect x="152" y="99" width="46" height="46" rx="2" fill="#101c2a" stroke="rgba(79,195,247,.3)" stroke-width="1"/>
         <rect x="155" y="102" width="16" height="12" rx="1" fill="rgba(79,195,247,.08)"/>
 
-        <!-- 箭頭：接口 → 往右上指向 C-Mount 螺紋環 -->
         <line x1="90" y1="205" x2="130" y2="180" stroke="#ef4444" stroke-width="1.4" marker-end="url(#arr)"/>
         <text x="55" y="222" fill="#f0f4fc" font-family="Noto Sans TC,sans-serif" font-size="14" font-weight="700">接口</text>
 
-        <!-- 箭頭：感光元件 → 往上指向感光元件中心 -->
         <line x1="175" y1="225" x2="175" y2="158" stroke="#ef4444" stroke-width="1.4" marker-end="url(#arr)"/>
         <text x="138" y="242" fill="#f0f4fc" font-family="Noto Sans TC,sans-serif" font-size="14" font-weight="700">感光元件</text>
 
-        <!-- ══ 背面 ══ -->
         <text x="650" y="22" text-anchor="middle" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="11" letter-spacing="1">背面（接口側）</text>
 
-        <!-- 機身 -->
         <rect x="525" y="35" width="250" height="170" rx="10" fill="#2e3d50" stroke="#4a5a70" stroke-width="1.5"/>
         <rect x="525" y="35" width="250" height="38" rx="10" fill="#1e2e42"/>
         <rect x="525" y="59" width="250" height="14" fill="#1e2e42"/>
 
-        <!-- 四個角螺絲 -->
         <circle cx="544" cy="53" r="6" fill="#1a2535" stroke="#5a7090" stroke-width="1.2"/>
         <line x1="541" y1="53" x2="547" y2="53" stroke="#5a7090" stroke-width=".8"/>
         <line x1="544" y1="50" x2="544" y2="56" stroke="#5a7090" stroke-width=".8"/>
@@ -570,7 +589,6 @@ canvas#apCanvas{border-radius:50%}
         <line x1="753" y1="187" x2="759" y2="187" stroke="#5a7090" stroke-width=".8"/>
         <line x1="756" y1="184" x2="756" y2="190" stroke="#5a7090" stroke-width=".8"/>
 
-        <!-- GigE 網口 -->
         <rect x="578" y="82" width="70" height="54" rx="4" fill="#1a2535" stroke="#4fc3f7" stroke-width="1.5"/>
         <rect x="583" y="87" width="60" height="44" rx="2" fill="#0d1520"/>
         <rect x="587" y="91" width="5" height="18" rx="1" fill="#3a5060"/>
@@ -582,7 +600,6 @@ canvas#apCanvas{border-radius:50%}
         <circle cx="589" cy="124" r="3" fill="#00e5cc" opacity=".9"/>
         <circle cx="634" cy="124" r="3" fill="#fbbf24" opacity=".7"/>
 
-        <!-- I/O Power 連接器 -->
         <rect x="680" y="75" width="32" height="92" rx="3" fill="#1a2535" stroke="#a78bfa" stroke-width="1.5"/>
         <rect x="685" y="81" width="22" height="80" rx="2" fill="#0d1520"/>
         <rect x="688" y="86" width="4" height="5" rx="1" fill="#7060a0"/>
@@ -600,22 +617,18 @@ canvas#apCanvas{border-radius:50%}
         <rect x="688" y="140" width="4" height="5" rx="1" fill="#7060a0"/>
         <rect x="695" y="140" width="4" height="5" rx="1" fill="#7060a0"/>
 
-        <!-- 箭頭：傳輸介面 -->
         <line x1="613" y1="225" x2="613" y2="137" stroke="#ef4444" stroke-width="1.4" marker-end="url(#arr)"/>
         <text x="555" y="242" fill="#f0f4fc" font-family="Noto Sans TC,sans-serif" font-size="14" font-weight="700">傳輸介面</text>
 
-        <!-- 箭頭：I/O Power -->
         <line x1="730" y1="225" x2="714" y2="170" stroke="#ef4444" stroke-width="1.4" marker-end="url(#arr)"/>
         <text x="700" y="242" fill="#f0f4fc" font-family="Noto Sans TC,sans-serif" font-size="14" font-weight="700">I/O, Power</text>
 
-        <!-- 箭頭定義 -->
         <defs>
           <marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
             <polygon points="0,0 8,4 0,8" fill="#ef4444"/>
           </marker>
         </defs>
 
-        <!-- 分隔線 -->
         <line x1="430" y1="15" x2="430" y2="275" stroke="rgba(255,255,255,.07)" stroke-width="1" stroke-dasharray="5,4"/>
       </svg>
       <div class="img-cap">▲ 工業相機結構示意：正面為 C-Mount 接口與感光元件；背面為傳輸介面（GigE）與 I/O、Power 連接器</div>
@@ -640,124 +653,29 @@ canvas#apCanvas{border-radius:50%}
     <div class="elist">
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🎯</span><div><div class="etitle">Image Circle——鏡頭能投影多大的圓？</div><div class="esum">感光元件必須完整落在這個圓圈內，否則四角會黑掉</div></div></div><span class="earr">▼</span></div>
-        <div class="ebody"><p>鏡頭投影出來的清晰影像，形狀其實是一個圓，不是方形。相機裡的感光元件是矩形的，必須完整塞進這個圓裡面——如果感光元件的對角線比圓的直徑還長，四個角就會超出圓的範圍，那裡的影像會變暗、變模糊，這就是「暗角」。</p><p>選鏡頭時，確認感光元件的對角線長度小於鏡頭標示的 Image Circle 數值就沒問題。</p></div>
-      </div>
-      <div class="ecard">
-        <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🔩</span><div><div class="etitle">C-Mount vs CS-Mount——差 5mm，搭錯就對不了焦</div><div class="esum">相機接口和鏡頭接口必須匹配，否則無法正確成像</div></div></div><span class="earr">▼</span></div>
-        <div class="ebody"><p>C-Mount 和 CS-Mount 是工業相機最常見的兩種鏡頭接口，外觀幾乎一樣，差別只在鏡頭裝上去之後，鏡片到感光元件的距離不同——C-Mount 是 17.526 mm，CS-Mount 是 12.5 mm，差了 5 mm。</p><p>這 5 mm 的差距如果沒有補上，鏡頭的焦點就不會落在感光元件上，整張影像都是模糊的。<strong>C-Mount 相機只能裝 C-Mount 鏡頭</strong>。CS-Mount 相機比較彈性，兩種都能用，但裝 C-Mount 鏡頭時，中間要夾一個 5 mm 的延伸環來補足。</p></div>
-      </div>
-      <div class="ecard">
-        <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">📏</span><div><div class="etitle">焦距、工作距離、光圈、畸變</div><div class="esum">選鏡頭前必須確認的四個實際限制</div></div></div><span class="earr">▼</span></div>
-        <div class="ebody"><p><strong>焦距 f</strong>：焦距愈長，在相同倍率下工作距離就愈遠——這反而是好事。機台裡如果有障礙物擋住相機，選長焦距鏡頭可以把相機「退到更遠的地方」，繞開障礙還能保持同樣的拍攝倍率。</p><p><strong>工作距離 WD</strong>：鏡頭前端到物件的距離。如果想讓鏡頭在更近的距離對焦，可以在相機和鏡頭之間夾入<em>近攝接寫環（Extension Tube）</em>，不換鏡頭就能實現近距離拍攝。</p><p><strong>光圈</strong>：光圈開大，進光量多、景深淺（只有一個平面清楚）；光圈縮小，景深加大（前後範圍都清楚），但影像變暗。檢測 3D 立體物件通常需要縮小光圈。</p><p><strong>畸變</strong>：便宜的鏡頭會讓直線看起來微微彎曲。多數外觀檢測不在意這個，但如果要量測尺寸，就必須選低畸變的鏡頭，否則量出來的數字會有誤差。</p></div>
+        <div class="ebody"><p>鏡頭投影出來的清晰影像，形狀其實是一個圓，不是方形。相機裡的感光元件是矩形的，必須完整塞進這個圓裡面——如果感光元件的對角線比圓的直徑還長，四個角就會超出圓的範圍，那裡的影像會變暗、變模糊，這就是「暗角」。</p></div>
       </div>
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🔬</span><div><div class="etitle">遠心鏡頭——量測用鏡頭的最高規格</div><div class="esum">沒有透視失真，景深內倍率完全一致，精密量測的首選</div></div></div><span class="earr">▼</span></div>
         <div class="ebody">
-          <p>一般鏡頭有個無法避免的物理現象：近的東西看起來大、遠的東西看起來小。這在看照片時很正常，但在精密量測時就是致命缺陷——同一個零件放近一點和放遠一點，量出來的尺寸會不一樣。</p>
-          <p><strong>遠心鏡頭（Telecentric Lens）</strong>解決了這個問題。它的光路設計讓只有平行於光軸的光線才能進入，使得景深範圍內的所有物件，不管距離遠近，倍率都完全一致。</p>
-          <div class="mcmp">
-            <div class="mc"><div class="mct">一般鏡頭</div><div class="mcn">有透視效應</div><div class="mcb">物件靠近時看起來變大，離遠時變小。量測時必須確保工件放置高度完全一致，否則數字會跑掉。</div></div>
-            <div class="mc"><div class="mct">遠心鏡頭</div><div class="mcn">無透視失真</div><div class="mcb">景深內倍率一致，工件就算有輕微的高低誤差，量測結果也不受影響。邊緣成像清晰穩定。</div></div>
-          </div>
-          <p>適合場景：半導體元件、精密五金零件、電子元件的尺寸量測。缺點是體積大且價格昂貴，FOV 也受限於鏡頭尺寸無法做太大。</p>
-          <div class="dyk" style="margin-top:1rem">
-            <div class="dyk-icon">🤔</div>
-            <div><div class="dyk-label">// 你知道嗎？</div><div class="dyk-text">遠心鏡頭的「Telecentric」字面意思是「遠處的中心」——光線必須平行進入，就好像光源在無限遠處一樣。這讓它的成本是一般鏡頭的 5～20 倍，但在精密量測場合無可替代。</div></div>
-          </div>
+          <p>一般鏡頭有個無法避免的物理現象：近的東西看起來大、遠的東西看起來小。這在精密量測時就是致命缺陷——同一個零件放近一點和放遠一點，量出來的尺寸會不一樣。</p>
+          <p><strong>遠心鏡頭（Telecentric Lens）</strong>的光路設計讓景深範圍內的所有物件，不管距離遠近，倍率都完全一致。適合半導體元件、精密五金零件的尺寸量測。</p>
         </div>
       </div>
-      <!-- FOV 計算器 -->
+
       <div class="ecard">
-        <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🧮</span><div><div class="etitle">FOV 計算器——輸入參數直接算出視野</div><div class="esum">Sensor 尺寸 ÷ 放大倍率 = FOV，試試看</div></div></div><span class="earr">▼</span></div>
+        <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🔩</span><div><div class="etitle">C-Mount vs CS-Mount——差 5mm，搭錯就對不了焦</div><div class="esum">相機接口和鏡頭接口必須匹配，否則無法正確成像</div></div></div><span class="earr">▼</span></div>
+        <div class="ebody"><p>C-Mount 和 CS-Mount 外觀幾乎一樣，差別在於鏡頭裝上去後到感光元件的距離不同：C-Mount 是 17.526 mm，CS-Mount 是 12.5 mm，差了 5 mm。這 5 mm 沒補上就會無法對焦。</p><p><strong>CS-Mount 相機</strong>通常可以用兩種鏡頭（裝 C-Mount 需加 5 mm 延伸環）；<strong>C-Mount 相機</strong>則只能直接用 C-Mount 鏡頭。</p></div>
+      </div>
+
+      <div class="ecard">
+        <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">📏</span><div><div class="etitle">焦距、工作距離、光圈、畸變</div><div class="esum">選鏡頭前必須確認的四個實際限制</div></div></div><span class="earr">▼</span></div>
+        <div class="ebody"><p><strong>焦距 f</strong>：焦距愈長，在相同倍率下工作距離通常更遠，有利於避開機構干涉。</p><p><strong>工作距離 WD</strong>：鏡頭到物件距離。想更近拍可加接寫環（Extension Tube）做近攝。</p><p><strong>光圈</strong>：決定進光量與景深。3D 物件通常需要縮小光圈提升景深。</p><p><strong>畸變</strong>：外觀檢測多可接受；精密量測需選低畸變鏡頭，避免尺寸誤差。</p></div>
+      </div>
+
+      <div class="ecard">
+        <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🧮</span><div><div class="etitle">FOV 計算器——輸入參數直接算出視野</div><div class="esum">Sensor 尺寸 ÷ 放大倍率 = FOV</div></div></div><span class="earr">▼</span></div>
         <div class="ebody">
-
-          <!-- 兩張示意圖並排 -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem">
-
-            <!-- 圖一：成像原理 物距/像距/焦距 -->
-            <div>
-              <div style="font-size:.75rem;font-family:'Share Tech Mono',monospace;color:var(--accent2);letter-spacing:.1em;margin-bottom:.5rem">// 成像原理</div>
-              <svg viewBox="0 0 240 245" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;display:block;background:#161c26;border-radius:6px;border:1px solid var(--border)">
-                <!-- 像面（上，小） -->
-                <ellipse cx="120" cy="32" rx="34" ry="10" fill="rgba(255,230,150,.12)" stroke="#e8b84b" stroke-width="1.5"/>
-                <text x="158" y="36" fill="#e8b84b" font-family="Noto Sans TC,sans-serif" font-size="10" font-weight="700">像面</text>
-                <!-- d 標示（像面寬度） -->
-                <line x1="86" y1="22" x2="154" y2="22" stroke="#4fc3f7" stroke-width="1"/>
-                <line x1="86" y1="18" x2="86" y2="26" stroke="#4fc3f7" stroke-width="1"/>
-                <line x1="154" y1="18" x2="154" y2="26" stroke="#4fc3f7" stroke-width="1"/>
-                <text x="120" y="18" text-anchor="middle" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="10" font-style="italic">d</text>
-                <!-- 像面內的 L 形（180度旋轉，比物面小） -->
-                <g transform="rotate(180, 120, 33)">
-                  <rect x="114" y="27" width="6" height="11" fill="#e8b84b" opacity=".85"/>
-                  <rect x="120" y="33" width="11" height="5" fill="#e8b84b" opacity=".85"/>
-                </g>
-
-                <!-- 鏡頭（中） -->
-                <ellipse cx="120" cy="120" rx="16" ry="24" fill="#263040" stroke="#4fc3f7" stroke-width="1.8"/>
-                <text x="142" y="114" fill="#4fc3f7" font-family="Noto Sans TC,sans-serif" font-size="9" font-weight="700">鏡頭</text>
-                <text x="142" y="126" fill="#b8cce0" font-family="Noto Sans TC,sans-serif" font-size="8">(焦距f)</text>
-
-                <!-- 物面（下，大） -->
-                <ellipse cx="120" cy="208" rx="56" ry="14" fill="rgba(100,200,100,.12)" stroke="#4ade80" stroke-width="1.5"/>
-                <text x="180" y="212" fill="#4ade80" font-family="Noto Sans TC,sans-serif" font-size="10" font-weight="700">物面</text>
-                <!-- D 標示（物面寬度） -->
-                <line x1="64" y1="226" x2="176" y2="226" stroke="#4fc3f7" stroke-width="1"/>
-                <line x1="64" y1="222" x2="64" y2="230" stroke="#4fc3f7" stroke-width="1"/>
-                <line x1="176" y1="222" x2="176" y2="230" stroke="#4fc3f7" stroke-width="1"/>
-                <text x="120" y="238" text-anchor="middle" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="10" font-style="italic">D</text>
-                <!-- 物面內的 L 形（正向，直角在左上，大） -->
-                <rect x="100" y="196" width="10" height="18" fill="#4ade80" opacity=".7"/>
-                <rect x="110" y="207" width="18" height="8" fill="#4ade80" opacity=".7"/>
-
-                <!-- 投影虛線 -->
-                <line x1="86" y1="42" x2="104" y2="96" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
-                <line x1="154" y1="42" x2="136" y2="96" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
-                <line x1="104" y1="144" x2="64" y2="194" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
-                <line x1="136" y1="144" x2="176" y2="194" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
-
-                <!-- 像距 v -->
-                <line x1="200" y1="32" x2="200" y2="120" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2"/>
-                <line x1="195" y1="32" x2="205" y2="32" stroke="#ef4444" stroke-width="1"/>
-                <line x1="195" y1="120" x2="205" y2="120" stroke="#ef4444" stroke-width="1"/>
-                <text x="208" y="82" fill="#ef4444" font-family="Noto Sans TC,sans-serif" font-size="10" font-weight="700">像距v</text>
-
-                <!-- 物距 u -->
-                <line x1="200" y1="120" x2="200" y2="208" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2"/>
-                <line x1="195" y1="208" x2="205" y2="208" stroke="#ef4444" stroke-width="1"/>
-                <text x="208" y="170" fill="#ef4444" font-family="Noto Sans TC,sans-serif" font-size="10" font-weight="700">物距u</text>
-              </svg>
-            </div>
-
-            <!-- 圖二：FOV 與感光元件對應關係 -->
-            <div>
-              <div style="font-size:.75rem;font-family:'Share Tech Mono',monospace;color:var(--accent2);letter-spacing:.1em;margin-bottom:.5rem">// FOV 與感光元件</div>
-              <svg viewBox="0 0 180 245" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:240px;display:block;background:#161c26;border-radius:6px;border:1px solid var(--border)">
-                <!-- 感光元件（上，小） -->
-                <rect x="55" y="18" width="70" height="46" rx="4" fill="rgba(0,229,204,.15)" stroke="#00e5cc" stroke-width="1.8"/>
-                <text x="90" y="39" text-anchor="middle" fill="#00e5cc" font-family="Noto Sans TC,sans-serif" font-size="10" font-weight="700">感光元件</text>
-                <text x="90" y="53" text-anchor="middle" fill="rgba(0,229,204,.6)" font-family="Share Tech Mono,monospace" font-size="8">Sensor</text>
-
-                <!-- 鏡頭（中） -->
-                <ellipse cx="90" cy="124" rx="18" ry="14" fill="#263040" stroke="#4fc3f7" stroke-width="1.8"/>
-                <ellipse cx="90" cy="124" rx="10" ry="8" fill="#1a2535" stroke="rgba(79,195,247,.4)" stroke-width="1"/>
-                <text x="115" y="128" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="8">LENS</text>
-
-                <!-- FOV 面（下，大） -->
-                <rect x="12" y="185" width="156" height="40" rx="4" fill="rgba(79,195,247,.12)" stroke="#4fc3f7" stroke-width="1.8"/>
-                <text x="90" y="210" text-anchor="middle" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="13" font-weight="700" letter-spacing="1">FOV</text>
-
-                <!-- 投影虛線 -->
-                <line x1="55" y1="64" x2="72" y2="110" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
-                <line x1="125" y1="64" x2="108" y2="110" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
-                <line x1="72" y1="138" x2="12" y2="185" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
-                <line x1="108" y1="138" x2="168" y2="185" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
-
-                <!-- 公式 -->
-                <text x="90" y="238" text-anchor="middle" fill="rgba(0,229,204,.65)" font-family="Share Tech Mono,monospace" font-size="8">FOV = Sensor ÷ α</text>
-              </svg>
-            </div>
-          </div>
-
           <div class="aperture-widget">
             <div class="aw-title">// 互動計算：輸入你的參數</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1rem">
@@ -792,47 +710,34 @@ canvas#apCanvas{border-radius:50%}
       </div>
     </div>
 
-    <!-- 鏡頭示意 SVG -->
     <div class="img-card" style="margin-top:1.5rem">
       <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;background:#1d2535">
-        <!-- 一般鏡頭 -->
         <text x="200" y="28" text-anchor="middle" fill="#b8cce0" font-family="Share Tech Mono,monospace" font-size="11">一般鏡頭（有透視效應）</text>
         <ellipse cx="200" cy="100" rx="18" ry="55" fill="#263040" stroke="#4fc3f7" stroke-width="1.5"/>
-        <!-- 近物大 -->
         <rect x="60" y="70" width="30" height="60" rx="3" fill="rgba(79,195,247,.2)" stroke="#4fc3f7" stroke-width="1.2"/>
         <text x="75" y="148" text-anchor="middle" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="9">近</text>
-        <!-- 遠物小 -->
         <rect x="100" y="82" width="18" height="36" rx="2" fill="rgba(79,195,247,.12)" stroke="rgba(79,195,247,.5)" stroke-width="1"/>
         <text x="109" y="130" text-anchor="middle" fill="rgba(79,195,247,.6)" font-family="Share Tech Mono,monospace" font-size="9">遠</text>
-        <!-- 光線匯聚 -->
         <line x1="90" y1="70" x2="200" y2="80" stroke="rgba(79,195,247,.4)" stroke-width=".8"/>
         <line x1="90" y1="130" x2="200" y2="120" stroke="rgba(79,195,247,.4)" stroke-width=".8"/>
-        <!-- 感光元件 -->
         <rect x="320" y="75" width="8" height="50" rx="2" fill="#4fc3f7" opacity=".7"/>
         <text x="340" y="103" fill="#b8cce0" font-family="Share Tech Mono,monospace" font-size="9">Sensor</text>
 
-        <!-- 分隔線 -->
         <line x1="420" y1="20" x2="420" y2="180" stroke="rgba(255,255,255,.08)" stroke-width="1" stroke-dasharray="4,4"/>
 
-        <!-- 遠心鏡頭 -->
         <text x="610" y="28" text-anchor="middle" fill="#b8cce0" font-family="Share Tech Mono,monospace" font-size="11">遠心鏡頭（無透視失真）</text>
         <ellipse cx="590" cy="100" rx="18" ry="55" fill="#263040" stroke="#00e5cc" stroke-width="1.5"/>
         <rect x="540" y="40" width="12" height="120" rx="2" fill="rgba(79,195,247,.08)" stroke="rgba(79,195,247,.2)" stroke-width="1"/>
-        <!-- 近物 -->
         <rect x="460" y="70" width="30" height="60" rx="3" fill="rgba(0,229,204,.2)" stroke="#00e5cc" stroke-width="1.2"/>
         <text x="475" y="148" text-anchor="middle" fill="#00e5cc" font-family="Share Tech Mono,monospace" font-size="9">近</text>
-        <!-- 遠物（同大） -->
         <rect x="500" y="70" width="30" height="60" rx="3" fill="rgba(0,229,204,.12)" stroke="rgba(0,229,204,.5)" stroke-width="1"/>
         <text x="515" y="148" text-anchor="middle" fill="rgba(0,229,204,.7)" font-family="Share Tech Mono,monospace" font-size="9">遠</text>
-        <!-- 平行光線 -->
         <line x1="475" y1="72" x2="590" y2="72" stroke="rgba(0,229,204,.5)" stroke-width=".9"/>
         <line x1="475" y1="128" x2="590" y2="128" stroke="rgba(0,229,204,.5)" stroke-width=".9"/>
         <line x1="515" y1="72" x2="590" y2="72" stroke="rgba(0,229,204,.3)" stroke-width=".9" stroke-dasharray="3,2"/>
         <line x1="515" y1="128" x2="590" y2="128" stroke="rgba(0,229,204,.3)" stroke-width=".9" stroke-dasharray="3,2"/>
-        <!-- 感光元件 -->
         <rect x="720" y="75" width="8" height="50" rx="2" fill="#00e5cc" opacity=".7"/>
         <text x="740" y="103" fill="#b8cce0" font-family="Share Tech Mono,monospace" font-size="9">Sensor</text>
-        <!-- 等號標示 -->
         <text x="611" y="175" text-anchor="middle" fill="#00e5cc" font-family="Share Tech Mono,monospace" font-size="10">近 = 遠（倍率一致）</text>
       </svg>
       <div class="img-cap">▲ 一般鏡頭 vs 遠心鏡頭：遠心鏡頭讓近處和遠處的物件在影像中保持相同大小</div>
@@ -854,15 +759,14 @@ canvas#apCanvas{border-radius:50%}
         <div class="vwarn">💡 現代工業幾乎全用 LED——壽命長、亮度可精確控制，還能在快門瞬間閃出數倍亮度，凍結高速移動的物件。</div>
       </div>
     </div>
-    <p class="pdesc" style="margin-bottom:.9rem">打光的方向決定影像能呈現什麼資訊，點選下方模式看實際效果：</p>
+    <p class="pdesc" style="margin-bottom:.9rem">打光的方向決定影像能呈現什麼資訊，點選下方模式看示意效果：</p>
 
-    <!-- 照明互動模擬 -->
     <div class="aperture-widget" style="margin-bottom:1.8rem">
       <div class="aw-title">// 互動示意：切換照明方式，看影像如何變化</div>
       <div style="display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap">
-        <button class="lb-btn" data-mode="bright" onclick="setLight('bright')" style="padding:.5rem 1.1rem;border-radius:4px;border:1px solid var(--border);background:var(--accent);color:#0d1117;font-weight:700;font-size:.88rem;cursor:pointer">☀️ 明視野</button>
-        <button class="lb-btn" data-mode="dark" onclick="setLight('dark')" style="padding:.5rem 1.1rem;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--dim);font-weight:700;font-size:.88rem;cursor:pointer">🌑 暗視野</button>
-        <button class="lb-btn" data-mode="back" onclick="setLight('back')" style="padding:.5rem 1.1rem;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--dim);font-weight:700;font-size:.88rem;cursor:pointer">🔦 穿透光</button>
+        <button class="lb-btn active" data-mode="bright" onclick="setLight('bright')">☀️ 明視野</button>
+        <button class="lb-btn" data-mode="dark" onclick="setLight('dark')">🌑 暗視野</button>
+        <button class="lb-btn" data-mode="back" onclick="setLight('back')">🔦 穿透光</button>
       </div>
       <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap">
         <canvas id="lightCanvas" width="220" height="220" style="border-radius:8px;background:#0d1117;border:1px solid var(--border);flex-shrink:0"></canvas>
@@ -879,16 +783,15 @@ canvas#apCanvas{border-radius:50%}
     <div class="elist">
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🔦</span><div><div class="etitle">LED 光源的形狀——不同形狀解決不同問題</div><div class="esum">環形光、條形光、背光板……形狀不同，打出來的效果完全不一樣</div></div></div><span class="earr">▼</span></div>
-        <div class="ebody"><p style="margin-bottom:.9rem">LED 可以組裝成各種形狀，每種形狀有它最適合的應用場合：</p>
+        <div class="ebody">
           <div style="display:flex;flex-direction:column;gap:.55rem">
-            <div style="background:var(--bg-light);border-radius:5px;padding:.8rem 1rem;border-left:2px solid var(--accent)"><div style="font-size:.87rem;font-weight:700;color:var(--text);margin-bottom:.22rem">💍 無影環光（Dome Light）</div><div style="font-size:.9rem;line-height:1.7;color:var(--dim)">半球形漫射光源，從所有角度均勻打光，消除陰影和高反射面的眩光。適合金屬零件、電路板等高反光表面的外觀檢測。</div></div>
-            <div style="background:var(--bg-light);border-radius:5px;padding:.8rem 1rem;border-left:2px solid var(--accent)"><div style="font-size:.87rem;font-weight:700;color:var(--text);margin-bottom:.22rem">⭕ 環形光（Ring Light）</div><div style="font-size:.9rem;line-height:1.7;color:var(--dim)">圍繞鏡頭一圈的 LED 陣列，正面均勻照射。是最常見的通用型光源，適合一般表面外觀檢測。</div></div>
-            <div style="background:var(--bg-light);border-radius:5px;padding:.8rem 1rem;border-left:2px solid var(--accent)"><div style="font-size:.87rem;font-weight:700;color:var(--text);margin-bottom:.22rem">📏 條形光（Bar Light）</div><div style="font-size:.9rem;line-height:1.7;color:var(--dim)">單方向線性光源，強調特定方向的陰影與高度差。適合邊緣檢測、刮痕、焊錫高度量測，也常搭配線掃描相機使用。</div></div>
-            <div style="background:var(--bg-light);border-radius:5px;padding:.8rem 1rem;border-left:2px solid var(--accent)"><div style="font-size:.87rem;font-weight:700;color:var(--text);margin-bottom:.22rem">🎯 外同軸光（Coaxial Light）</div><div style="font-size:.9rem;line-height:1.7;color:var(--dim)">光線從鏡頭內部沿光軸方向射出，利用半反射鏡導光。適合極度平坦的高反光表面（如晶圓、金屬蓋板），能讓微細刮痕現形。</div></div>
+            <div style="background:var(--bg-light);border-radius:5px;padding:.8rem 1rem;border-left:2px solid var(--accent)"><div style="font-size:.87rem;font-weight:700;color:var(--text);margin-bottom:.22rem">💍 無影環光（Dome Light）</div><div style="font-size:.9rem;line-height:1.7;color:var(--dim)">半球形漫射光源，從所有角度均勻打光，消除陰影和高反射面的眩光。</div></div>
+            <div style="background:var(--bg-light);border-radius:5px;padding:.8rem 1rem;border-left:2px solid var(--accent)"><div style="font-size:.87rem;font-weight:700;color:var(--text);margin-bottom:.22rem">⭕ 環形光（Ring Light）</div><div style="font-size:.9rem;line-height:1.7;color:var(--dim)">圍繞鏡頭一圈的 LED 陣列，正面均勻照射。是最常見的通用型光源。</div></div>
             <div style="background:var(--bg-light);border-radius:5px;padding:.8rem 1rem;border-left:2px solid var(--accent)"><div style="font-size:.87rem;font-weight:700;color:var(--text);margin-bottom:.22rem">⬛ 背光板（Back Light）</div><div style="font-size:.9rem;line-height:1.7;color:var(--dim)">放在物件背面，產生均勻亮面讓物件呈現黑色剪影。尺寸量測的首選——輪廓最清晰，量測誤差最小。</div></div>
           </div>
         </div>
       </div>
+
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">💡</span><div><div class="etitle">各種光源的特色與選擇</div><div class="esum">鎢絲燈熱、螢光燈老化快、氙氣燈貴——現代工業幾乎全用 LED</div></div></div><span class="earr">▼</span></div>
         <div class="ebody"><p style="margin-bottom:.9rem">光源發展了很多種類，但每種都有它的取捨，最終 LED 幾乎成為工業視覺的唯一答案。</p>
@@ -900,13 +803,15 @@ canvas#apCanvas{border-radius:50%}
           </div>
         </div>
       </div>
+
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🎨</span><div><div class="etitle">光的顏色也是工具</div><div class="esum">同色光讓背景消失，互補色光讓邊緣更銳利</div></div></div><span class="earr">▼</span></div>
         <div class="ebody"><p>你有沒有注意到，在黃色路燈下，鮮豔的顏色看起來都變得暗淡？這是因為特定波長的光打在相同顏色的表面上，那個顏色的對比會被壓低、幾乎消失。反過來，用互補色的光，就能讓那個顏色的區域顯得更深更黑，邊緣更銳利。</p><p>實際案例：用<strong>紅色 LED</strong> 拍一個紅色物件上的黑色印刷文字，紅色背景幾乎消失，黑色文字反而跳出來更清楚。工業上常用紅、綠、藍、白、紅外（IR）和近紫外（NUV），各自在不同材質下有最佳效果——但沒有萬用答案，實際上還是要動手試。</p></div>
       </div>
+
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">⚡</span><div><div class="etitle">頻閃控制——讓光源在關鍵瞬間爆發</div><div class="esum">快門開啟的那一瞬，光源閃出平時數倍的亮度，凍結高速物件</div></div></div><span class="earr">▼</span></div>
-        <div class="ebody"><p>拍高速移動的物件時，曝光時間必須極短，否則影像會模糊。但曝光時間短，進光量就少，影像會太暗。頻閃光源解決了這個矛盾——在相機快門開啟的那一微秒，以平時數倍的強度猛烈閃光，讓影像既夠亮又不模糊。</p><p>這樣做還有一個好處：LED 光源平時處於低功率待機，只在必要時全力爆發，<strong>實際壽命比連續照明長好幾倍</strong>。搭配 Global Shutter 相機使用效果最佳。</p></div>
+        <div class="ebody"><p>拍高速移動的物件時，曝光時間必須極短，否則影像會模糊；但曝光越短影像越暗。頻閃光源能在快門開啟的那一瞬間以數倍亮度閃光，讓影像既夠亮又不模糊。搭配 Global Shutter 相機效果最佳。</p></div>
       </div>
     </div>
   </div>
@@ -919,15 +824,538 @@ canvas#apCanvas{border-radius:50%}
   <div class="ptag">// 02 · IMAGE PROCESSING</div>
   <h2 class="ptitle">影像處理</h2>
   <div class="divider"></div>
-  <p class="pdesc">影像處理是系統的「大腦」，將原始像素資料轉化為有意義的特徵資訊。從基本的前處理到進階的深度學習，依檢測需求組合不同的演算法流程。</p>
-  <p class="pnote">❓ 為何需要了解流程？——每個處理步驟都會影響最終結果，理解流程才能在誤判率高時找到問題出在哪個環節並進行調整。</p>
-  <div class="pipeline">
-    <div class="ps"><div class="psn">STEP 01</div><div class="pst">影像前處理</div><div class="psb">灰階轉換、雜訊去除（高斯模糊、中值濾波）、對比增強（直方圖均化），提升影像品質。</div></div>
-    <div class="ps"><div class="psn">STEP 02</div><div class="pst">特徵擷取</div><div class="psb">邊緣偵測（Canny、Sobel）、輪廓提取、Blob 分析，找出影像中的幾何特徵。</div></div>
-    <div class="ps"><div class="psn">STEP 03</div><div class="pst">二值化分割</div><div class="psb">閾值分割（Otsu、自適應閾值）將目標區域從背景中分離，是後續量測的基礎。</div></div>
-    <div class="ps"><div class="psn">STEP 04</div><div class="pst">模式識別</div><div class="psb">傳統機器學習（SVM、隨機森林）或深度學習（CNN、YOLO）分類瑕疵類型。</div></div>
-    <div class="ps"><div class="psn">STEP 05</div><div class="pst">判定輸出</div><div class="psb">依設定的公差標準給出 OK / NG 結果，並將座標、尺寸、缺陷類別回傳給 PLC 或 MES。</div></div>
+  <p class="pdesc">影像處理是系統的「大腦」，將原始像素資料轉化為有意義的特徵資訊。包含強度轉換、空間濾波、頻率濾波、以及影像分割四大主題。</p>
+
+  <!-- Tab navigation -->
+  <div class="pp-tabs">
+    <button class="pp-tab active" onclick="swPP(event,'pp-intensity')">🎚️ 強度轉換</button>
+    <button class="pp-tab" onclick="swPP(event,'pp-spatial')">🧮 空間濾波</button>
+    <button class="pp-tab" onclick="swPP(event,'pp-frequency')">📡 頻率濾波</button>
+    <button class="pp-tab" onclick="swPP(event,'pp-segmentation')">✂️ 影像分割</button>
   </div>
+
+  <!-- ── 強度轉換 ── -->
+  <div class="pp-section active" id="pp-intensity">
+    <div class="sec-header">
+      <span class="sec-num">STEP 01</span>
+      <span class="sec-title">強度轉換與直方圖</span>
+    </div>
+    <p style="font-size:.97rem;line-height:1.82;color:var(--dim);margin-bottom:1.2rem">強度轉換（Intensity Transformation）是最基本的影像前處理步驟——對每個像素獨立套用一個數學函數，改變它的亮暗程度，進而提升影像的可視性與對比度。輸入影像的每個像素值 <em>r</em> 都經過函數 <em>S = T(r)</em> 轉換成輸出值 <em>s</em>。</p>
+
+    <!-- Interactive transform demo -->
+    <div class="transform-widget">
+      <div class="aw-title">// 互動示意：切換轉換函數，看影像如何變化</div>
+      <div class="transform-btns">
+        <button class="t-btn active" onclick="setTransform('threshold')">二值化</button>
+        <button class="t-btn" onclick="setTransform('negative')">負轉換</button>
+        <button class="t-btn" onclick="setTransform('log')">對數轉換</button>
+        <button class="t-btn" onclick="setTransform('gamma_bright')">指數（γ&lt;1）</button>
+        <button class="t-btn" onclick="setTransform('gamma_dark')">指數（γ&gt;1）</button>
+      </div>
+      <div class="transform-display">
+        <div class="canvas-pair">
+          <div class="canvas-wrap">
+            <canvas id="trOrigCanvas" width="150" height="150" style="border-radius:5px;border:1px solid var(--border)"></canvas>
+            <div class="canvas-label">原始影像</div>
+          </div>
+          <div style="display:flex;align-items:center;color:var(--accent);font-size:1.3rem;padding-top:40px">→</div>
+          <div class="canvas-wrap">
+            <canvas id="trOutCanvas" width="150" height="150" style="border-radius:5px;border:1px solid var(--border)"></canvas>
+            <div class="canvas-label" id="trOutLabel">二值化輸出</div>
+          </div>
+          <div class="canvas-wrap" style="margin-left:.5rem">
+            <canvas id="trCurveCanvas" width="120" height="120" style="border-radius:5px;border:1px solid var(--border);background:#0d1117"></canvas>
+            <div class="canvas-label">轉換曲線 T(r)</div>
+          </div>
+        </div>
+        <div class="filter-info-panel">
+          <div id="trDesc" style="font-size:.92rem;line-height:1.8;color:var(--dim)"></div>
+          <div id="trUse" style="margin-top:.8rem;background:var(--bg);border-radius:5px;padding:.7rem 1rem;border-left:2px solid var(--accent2);font-size:.88rem;color:var(--text);line-height:1.7"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Histogram section -->
+    <div class="sec-divider"></div>
+    <div class="sec-header" style="margin-top:0">
+      <span class="sec-num">CONCEPT</span>
+      <span class="sec-title">直方圖與直方圖等化</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.2rem">
+      <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:6px;padding:1.2rem">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.15em;color:var(--accent2);margin-bottom:.7rem">// 什麼是直方圖？</div>
+        <p style="font-size:.9rem;line-height:1.78;color:var(--dim);margin-bottom:.8rem">直方圖就是「像素強度的人口統計圖」——橫軸是亮度值（0=黑到255=白），縱軸是有多少像素落在那個亮度。一眼就能看出影像是偏暗、偏亮，還是對比度不足。</p>
+        <div style="display:flex;gap:1rem">
+          <div style="flex:1">
+            <div style="font-size:.75rem;color:var(--dim);margin-bottom:.3rem;font-family:'Share Tech Mono',monospace">偏暗（集中左側）</div>
+            <div class="hist-bars" id="histDark"></div>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:.75rem;color:var(--dim);margin-bottom:.3rem;font-family:'Share Tech Mono',monospace">對比不足（中央）</div>
+            <div class="hist-bars" id="histMid"></div>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:.75rem;color:var(--dim);margin-bottom:.3rem;font-family:'Share Tech Mono',monospace">等化後（均勻）</div>
+            <div class="hist-bars" id="histFlat"></div>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:6px;padding:1.2rem">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.15em;color:var(--accent2);margin-bottom:.7rem">// 直方圖等化（Equalization）</div>
+        <p style="font-size:.9rem;line-height:1.78;color:var(--dim);margin-bottom:.7rem">透過重新分布像素強度，讓亮度均勻散佈在整個範圍，提升影像整體對比度。原本擠在中間灰階的像素，等化後會被撐開到更寬的範圍。</p>
+        <div style="display:grid;grid-template-columns:90px 24px 90px;gap:1rem;align-items:center;justify-content:start">
+          <canvas id="heqOrig" width="90" height="90" style="border-radius:4px;border:1px solid var(--border)"></canvas>
+          <div style="color:var(--accent);font-size:1.2rem;text-align:center">→</div>
+          <canvas id="heqOut" width="90" height="90" style="border-radius:4px;border:1px solid var(--border)"></canvas>
+        </div>
+        <div style="display:grid;grid-template-columns:90px 24px 90px;gap:1rem;margin-top:.5rem;justify-content:start">
+          <div style="font-size:.75rem;text-align:center;color:var(--dim);font-family:'Share Tech Mono',monospace">等化前</div>
+          <div></div>
+          <div style="font-size:.75rem;text-align:center;color:var(--accent2);font-family:'Share Tech Mono',monospace">等化後</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box yellow">
+      <strong>💡 選擇提示：</strong>偏暗影像先試負轉換或對數轉換；對比不足先試直方圖等化；需要前景/背景二分就用二值化；校正螢幕輸出偏差用指數（Power Law）轉換。
+    </div>
+  </div>
+
+  <!-- ── 空間濾波 ── -->
+  <div class="pp-section" id="pp-spatial">
+    <div class="sec-header">
+      <span class="sec-num">STEP 02</span>
+      <span class="sec-title">空間域濾波（Spatial Filtering）</span>
+    </div>
+    <p style="font-size:.97rem;line-height:1.82;color:var(--dim);margin-bottom:1.2rem">空間濾波把一個小遮罩（kernel）在影像上滑動，每個位置都用遮罩內的加權平均計算輸出值。遮罩的係數決定了濾波器的功能——平滑、銳化還是去除特定雜訊，全靠這幾個數字。</p>
+
+    <!-- Interactive filter demo -->
+    <div class="filter-widget">
+      <div class="aw-title">// 互動示意：選擇濾波器，觀察效果與遮罩</div>
+      <div class="filter-btns">
+        <button class="f-btn active" onclick="setFilter('mean')">均值濾波</button>
+        <button class="f-btn" onclick="setFilter('gaussian')">高斯濾波</button>
+        <button class="f-btn" onclick="setFilter('median')">中值濾波</button>
+        <button class="f-btn" onclick="setFilter('sharpen')">銳化濾波</button>
+        <button class="f-btn" onclick="setFilter('laplacian')">拉普拉斯</button>
+        <button class="f-btn" onclick="setFilter('sobel_x')">Sobel X</button>
+        <button class="f-btn" onclick="setFilter('sobel_y')">Sobel Y</button>
+      </div>
+      <div class="filter-display">
+        <div>
+          <div class="canvas-pair">
+            <div class="canvas-wrap">
+              <canvas id="filtOrig" width="140" height="140" style="border-radius:5px;border:1px solid var(--border)"></canvas>
+              <div class="canvas-label">原始影像</div>
+            </div>
+            <div style="display:flex;align-items:center;color:var(--accent);font-size:1.3rem;padding-top:40px">→</div>
+            <div class="canvas-wrap">
+              <canvas id="filtOut" width="140" height="140" style="border-radius:5px;border:1px solid var(--border)"></canvas>
+              <div class="canvas-label" id="filtOutLabel">均值濾波輸出</div>
+            </div>
+          </div>
+          <div style="margin-top:1rem">
+            <div class="kernel-label">// 遮罩（Kernel）</div>
+            <div id="kernelDisplay"></div>
+            <div id="kernelNote" style="font-size:.78rem;color:var(--dim);margin-top:.4rem"></div>
+          </div>
+        </div>
+        <div class="filter-info-panel">
+          <div id="filtDesc" style="font-size:.92rem;line-height:1.8;color:var(--dim);margin-bottom:.8rem"></div>
+          <div id="filtUse" style="background:var(--bg);border-radius:5px;padding:.7rem 1rem;border-left:2px solid var(--accent2);font-size:.88rem;color:var(--text);line-height:1.7"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Median filter explainer -->
+    <div class="sec-divider"></div>
+    <div class="sec-header" style="margin-top:0">
+      <span class="sec-num">DETAIL</span>
+      <span class="sec-title">中值濾波器的工作原理</span>
+    </div>
+
+    <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:6px;padding:1.3rem;margin-bottom:1.2rem">
+      <p style="font-size:.9rem;line-height:1.78;color:var(--dim);margin-bottom:1rem">中值濾波器不做加權平均，而是把 3×3 視窗內的 9 個像素值<strong style="color:var(--text)">排序後取中間值</strong>。這個特性讓它對「胡椒鹽」雜訊（極亮或極暗的孤立像素）非常有效——極端值在排序中被推到兩端，中間值是正常的像素。</p>
+      <div style="background:var(--bg);border-radius:5px;padding:1rem">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--accent2);letter-spacing:.1em;margin-bottom:.7rem">// 運算範例</div>
+        <div style="display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap">
+          <div>
+            <div style="font-size:.75rem;color:var(--dim);margin-bottom:.4rem">3×3 視窗像素值</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;width:130px">
+              <div style="background:var(--bg-light);padding:.3rem;text-align:center;font-family:'Share Tech Mono',monospace;font-size:.82rem;border-radius:3px">42</div>
+              <div style="background:var(--bg-light);padding:.3rem;text-align:center;font-family:'Share Tech Mono',monospace;font-size:.82rem;border-radius:3px">46</div>
+              <div style="background:rgba(248,113,113,.15);padding:.3rem;text-align:center;font-family:'Share Tech Mono',monospace;font-size:.82rem;border-radius:3px;color:#f87171">255</div>
+              <div style="background:var(--bg-light);padding:.3rem;text-align:center;font-family:'Share Tech Mono',monospace;font-size:.82rem;border-radius:3px">50</div>
+              <div style="background:rgba(79,195,247,.15);padding:.3rem;text-align:center;font-family:'Share Tech Mono',monospace;font-size:.82rem;border-radius:3px;color:var(--accent)">200</div>
+              <div style="background:var(--bg-light);padding:.3rem;text-align:center;font-family:'Share Tech Mono',monospace;font-size:.82rem;border-radius:3px">44</div>
+              <div style="background:var(--bg-light);padding:.3rem;text-align:center;font-family:'Share Tech Mono',monospace;font-size:.82rem;border-radius:3px">41</div>
+              <div style="background:var(--bg-light);padding:.3rem;text-align:center;font-family:'Share Tech Mono',monospace;font-size:.82rem;border-radius:3px">48</div>
+              <div style="background:rgba(248,113,113,.15);padding:.3rem;text-align:center;font-family:'Share Tech Mono',monospace;font-size:.82rem;border-radius:3px;color:#f87171">0</div>
+            </div>
+          </div>
+          <div style="color:var(--accent);font-size:1.5rem">→</div>
+          <div>
+            <div style="font-size:.75rem;color:var(--dim);margin-bottom:.4rem">排序後</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:.82rem;color:var(--dim);line-height:1.8">0, 41, 42, 44, <span style="color:var(--accent2);font-weight:700">46</span>, 48, 50, 200, 255</div>
+            <div style="font-size:.78rem;color:var(--dim);margin-top:.4rem">↑ 第 5 個（中值） = <span style="color:var(--accent2);font-weight:700">46</span></div>
+            <div style="background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.3);border-radius:4px;padding:.5rem .8rem;margin-top:.6rem;font-size:.85rem;color:#4ade80">255 和 200（雜訊）被排除 ✓</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison table -->
+    <div class="sec-header">
+      <span class="sec-num">COMPARE</span>
+      <span class="sec-title">空間濾波器比較</span>
+    </div>
+    <table class="cmp-table">
+      <thead><tr><th>濾波器</th><th>用途</th><th>對雜訊</th><th>保留邊緣</th><th>適用場景</th></tr></thead>
+      <tbody>
+        <tr><td><strong>均值濾波</strong></td><td>平滑影像</td><td class="good">有效</td><td class="bad">會模糊邊緣</td><td>一般雜訊去除</td></tr>
+        <tr><td><strong>高斯濾波</strong></td><td>柔和平滑</td><td class="good">有效</td><td class="warn">輕微模糊</td><td>自然影像前處理</td></tr>
+        <tr><td><strong>中值濾波</strong></td><td>去除脈衝雜訊</td><td class="good">極佳</td><td class="good">邊緣保留好</td><td>胡椒鹽雜訊、IC板</td></tr>
+        <tr><td><strong>銳化濾波</strong></td><td>強調邊緣</td><td class="bad">放大雜訊</td><td class="good">強化邊緣</td><td>細節增強、輪廓</td></tr>
+        <tr><td><strong>拉普拉斯</strong></td><td>二階邊緣偵測</td><td class="bad">敏感</td><td class="good">所有方向</td><td>邊緣偵測</td></tr>
+        <tr><td><strong>Sobel X/Y</strong></td><td>一階邊緣偵測</td><td class="warn">中等</td><td class="good">方向性強</td><td>水平/垂直邊緣</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── 頻率濾波 ── -->
+  <div class="pp-section" id="pp-frequency">
+    <div class="sec-header">
+      <span class="sec-num">STEP 03</span>
+      <span class="sec-title">頻率域濾波（Frequency Filtering）</span>
+    </div>
+    <p style="font-size:.97rem;line-height:1.82;color:var(--dim);margin-bottom:1.2rem">空間域濾波是「直接在影像上操作」；頻率域濾波則是先把影像「翻譯」成頻率語言，在那裡操作完再翻譯回來。這樣做讓某些複雜的濾波設計變得非常直觀——想要什麼頻率就留什麼。</p>
+
+    <!-- Frequency concept visual -->
+    <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin-bottom:1.5rem">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.18em;color:var(--accent2);margin-bottom:1rem">// 影像頻率是什麼？</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem">
+        <div>
+          <canvas id="freqHigh" width="120" height="60" style="width:100%;border-radius:5px;border:1px solid var(--border);display:block"></canvas>
+          <div style="text-align:center;font-family:'Share Tech Mono',monospace;font-size:.72rem;color:#f87171;margin-top:.4rem">高頻（條紋、細節、邊緣）</div>
+          <p style="font-size:.85rem;line-height:1.7;color:var(--dim);margin-top:.4rem">像素強度變化<strong style="color:var(--text)">快速</strong>——相鄰像素明暗差異大，對應影像裡的細節、紋理和邊緣。</p>
+        </div>
+        <div>
+          <canvas id="freqLow" width="120" height="60" style="width:100%;border-radius:5px;border:1px solid var(--border);display:block"></canvas>
+          <div style="text-align:center;font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--accent2);margin-top:.4rem">低頻（平坦區域、整體亮度）</div>
+          <p style="font-size:.85rem;line-height:1.7;color:var(--dim);margin-top:.4rem">像素強度變化<strong style="color:var(--text)">平緩</strong>——大片相近的顏色，對應影像的整體色調和平坦背景。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter flow -->
+    <div class="sec-header">
+      <span class="sec-num">FLOW</span>
+      <span class="sec-title">頻率域濾波流程</span>
+    </div>
+    <div style="display:flex;gap:0;margin-bottom:1.5rem;flex-wrap:wrap;border:1px solid var(--border);border-radius:6px;overflow:hidden">
+      <div style="flex:1;min-width:110px;padding:1rem .9rem;background:var(--bg-light);border-right:1px solid var(--border);text-align:center">
+        <div style="font-size:1.4rem;margin-bottom:.3rem">🖼️</div>
+        <div style="font-size:.8rem;font-weight:700;color:var(--text)">空間域影像</div>
+        <div style="font-size:.72rem;color:var(--dim);margin-top:.2rem">f(x,y)</div>
+      </div>
+      <div style="display:flex;align-items:center;padding:0 .5rem;color:var(--accent);font-size:.9rem">→</div>
+      <div style="flex:1;min-width:110px;padding:1rem .9rem;background:rgba(79,195,247,.06);border-right:1px solid var(--border);text-align:center">
+        <div style="font-size:1.4rem;margin-bottom:.3rem">🔄</div>
+        <div style="font-size:.8rem;font-weight:700;color:var(--accent)">傅立葉轉換</div>
+        <div style="font-size:.72rem;color:var(--dim);margin-top:.2rem">2D FFT</div>
+      </div>
+      <div style="display:flex;align-items:center;padding:0 .5rem;color:var(--accent);font-size:.9rem">→</div>
+      <div style="flex:1;min-width:110px;padding:1rem .9rem;background:var(--bg-light);border-right:1px solid var(--border);text-align:center">
+        <div style="font-size:1.4rem;margin-bottom:.3rem">⚙️</div>
+        <div style="font-size:.8rem;font-weight:700;color:var(--text)">設計濾波器</div>
+        <div style="font-size:.72rem;color:var(--dim);margin-top:.2rem">H(u,v)</div>
+      </div>
+      <div style="display:flex;align-items:center;padding:0 .5rem;color:var(--accent);font-size:.9rem">→</div>
+      <div style="flex:1;min-width:110px;padding:1rem .9rem;background:var(--bg-light);border-right:1px solid var(--border);text-align:center">
+        <div style="font-size:1.4rem;margin-bottom:.3rem">✖️</div>
+        <div style="font-size:.8rem;font-weight:700;color:var(--text)">頻率域相乘</div>
+        <div style="font-size:.72rem;color:var(--dim);margin-top:.2rem">G = H·F</div>
+      </div>
+      <div style="display:flex;align-items:center;padding:0 .5rem;color:var(--accent);font-size:.9rem">→</div>
+      <div style="flex:1;min-width:110px;padding:1rem .9rem;background:rgba(0,229,204,.06);text-align:center">
+        <div style="font-size:1.4rem;margin-bottom:.3rem">🔄</div>
+        <div style="font-size:.8rem;font-weight:700;color:var(--accent2)">反傅立葉轉換</div>
+        <div style="font-size:.72rem;color:var(--dim);margin-top:.2rem">輸出 g(x,y)</div>
+      </div>
+    </div>
+
+    <!-- Filter type interactive -->
+    <div class="filter-widget">
+      <div class="aw-title">// 互動示意：切換濾波器類型，看頻率響應</div>
+      <div class="filter-btns" id="freqFilterBtns">
+        <button class="f-btn active" onclick="setFreqFilter('ideal_lp')">理想低通</button>
+        <button class="f-btn" onclick="setFreqFilter('butter_lp')">巴特沃斯低通</button>
+        <button class="f-btn" onclick="setFreqFilter('gauss_lp')">高斯低通</button>
+        <button class="f-btn" onclick="setFreqFilter('ideal_hp')">理想高通</button>
+        <button class="f-btn" onclick="setFreqFilter('butter_hp')">巴特沃斯高通</button>
+        <button class="f-btn" onclick="setFreqFilter('gauss_hp')">高斯高通</button>
+      </div>
+      <div style="display:flex;gap:1.5rem;flex-wrap:wrap;align-items:flex-start">
+        <div>
+          <canvas id="freqFilterCanvas" width="180" height="140" style="border-radius:6px;border:1px solid var(--border);background:#0d1117;display:block"></canvas>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--dim);text-align:center;margin-top:.3rem">頻率響應 H(u,v)</div>
+        </div>
+        <div class="filter-info-panel">
+          <div id="freqFilterName" style="font-size:1rem;font-weight:700;color:var(--accent);margin-bottom:.5rem"></div>
+          <div id="freqFilterDesc" style="font-size:.9rem;line-height:1.8;color:var(--dim);margin-bottom:.7rem"></div>
+          <div id="freqFilterRing" style="font-size:.88rem;border-radius:5px;padding:.6rem .9rem;border-left:3px solid var(--accent2)"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison table -->
+    <div class="sec-header" style="margin-top:1.5rem">
+      <span class="sec-num">COMPARE</span>
+      <span class="sec-title">低通 / 高通濾波器比較</span>
+    </div>
+    <table class="cmp-table">
+      <thead><tr><th>濾波器</th><th>通過頻率</th><th>影像效果</th><th>振鈴現象</th><th>可調參數</th></tr></thead>
+      <tbody>
+        <tr><td><strong>理想低通</strong></td><td>低頻</td><td>模糊、去雜訊</td><td class="bad">有，嚴重</td><td>截斷頻率 D₀</td></tr>
+        <tr><td><strong>巴特沃斯低通</strong></td><td>低頻（平滑過渡）</td><td>平滑，無振鈴</td><td class="good">無（n&lt;2）</td><td>D₀、階數 n</td></tr>
+        <tr><td><strong>高斯低通</strong></td><td>低頻（自然衰減）</td><td>自然平滑</td><td class="good">無</td><td>變異數 σ</td></tr>
+        <tr><td><strong>理想高通</strong></td><td>高頻</td><td>銳化、邊緣增強</td><td class="bad">有，嚴重</td><td>截斷頻率 D₀</td></tr>
+        <tr><td><strong>巴特沃斯高通</strong></td><td>高頻（平滑過渡）</td><td>細節清晰</td><td class="good">無（n&lt;2）</td><td>D₀、階數 n</td></tr>
+        <tr><td><strong>高斯高通</strong></td><td>高頻（自然衰減）</td><td>自然銳化</td><td class="good">無</td><td>變異數 σ</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-box yellow" style="margin-top:1rem">
+      <strong>⚠️ 振鈴效應（Ringing Effect）</strong>：理想濾波器的頻率響應像一堵「硬牆」——突然截斷會在空間域產生波紋狀干擾，就像拍一下水面產生的漣漪。巴特沃斯和高斯濾波器使用平滑過渡，避免了這個問題。
+    </div>
+  </div>
+
+  <!-- ── 影像分割 ── -->
+  <div class="pp-section" id="pp-segmentation">
+    <div class="sec-header">
+      <span class="sec-num">STEP 04</span>
+      <span class="sec-title">影像分割（Image Segmentation）</span>
+    </div>
+    <p style="font-size:.97rem;line-height:1.82;color:var(--dim);margin-bottom:1.2rem">影像分割是將整張影像細分成各個構成區域或物體的過程。輸入是一張完整影像，輸出是「哪裡是物體、哪裡是背景」。分割的依據主要有兩大特性：<strong style="color:var(--text)">不連續性</strong>（邊緣突然變化）和<strong style="color:var(--text)">相似性</strong>（同一區域內像素特性相近）。</p>
+
+    <!-- Two pillars -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem">
+      <div style="background:var(--bg-light);border:1px solid rgba(248,113,113,.3);border-radius:6px;padding:1.2rem">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.15em;color:#f87171;margin-bottom:.6rem">// 不連續性</div>
+        <div style="font-size:1rem;font-weight:700;margin-bottom:.5rem">邊緣偵測分割</div>
+        <p style="font-size:.88rem;line-height:1.75;color:var(--dim)">利用強度的突然跳躍找出物體邊界。效果好但對雜訊敏感——物體內部的雜訊也會被誤判為邊界。</p>
+        <div style="margin-top:.8rem;background:var(--bg);border-radius:4px;padding:.6rem .8rem">
+          <div style="font-size:.8rem;line-height:1.7;color:var(--dim)">適合：<strong style="color:var(--text)">無雜訊、邊界明顯</strong>的影像</div>
+        </div>
+      </div>
+      <div style="background:var(--bg-light);border:1px solid rgba(0,229,204,.3);border-radius:6px;padding:1.2rem">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.15em;color:var(--accent2);margin-bottom:.6rem">// 相似性</div>
+        <div style="font-size:1rem;font-weight:700;margin-bottom:.5rem">區域特性分割</div>
+        <p style="font-size:.88rem;line-height:1.75;color:var(--dim)">根據區域內像素特性（顏色、紋理、標準差）的相似程度進行分組。對雜訊更有抵抗力。</p>
+        <div style="margin-top:.8rem;background:var(--bg);border-radius:4px;padding:.6rem .8rem">
+          <div style="font-size:.8rem;line-height:1.7;color:var(--dim)">適合：<strong style="color:var(--text)">有雜訊、區域特性差異明顯</strong>的影像</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edge model -->
+    <div class="sec-divider"></div>
+    <div class="sec-header" style="margin-top:0">
+      <span class="sec-num">METHOD</span>
+      <span class="sec-title">邊緣偵測——三種邊緣輪廓</span>
+    </div>
+
+    <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:8px;padding:1.3rem;margin-bottom:1.2rem">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.15em;color:var(--accent2);margin-bottom:1rem">// 邊緣強度輪廓類型</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem">
+        <div style="text-align:center">
+          <canvas id="edgeStep" width="100" height="70" style="width:100%;border-radius:4px;border:1px solid var(--border);background:#0d1117;display:block"></canvas>
+          <div style="font-size:.85rem;font-weight:700;margin-top:.5rem">步階邊緣</div>
+          <div style="font-size:.78rem;color:var(--dim);margin-top:.2rem;line-height:1.5">強度突然跳躍，理想邊緣，常見於電腦生成影像</div>
+        </div>
+        <div style="text-align:center">
+          <canvas id="edgeRamp" width="100" height="70" style="width:100%;border-radius:4px;border:1px solid var(--border);background:#0d1117;display:block"></canvas>
+          <div style="font-size:.85rem;font-weight:700;margin-top:.5rem">斜坡邊緣</div>
+          <div style="font-size:.78rem;color:var(--dim);margin-top:.2rem;line-height:1.5">有斜率的漸變，斜率越大邊緣越銳利</div>
+        </div>
+        <div style="text-align:center">
+          <canvas id="edgeRoof" width="100" height="70" style="width:100%;border-radius:4px;border:1px solid var(--border);background:#0d1117;display:block"></canvas>
+          <div style="font-size:.85rem;font-weight:700;margin-top:.5rem">屋頂邊緣</div>
+          <div style="font-size:.78rem;color:var(--dim);margin-top:.2rem;line-height:1.5">三角形峰值，對應線型邊緣結構</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edge detection kernels -->
+    <div class="sec-header">
+      <span class="sec-num">KERNELS</span>
+      <span class="sec-title">常用邊緣偵測遮罩</span>
+    </div>
+
+    <!-- Roberts -->
+    <div class="kernel-demo">
+      <div>
+        <div class="kernel-label">// ROBERTS (2×2)</div>
+        <div style="display:flex;gap:.8rem">
+          <div>
+            <div style="font-size:.72rem;color:var(--dim);text-align:center;margin-bottom:.3rem;font-family:'Share Tech Mono',monospace">Gx</div>
+            <div class="kernel-grid g2">
+              <div class="kc kp">+1</div><div class="kc kn">0</div>
+              <div class="kc kn">0</div><div class="kc kp">-1</div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:.72rem;color:var(--dim);text-align:center;margin-bottom:.3rem;font-family:'Share Tech Mono',monospace">Gy</div>
+            <div class="kernel-grid g2">
+              <div class="kc kn">0</div><div class="kc kp">+1</div>
+              <div class="kc kn">-1</div><div class="kc kn">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="kernel-info">
+        <div class="kernel-name">Roberts Cross Operator</div>
+        <div class="kernel-desc">使用 2×2 遮罩計算對角方向的梯度，最簡單的邊緣偵測遮罩。非中心對稱，適合斜向邊緣偵測。計算快速，但對雜訊較敏感。</div>
+      </div>
+    </div>
+
+    <!-- Prewitt -->
+    <div class="kernel-demo">
+      <div>
+        <div class="kernel-label">// PREWITT (3×3)</div>
+        <div style="display:flex;gap:.8rem">
+          <div>
+            <div style="font-size:.72rem;color:var(--dim);text-align:center;margin-bottom:.3rem;font-family:'Share Tech Mono',monospace">Gx（垂直邊緣）</div>
+            <div class="kernel-grid">
+              <div class="kc kn">-1</div><div class="kc kn">0</div><div class="kc kp">+1</div>
+              <div class="kc kn">-1</div><div class="kc kn">0</div><div class="kc kp">+1</div>
+              <div class="kc kn">-1</div><div class="kc kn">0</div><div class="kc kp">+1</div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:.72rem;color:var(--dim);text-align:center;margin-bottom:.3rem;font-family:'Share Tech Mono',monospace">Gy（水平邊緣）</div>
+            <div class="kernel-grid">
+              <div class="kc kp">+1</div><div class="kc kp">+1</div><div class="kc kp">+1</div>
+              <div class="kc kn">0</div><div class="kc kn">0</div><div class="kc kn">0</div>
+              <div class="kc kn">-1</div><div class="kc kn">-1</div><div class="kc kn">-1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="kernel-info">
+        <div class="kernel-name">Prewitt Operator</div>
+        <div class="kernel-desc">3×3 遮罩，利用相鄰兩行（列）差值計算梯度，分 0° 和 90° 方向。比 Roberts 更穩定，適合水平與垂直邊緣偵測。</div>
+      </div>
+    </div>
+
+    <!-- Sobel -->
+    <div class="kernel-demo" style="border-color:rgba(79,195,247,.4)">
+      <div>
+        <div class="kernel-label" style="color:var(--accent)">// SOBEL (3×3) ⭐ 最常用</div>
+        <div style="display:flex;gap:.8rem">
+          <div>
+            <div style="font-size:.72rem;color:var(--dim);text-align:center;margin-bottom:.3rem;font-family:'Share Tech Mono',monospace">Gx（垂直邊緣）</div>
+            <div class="kernel-grid">
+              <div class="kc kn">-1</div><div class="kc kn">0</div><div class="kc kp">+1</div>
+              <div class="kc kn">-2</div><div class="kc kn">0</div><div class="kc kp">+2</div>
+              <div class="kc kn">-1</div><div class="kc kn">0</div><div class="kc kp">+1</div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:.72rem;color:var(--dim);text-align:center;margin-bottom:.3rem;font-family:'Share Tech Mono',monospace">Gy（水平邊緣）</div>
+            <div class="kernel-grid">
+              <div class="kc kp">+1</div><div class="kc kp">+2</div><div class="kc kp">+1</div>
+              <div class="kc kn">0</div><div class="kc kn">0</div><div class="kc kn">0</div>
+              <div class="kc kn">-1</div><div class="kc kn">-2</div><div class="kc kn">-1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="kernel-info">
+        <div class="kernel-name" style="color:var(--accent)">Sobel Operator</div>
+        <div class="kernel-desc">與 Prewitt 類似，但中心行（列）給予 <strong style="color:var(--text)">2 倍權重</strong>，讓中心像素對計算影響更大，邊緣銳利度更好。同時計算 Gx 和 Gy 後取合成量，可得到完整邊緣。這是工業上最常用的邊緣偵測遮罩。</div>
+      </div>
+    </div>
+
+    <!-- Laplacian -->
+    <div class="kernel-demo">
+      <div>
+        <div class="kernel-label">// LAPLACIAN (二階導數)</div>
+        <div style="display:flex;gap:.8rem">
+          <div>
+            <div style="font-size:.72rem;color:var(--dim);text-align:center;margin-bottom:.3rem;font-family:'Share Tech Mono',monospace">上下左右</div>
+            <div class="kernel-grid">
+              <div class="kc">0</div><div class="kc kn">-1</div><div class="kc">0</div>
+              <div class="kc kn">-1</div><div class="kc kh">+4</div><div class="kc kn">-1</div>
+              <div class="kc">0</div><div class="kc kn">-1</div><div class="kc">0</div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:.72rem;color:var(--dim);text-align:center;margin-bottom:.3rem;font-family:'Share Tech Mono',monospace">含對角線（等向性）</div>
+            <div class="kernel-grid">
+              <div class="kc kn">-1</div><div class="kc kn">-1</div><div class="kc kn">-1</div>
+              <div class="kc kn">-1</div><div class="kc kh">+8</div><div class="kc kn">-1</div>
+              <div class="kc kn">-1</div><div class="kc kn">-1</div><div class="kc kn">-1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="kernel-info">
+        <div class="kernel-name">Laplacian Operator（拉普拉斯）</div>
+        <div class="kernel-desc">二階導數，同時偵測所有方向的邊緣。<strong style="color:var(--text)">等向性</strong>版本（含對角線）對各方向邊緣均等處理，避免方向偏差。對雜訊敏感，通常先平滑再套用，或直接使用 LoG（Laplacian of Gaussian）組合。</div>
+      </div>
+    </div>
+
+    <!-- Interactive edge detection demo -->
+    <div class="filter-widget" style="margin-top:1.5rem">
+      <div class="aw-title">// 互動示意：切換偵測器，觀察邊緣偵測效果</div>
+      <div class="filter-btns">
+        <button class="f-btn active" onclick="setEdge('sobel_x')">Sobel X（垂直邊緣）</button>
+        <button class="f-btn" onclick="setEdge('sobel_y')">Sobel Y（水平邊緣）</button>
+        <button class="f-btn" onclick="setEdge('sobel_both')">Sobel 合成</button>
+        <button class="f-btn" onclick="setEdge('laplacian')">Laplacian</button>
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-start">
+        <div class="canvas-wrap">
+          <canvas id="edgeOrigCanvas" width="160" height="160" style="border-radius:5px;border:1px solid var(--border)"></canvas>
+          <div class="canvas-label">原始影像</div>
+        </div>
+        <div style="display:flex;align-items:center;padding-top:60px;color:var(--accent);font-size:1.3rem">→</div>
+        <div class="canvas-wrap">
+          <canvas id="edgeOutCanvas" width="160" height="160" style="border-radius:5px;border:1px solid var(--border)"></canvas>
+          <div class="canvas-label" id="edgeOutLabel">Sobel X 輸出</div>
+        </div>
+        <div class="filter-info-panel">
+          <div id="edgeDesc" style="font-size:.9rem;line-height:1.8;color:var(--dim)"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thresholding -->
+    <div class="sec-divider"></div>
+    <div class="sec-header" style="margin-top:0">
+      <span class="sec-num">METHOD</span>
+      <span class="sec-title">門檻化（Thresholding）分割</span>
+    </div>
+    <p style="font-size:.9rem;line-height:1.78;color:var(--dim);margin-bottom:1rem">門檻化是最簡單的分割方式：設定一個亮度門檻值，高於門檻的像素設為白（物體），低於門檻的設為黑（背景）。輸出是二值化影像。</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+      <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:6px;padding:1.1rem">
+        <div style="font-size:.85rem;font-weight:700;margin-bottom:.4rem;color:var(--accent2)">全域門檻化（固定閾值）</div>
+        <p style="font-size:.85rem;line-height:1.7;color:var(--dim)">整張影像用同一個門檻值。<strong style="color:var(--text)">Otsu 演算法</strong>能自動計算讓類內變異最小的最佳門檻，是最常用的全域門檻化方法。</p>
+      </div>
+      <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:6px;padding:1.1rem">
+        <div style="font-size:.85rem;font-weight:700;margin-bottom:.4rem;color:var(--accent2)">自適應門檻化</div>
+        <p style="font-size:.85rem;line-height:1.7;color:var(--dim)">每個像素根據其<strong style="color:var(--text)">局部鄰域</strong>計算門檻值，適合光照不均勻的影像——不同區域明暗不同也能正確分割。</p>
+      </div>
+    </div>
+
+    <div class="dyk">
+      <div class="dyk-icon">💡</div>
+      <div><div class="dyk-label">// 分割方法選擇策略</div><div class="dyk-text">影像無雜訊且邊界清晰 → 邊緣偵測；影像有雜訊 → 區域相似性或自適應門檻；需要快速二值化 → Otsu 自動閾值；光照不均勻 → 自適應門檻化。通常在實際應用中會組合多種方法使用。</div></div>
+    </div>
+  </div>
+
 </div>
 </div>
 
@@ -938,12 +1366,11 @@ canvas#apCanvas{border-radius:50%}
   <h2 class="ptitle">檢測應用</h2>
   <div class="divider"></div>
   <p class="pdesc">機器視覺已廣泛應用於各產業的自動化生產線，以下列舉四大主要應用類型，每種應用對相機、演算法的需求各不相同。</p>
-  <p class="pnote">❓ 為何要分類？——了解不同應用場景的需求差異，才能為專案選擇最合適的硬體規格與演算法組合，避免過度投資或規格不足。</p>
   <div class="agrid">
     <div class="ac"><div class="ach h1">🔍 外觀瑕疵檢測</div><div class="acb">檢測產品表面的刮痕、裂縫、汙漬、凹凸等缺陷。廣泛應用於 PCB 電路板、金屬零件、玻璃面板、塑膠外殼等產品的出廠品管。<div class="tags"><span class="tag">表面缺陷</span><span class="tag">AOI</span><span class="tag">PCB 檢測</span></div></div></div>
     <div class="ac"><div class="ach h2">📏 尺寸量測</div><div class="acb">利用影像中的像素距離換算實際尺寸，進行非接觸式精密量測。可量測孔徑、間距、平行度等幾何參數，精度可達微米等級。<div class="tags"><span class="tag">非接觸量測</span><span class="tag">幾何量測</span><span class="tag">μm 精度</span></div></div></div>
     <div class="ac"><div class="ach h3">🔤 條碼 / OCR 辨識</div><div class="acb">讀取產品上的一維條碼、QR Code、Data Matrix 或印刷文字，進行追蹤溯源、防錯漏裝，確保正確產品流入正確工序。<div class="tags"><span class="tag">QR Code</span><span class="tag">追蹤溯源</span><span class="tag">防錯裝</span></div></div></div>
-    <div class="ac"><div class="ach h4">🤖 定位引導</div><div class="acb">提供機器手臂精確的抓取座標，補償工件擺放誤差。結合視覺定位與機器人運動控制，實現高精度的撿料、組裝與貼合作業。<div class="tags"><span class="tag">機器手臂</span><span class="tag">視覺引導</span><span class="tag">Pick & Place</span></div></div></div>
+    <div class="ac"><div class="ach h4">🤖 定位引導</div><div class="acb">提供機器手臂精確的抓取座標，補償工件擺放誤差。結合視覺定位與機器人運動控制，實現高精度的撿料、組裝與貼合作業。<div class="tags"><span class="tag">機器手臂</span><span class="tag">視覺引導</span><span class="tag">Pick &amp; Place</span></div></div></div>
   </div>
 </div>
 </div>
@@ -955,7 +1382,6 @@ canvas#apCanvas{border-radius:50%}
   <h2 class="ptitle">專題報告</h2>
   <div class="divider"></div>
   <p class="pdesc">本專題報告整合上述各模組的理論與實作成果，完整呈現從系統規劃、硬體選型、軟體開發到實驗驗證的全流程。</p>
-  <p class="pnote">❓ 為何要寫報告？——報告不只是作業，它是將學到的知識系統化整理的過程。未來在業界提案或評估新系統時，這套思考框架將會非常實用。</p>
   <div class="rl">
     <div class="rcl">
       <div class="ri"><div class="ricon">📌</div><div><div class="rit">研究動機與目標</div><div class="rid">說明為何選擇此主題，預計解決什麼問題，以及系統的設計規格目標（如：檢測速度、精度需求）。</div></div></div>
@@ -985,6 +1411,7 @@ canvas#apCanvas{border-radius:50%}
 </div>
 
 <script>
+// ── Page Navigation ──
 const N=5;let cur=0;
 function goTo(i){
   if(i<0||i>=N)return;
@@ -1002,6 +1429,12 @@ function swTab(e,id){
   document.getElementById('p-'+id).classList.add('active');
   e.currentTarget.classList.add('active');
 }
+function swPP(e,id){
+  document.querySelectorAll('.pp-section').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.pp-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  e.currentTarget.classList.add('active');
+}
 function tog(tr){
   const c=tr.closest('.ecard'),open=c.classList.contains('open');
   tr.closest('.elist').querySelectorAll('.ecard').forEach(x=>x.classList.remove('open'));
@@ -1011,8 +1444,110 @@ document.addEventListener('keydown',e=>{
   if(e.key==='ArrowRight'||e.key==='ArrowDown')goTo(cur+1);
   if(e.key==='ArrowLeft'||e.key==='ArrowUp')goTo(cur-1);
 });
+let tx=0;
+document.querySelector('.main').addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+document.querySelector('.main').addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>50){dx<0?goTo(cur+1):goTo(cur-1);}
+},{passive:true});
 
-// Aperture interactive widget
+// ══════════════════════════════
+// CANVAS UTILITIES
+// ══════════════════════════════
+function makeTestImage(w,h){
+  // Generate a synthetic test image with shapes, gradient, noise
+  const data=new Uint8ClampedArray(w*h*4);
+  for(let y=0;y<h;y++){
+    for(let x=0;x<w;x++){
+      const i=(y*w+x)*4;
+      // base gradient
+      let v=Math.floor((x/w)*180+30);
+      // rectangle
+      if(x>w*0.3&&x<w*0.7&&y>h*0.25&&y<h*0.75)v=210;
+      // circle
+      const dx=x-w*0.75,dy=y-h*0.3;
+      if(dx*dx+dy*dy<(w*0.12)*(w*0.12))v=70;
+      // noise
+      v+=Math.floor((Math.random()-0.5)*20);
+      v=Math.max(0,Math.min(255,v));
+      data[i]=data[i+1]=data[i+2]=v;data[i+3]=255;
+    }
+  }
+  return data;
+}
+function putGray(canvas,data){
+  const ctx=canvas.getContext('2d');
+  const img=new ImageData(data,canvas.width,canvas.height);
+  ctx.putImageData(img,0,0);
+}
+function getGray(canvas){
+  return canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;
+}
+
+// ── Apply 3x3 kernel ──
+function applyKernel(src,w,h,kernel,normalize){
+  const out=new Uint8ClampedArray(src.length);
+  for(let y=1;y<h-1;y++){
+    for(let x=1;x<w-1;x++){
+      let sum=0;
+      for(let ky=-1;ky<=1;ky++){
+        for(let kx=-1;kx<=1;kx++){
+          const px=((y+ky)*w+(x+kx))*4;
+          sum+=src[px]*kernel[(ky+1)*3+(kx+1)];
+        }
+      }
+      if(normalize)sum=Math.abs(sum)/normalize;
+      const v=Math.max(0, Math.min(255, Math.abs(Math.round(sum))));
+      const idx=(y*w+x)*4;
+      out[idx]=out[idx+1]=out[idx+2]=v;out[idx+3]=255;
+    }
+  }
+  return out;
+}
+
+// ── Apply Sobel combined ──
+function applySobelCombined(src,w,h){
+  const kx=[-1,0,1,-2,0,2,-1,0,1];
+  const ky=[1,2,1,0,0,0,-1,-2,-1];
+  const out=new Uint8ClampedArray(src.length);
+  for(let y=1;y<h-1;y++){
+    for(let x=1;x<w-1;x++){
+      let sx=0,sy=0;
+      for(let ky2=-1;ky2<=1;ky2++){
+        for(let kx2=-1;kx2<=1;kx2++){
+          const px=((y+ky2)*w+(x+kx2))*4;
+          const ki=(ky2+1)*3+(kx2+1);
+          sx+=src[px]*kx[ki];
+          sy+=src[px]*ky[ki];
+        }
+      }
+      const v=Math.max(0, Math.min(255, Math.abs(Math.floor(Math.sqrt(sx*sx+sy*sy)/4))));
+      const idx=(y*w+x)*4;
+      out[idx]=out[idx+1]=out[idx+2]=v;out[idx+3]=255;
+    }
+  }
+  return out;
+}
+
+// ── Median filter ──
+function applyMedian(src,w,h){
+  const out=new Uint8ClampedArray(src.length);
+  for(let y=1;y<h-1;y++){
+    for(let x=1;x<w-1;x++){
+      const vals=[];
+      for(let ky=-1;ky<=1;ky++)for(let kx=-1;kx<=1;kx++)vals.push(src[((y+ky)*w+(x+kx))*4]);
+      vals.sort((a,b)=>a-b);
+      const v=vals[4];
+      const idx=(y*w+x)*4;
+      out[idx]=out[idx+1]=out[idx+2]=v;out[idx+3]=255;
+    }
+  }
+  return out;
+}
+
+// ══════════════════════════════
+// APERTURE / FOV / LIGHTING (Imaging module widgets)
+// ══════════════════════════════
 const apSteps=[
   {f:'F 1.4',desc:'光圈全開，進光量最多，景深極淺。工業上很少用——一點點對焦誤差就全模糊。',tags:['進光量最多','景深極淺'],warn:true},
   {f:'F 2',desc:'光圈大，景深仍然很淺，適合極低光源環境，需要非常精準對焦。',tags:['進光量多','景深淺'],warn:true},
@@ -1023,18 +1558,17 @@ const apSteps=[
   {f:'F 11',desc:'光圈偏小，進光量減少，需拉長曝光時間補光。景深很大。',tags:['景深大','需補光'],warn:false},
   {f:'F 22',desc:'光圈全縮，景深最大但繞射效應讓影像反而變模糊。工業上幾乎不用。',tags:['景深最大','⚠ 繞射模糊'],warn:true}
 ];
+
 function drawAperture(idx){
-  const c=document.getElementById('apCanvas');if(!c)return;
-  const ctx=c.getContext('2d'),w=140,h=140,cx=w/2,cy=h/2;
+  const c=document.getElementById('apCanvas');
+  if(!c)return;
+  const ctx=c.getContext('2d'),w=c.width,h=c.height,cx=w/2,cy=h/2;
   const maxR=60,step=apSteps[idx];
-  // 光圈開口大小：idx 0=最大, 7=最小
   const openR=maxR*(1-idx/8);
   ctx.clearRect(0,0,w,h);
-  // 外圈
   ctx.beginPath();ctx.arc(cx,cy,maxR,0,Math.PI*2);
   ctx.fillStyle='#263040';ctx.fill();
   ctx.strokeStyle='rgba(79,195,247,.3)';ctx.lineWidth=1.5;ctx.stroke();
-  // 光圈葉片（遮光區）用扇形填充表示
   const blades=8;
   for(let i=0;i<blades;i++){
     const a=i/blades*Math.PI*2;
@@ -1044,7 +1578,6 @@ function drawAperture(idx){
     const alpha=0.15+0.65*(idx/7);
     ctx.fillStyle=`rgba(22,28,38,${alpha})`;ctx.fill();
   }
-  // 開口
   ctx.beginPath();ctx.arc(cx,cy,openR,0,Math.PI*2);
   const grad=ctx.createRadialGradient(cx,cy,0,cx,cy,openR);
   grad.addColorStop(0,'rgba(79,195,247,0.35)');
@@ -1052,88 +1585,83 @@ function drawAperture(idx){
   ctx.fillStyle=grad;ctx.fill();
   ctx.strokeStyle=step.warn?'rgba(251,191,36,.6)':'rgba(79,195,247,.7)';
   ctx.lineWidth=1.5;ctx.stroke();
-  // F 數字在圓心
   ctx.fillStyle='rgba(240,244,252,0.9)';
   ctx.font='bold 13px Share Tech Mono,monospace';
   ctx.textAlign='center';ctx.textBaseline='middle';
   ctx.fillText(step.f,cx,cy);
 }
+
 function updateAp(v){
-  const idx=parseInt(v)-1;
+  const idx=Math.max(0,Math.min(7,parseInt(v,10)-1));
   const step=apSteps[idx];
-  document.getElementById('apFnum').textContent=step.f;
-  document.getElementById('apDesc').textContent=step.desc;
+  const fnumEl=document.getElementById('apFnum');
+  const descEl=document.getElementById('apDesc');
   const tagsEl=document.getElementById('apTags');
+  if(!fnumEl||!descEl||!tagsEl)return;
+  fnumEl.textContent=step.f;
+  descEl.textContent=step.desc;
   tagsEl.innerHTML=step.tags.map(t=>`<span class="aw-tag ${t.startsWith('✓')||t==='畫質穩定'||t==='工業首選'||t==='最佳平衡'||t==='景深充足'?'good':'warn'}">${t}</span>`).join('');
-  document.getElementById('apFnum').style.color=step.warn?'#fbbf24':'var(--accent)';
+  fnumEl.style.color=step.warn?'#fbbf24':'var(--accent)';
   drawAperture(idx);
 }
-// init
-setTimeout(()=>{updateAp(4);},300);
 
-// FOV Calculator
 function calcFOV(){
-  const sw=parseFloat(document.getElementById('fovSW')?.value)||8.4;
-  const sh=parseFloat(document.getElementById('fovSH')?.value)||7.1;
-  const a=parseFloat(document.getElementById('fovAlpha')?.value)||0.5;
-  const ps=parseFloat(document.getElementById('fovPS')?.value)||3.45;
+  const swEl=document.getElementById('fovSW');
+  const shEl=document.getElementById('fovSH');
+  const aEl=document.getElementById('fovAlpha');
+  const psEl=document.getElementById('fovPS');
+  if(!swEl||!shEl||!aEl||!psEl)return;
+  const sw=parseFloat(swEl.value)||8.4;
+  const sh=parseFloat(shEl.value)||7.1;
+  const a=parseFloat(aEl.value)||0.5;
+  const ps=parseFloat(psEl.value)||3.45;
   if(a<=0)return;
-  document.getElementById('fovRW').textContent=(sw/a).toFixed(1)+' mm';
-  document.getElementById('fovRH').textContent=(sh/a).toFixed(1)+' mm';
-  document.getElementById('fovRR').textContent=(ps/a).toFixed(2)+' μm';
-  document.getElementById('fovRD').textContent=Math.sqrt(sw*sw+sh*sh).toFixed(1)+' mm';
+  const rw=document.getElementById('fovRW');
+  const rh=document.getElementById('fovRH');
+  const rr=document.getElementById('fovRR');
+  const rd=document.getElementById('fovRD');
+  if(rw)rw.textContent=(sw/a).toFixed(1)+' mm';
+  if(rh)rh.textContent=(sh/a).toFixed(1)+' mm';
+  if(rr)rr.textContent=(ps/a).toFixed(2)+' μm';
+  if(rd)rd.textContent=Math.sqrt(sw*sw+sh*sh).toFixed(1)+' mm';
 }
 
-// Lighting simulator
 const lightModes={
-  bright:{name:'明視野',color:'rgba(255,255,200,0.9)',angle:0,desc:'正面均勻打光，整個表面亮起來，反射率差異形成對比。適合表面顏色、印刷、電路板檢測。',usecase:'✓ 印刷品質  ✓ 顏色檢測  ✓ PCB 外觀'},
-  dark:{name:'暗視野',color:'rgba(255,160,80,0.8)',angle:75,desc:'低角度斜打，只有邊緣和凹凸產生散射光，背景保持黑暗。缺陷對比極強，刮痕清晰可見。',usecase:'✓ 刮痕  ✓ 毛邊  ✓ 表面凹凸'},
-  back:{name:'穿透光',color:'rgba(200,230,255,0.9)',angle:180,desc:'從物件背後打光，物件形成清晰黑色剪影。輪廓邊緣銳利，適合量測外形尺寸。',usecase:'✓ 輪廓量測  ✓ 通孔檢測  ✓ 透明材質'}
+  bright:{desc:'正面均勻打光，整個表面亮起來，反射率差異形成對比。適合表面顏色、印刷、電路板檢測。',usecase:'✓ 印刷品質  ✓ 顏色檢測  ✓ PCB 外觀',angle:0},
+  dark:{desc:'低角度斜打，只有邊緣和凹凸產生散射光，背景保持黑暗。缺陷對比極強，刮痕清晰可見。',usecase:'✓ 刮痕  ✓ 毛邊  ✓ 表面凹凸',angle:75},
+  back:{desc:'從物件背後打光，物件形成清晰黑色剪影。輪廓邊緣銳利，適合量測外形尺寸。',usecase:'✓ 輪廓量測  ✓ 通孔檢測  ✓ 透明材質',angle:180},
 };
-let curLight='bright';
+
 function setLight(mode){
-  curLight=mode;
+  const info=lightModes[mode];
+  if(!info)return;
   document.querySelectorAll('.lb-btn').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+  const descEl=document.getElementById('ldDesc');
+  const useEl=document.getElementById('ldUse');
+  if(descEl)descEl.textContent=info.desc;
+  if(useEl)useEl.textContent=info.usecase;
   drawLight(mode);
-  const m=lightModes[mode];
-  document.getElementById('ldDesc').textContent=m.desc;
-  document.getElementById('ldUse').textContent=m.usecase;
 }
+
 function drawLight(mode){
-  const cv=document.getElementById('lightCanvas');if(!cv)return;
+  const cv=document.getElementById('lightCanvas');
+  if(!cv)return;
   const ctx=cv.getContext('2d'),w=cv.width,h=cv.height;
-  const m=lightModes[mode];
+  const info=lightModes[mode];
   ctx.clearRect(0,0,w,h);
-  // background
   ctx.fillStyle=mode==='back'?'rgba(180,220,255,0.15)':'#0d1117';
   ctx.fillRect(0,0,w,h);
-  // object (circle with scratch)
   const ox=w/2,oy=h/2,or=48;
   ctx.beginPath();ctx.arc(ox,oy,or,0,Math.PI*2);
-  if(mode==='back'){
-    ctx.fillStyle='#0d1117';
-  } else if(mode==='bright'){
-    ctx.fillStyle='#3a4a5a';
-  } else {
-    ctx.fillStyle='#1a2535';
-  }
+  ctx.fillStyle=mode==='back'?'#0d1117':(mode==='bright'?'#3a4a5a':'#1a2535');
   ctx.fill();
   ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=1;ctx.stroke();
-  // scratch/defect
   ctx.beginPath();ctx.moveTo(ox-20,oy-15);ctx.lineTo(ox+18,oy+12);
-  if(mode==='dark'){
-    ctx.strokeStyle='rgba(255,200,100,0.95)';ctx.lineWidth=2.5;
-  } else if(mode==='bright'){
-    ctx.strokeStyle='rgba(180,180,180,0.5)';ctx.lineWidth=1.2;
-  } else {
-    ctx.strokeStyle='rgba(0,0,0,0)';ctx.lineWidth=0;
-  }
-  ctx.stroke();
-  // light source indicator
-  const lightR=95,la=(m.angle-90)*Math.PI/180;
+  if(mode==='dark'){ctx.strokeStyle='rgba(255,200,100,0.95)';ctx.lineWidth=2.5;ctx.stroke();}
+  else if(mode==='bright'){ctx.strokeStyle='rgba(180,180,180,0.5)';ctx.lineWidth=1.2;ctx.stroke();}
+  const lightR=95,la=(info.angle-90)*Math.PI/180;
   const lx=ox+lightR*Math.cos(la),ly=oy+lightR*Math.sin(la);
   if(mode!=='back'){
-    // rays
     for(let i=-2;i<=2;i++){
       const ra=la+i*0.12;
       ctx.beginPath();
@@ -1142,36 +1670,471 @@ function drawLight(mode){
       ctx.strokeStyle=`rgba(255,255,150,${0.15-Math.abs(i)*0.04})`;
       ctx.lineWidth=1;ctx.stroke();
     }
-    // light source circle
     ctx.beginPath();ctx.arc(lx,ly,10,0,Math.PI*2);
     const lg=ctx.createRadialGradient(lx,ly,0,lx,ly,10);
-    lg.addColorStop(0,'rgba(255,255,200,0.9)');lg.addColorStop(1,'rgba(255,200,50,0.2)');
+    lg.addColorStop(0,'rgba(255,255,200,0.9)');
+    lg.addColorStop(1,'rgba(255,200,50,0.2)');
     ctx.fillStyle=lg;ctx.fill();
   } else {
-    // backlight panel
     ctx.beginPath();ctx.arc(ox,oy+100,40,0,Math.PI*2);
     const bg=ctx.createRadialGradient(ox,oy+100,0,ox,oy+100,40);
-    bg.addColorStop(0,'rgba(200,230,255,0.8)');bg.addColorStop(1,'rgba(150,200,255,0.1)');
+    bg.addColorStop(0,'rgba(200,230,255,0.8)');
+    bg.addColorStop(1,'rgba(150,200,255,0.1)');
     ctx.fillStyle=bg;ctx.fill();
-    // upward rays
     for(let i=-2;i<=2;i++){
       ctx.beginPath();ctx.moveTo(ox+i*12,oy+60);ctx.lineTo(ox+i*8,oy+or+5);
       ctx.strokeStyle='rgba(200,230,255,0.25)';ctx.lineWidth=1;ctx.stroke();
     }
   }
-  // camera indicator (top)
   ctx.beginPath();ctx.arc(ox,oy-110,8,0,Math.PI*2);
   ctx.fillStyle='rgba(79,195,247,0.7)';ctx.fill();
   ctx.fillStyle='rgba(240,244,252,0.8)';
   ctx.font='9px Share Tech Mono,monospace';ctx.textAlign='center';ctx.textBaseline='middle';
   ctx.fillText('CAM',ox,oy-95);
 }
-setTimeout(()=>{setLight('bright');},400);
-document.querySelector('.main').addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
-document.querySelector('.main').addEventListener('touchend',e=>{
-  const dx=e.changedTouches[0].clientX-tx;
-  if(Math.abs(dx)>50){dx<0?goTo(cur+1):goTo(cur-1);}
-},{passive:true});
+
+// ══════════════════════════════
+// INTENSITY TRANSFORMS
+// ══════════════════════════════
+const trInfos={
+  threshold:{label:'二值化輸出',desc:'設定門檻值，高於門檻的像素變白（255），低於的變黑（0）。輸出是黑白二值影像，常作為後續輪廓分析的輸入。',use:'✓ 前景/背景分離  ✓ 輪廓提取  ✓ 計數'},
+  negative:{label:'負轉換輸出',desc:'把每個像素強度反轉：黑的變白，白的變黑。就像底片沖印反轉一樣。可以讓暗區的細節更清楚可見。',use:'✓ 醫療影像（X光）  ✓ 凸顯暗區細節'},
+  log:{label:'對數轉換輸出',desc:'把高亮度的值壓縮，讓暗部細節更容易分辨。常用於傅立葉頻譜影像顯示——頻譜的動態範圍太大，用對數壓縮才看得到細節。',use:'✓ 傅立葉頻譜顯示  ✓ 動態範圍壓縮'},
+  gamma_bright:{label:'指數轉換（γ<1）輸出',desc:'γ 小於 1 時，轉換曲線向上彎，整體影像變亮。常用於校正螢幕顯示偏暗的問題，也叫 Gamma 校正。',use:'✓ 螢幕亮度校正  ✓ 提亮暗部影像'},
+  gamma_dark:{label:'指數轉換（γ>1）輸出',desc:'γ 大於 1 時，轉換曲線向下彎，整體影像變暗，對比度增加。高亮度區域被壓縮，中低亮度差異更明顯。',use:'✓ 增加對比度  ✓ 壓制過曝亮部'},
+};
+
+function drawTestGradient(canvas){
+  const w=canvas.width,h=canvas.height;
+  const ctx=canvas.getContext('2d');
+  const grad=ctx.createLinearGradient(0,0,w,h);
+  grad.addColorStop(0,'#0d1117');
+  grad.addColorStop(0.3,'#4a6070');
+  grad.addColorStop(0.6,'#a0c0d0');
+  grad.addColorStop(1,'#e8f4ff');
+  ctx.fillStyle=grad;
+  ctx.fillRect(0,0,w,h);
+  // add circle and rect shapes
+  ctx.fillStyle='rgba(220,180,60,0.7)';
+  ctx.fillRect(w*0.1,h*0.1,w*0.35,h*0.35);
+  ctx.fillStyle='rgba(60,120,200,0.6)';
+  ctx.beginPath();ctx.arc(w*0.72,h*0.65,w*0.18,0,Math.PI*2);ctx.fill();
+}
+
+function applyTransform(origCanvas,outCanvas,mode){
+  const ctx=origCanvas.getContext('2d');
+  const imgData=ctx.getImageData(0,0,origCanvas.width,origCanvas.height);
+  const src=imgData.data;
+  const out=new Uint8ClampedArray(src.length);
+  const threshold=128;
+  for(let i=0;i<src.length;i+=4){
+    const r=src[i],g=src[i+1],b=src[i+2];
+    const gray=Math.floor(0.299*r+0.587*g+0.114*b);
+    let v;
+    if(mode==='threshold'){v=gray>threshold?255:0;}
+    else if(mode==='negative'){v=255-gray;}
+    else if(mode==='log'){v=Math.floor(45*Math.log(1+gray));}
+    else if(mode==='gamma_bright'){v=Math.floor(255*Math.pow(gray/255,0.4));}
+    else if(mode==='gamma_dark'){v=Math.floor(255*Math.pow(gray/255,2.5));}
+    else{v=gray;}
+    out[i]=out[i+1]=out[i+2]=v;out[i+3]=255;
+  }
+  const outCtx=outCanvas.getContext('2d');
+  outCtx.putImageData(new ImageData(out,outCanvas.width,outCanvas.height),0,0);
+}
+
+function drawTransformCurve(canvas,mode){
+  const ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle='rgba(255,255,255,0.1)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(0,h);ctx.lineTo(w,0);ctx.stroke(); // diagonal
+  ctx.strokeStyle='rgba(79,195,247,0.2)';
+  for(let i=0;i<=4;i++){ctx.beginPath();ctx.moveTo(i*w/4,0);ctx.lineTo(i*w/4,h);ctx.stroke();ctx.beginPath();ctx.moveTo(0,i*h/4);ctx.lineTo(w,i*h/4);ctx.stroke();}
+  ctx.strokeStyle='#4fc3f7';ctx.lineWidth=2;ctx.beginPath();
+  for(let r=0;r<256;r++){
+    let s;
+    if(mode==='threshold'){s=r>128?255:0;}
+    else if(mode==='negative'){s=255-r;}
+    else if(mode==='log'){s=Math.min(255,Math.floor(45*Math.log(1+r)));}
+    else if(mode==='gamma_bright'){s=Math.floor(255*Math.pow(r/255,0.4));}
+    else if(mode==='gamma_dark'){s=Math.floor(255*Math.pow(r/255,2.5));}
+    else{s=r;}
+    const px=r/255*w,py=(1-s/255)*h;
+    r===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+  }
+  ctx.stroke();
+  ctx.fillStyle='rgba(79,195,247,0.3)';ctx.font='8px Share Tech Mono,monospace';
+  ctx.fillText('r →',w-24,h-4);ctx.fillText('s',3,10);
+}
+
+let curTransform='threshold';
+function setTransform(mode){
+  curTransform=mode;
+  document.querySelectorAll('.t-btn').forEach(b=>b.classList.toggle('active',b.onclick.toString().includes(mode)));
+  const info=trInfos[mode];
+  document.getElementById('trOutLabel').textContent=info.label;
+  document.getElementById('trDesc').textContent=info.desc;
+  document.getElementById('trUse').textContent=info.use;
+  const origC=document.getElementById('trOrigCanvas');
+  const outC=document.getElementById('trOutCanvas');
+  const curveC=document.getElementById('trCurveCanvas');
+  applyTransform(origC,outC,mode);
+  drawTransformCurve(curveC,mode);
+}
+
+// ══════════════════════════════
+// HISTOGRAM BARS
+// ══════════════════════════════
+function drawHistBars(containerId,distribution){
+  const container=document.getElementById(containerId);
+  if(!container)return;
+  container.innerHTML='';
+  const maxV=Math.max(...distribution);
+  distribution.forEach(v=>{
+    const bar=document.createElement('div');
+    bar.className='hist-bar';
+    bar.style.height=(v/maxV*100)+'%';
+    container.appendChild(bar);
+  });
+}
+function initHistograms(){
+  const dark=[40,38,32,28,22,15,10,8,5,3,2,1,1,0,0,0];
+  const mid=[2,3,5,8,15,25,35,40,38,30,20,12,7,4,2,1];
+  const flat=[12,13,13,12,13,12,13,12,13,12,13,12,13,12,13,13];
+  drawHistBars('histDark',dark);
+  drawHistBars('histMid',mid);
+  drawHistBars('histFlat',flat);
+}
+
+// ── Histogram equalization demo ──
+function drawHeqDemo(){
+  const origC=document.getElementById('heqOrig');
+  const outC=document.getElementById('heqOut');
+  if(!origC||!outC)return;
+  const w=origC.width,h=origC.height;
+  const ctx=origC.getContext('2d');
+  // low contrast image: gradient 80-150
+  for(let y=0;y<h;y++){
+    for(let x=0;x<w;x++){
+      const v=Math.floor(80+(x/w)*70+(y/h)*30+(Math.random()-0.5)*10);
+      ctx.fillStyle=`rgb(${v},${v},${v})`;
+      ctx.fillRect(x,y,1,1);
+    }
+  }
+  // add shapes
+  ctx.fillStyle='rgba(110,110,110,0.8)';ctx.fillRect(w*0.2,h*0.2,w*0.25,h*0.3);
+  ctx.fillStyle='rgba(140,140,140,0.7)';ctx.beginPath();ctx.arc(w*0.7,h*0.6,w*0.18,0,Math.PI*2);ctx.fill();
+  
+  // equalize: get pixels, compute cumulative histogram, remap
+  const imgData=origC.getContext('2d').getImageData(0,0,w,h);
+  const pixels=imgData.data;
+  const hist=new Array(256).fill(0);
+  for(let i=0;i<pixels.length;i+=4)hist[pixels[i]]++;
+  const totalPx=w*h;
+  const cdf=new Array(256).fill(0);
+  cdf[0]=hist[0];
+  for(let i=1;i<256;i++)cdf[i]=cdf[i-1]+hist[i];
+  const cdfMin=cdf.find(v=>v>0);
+  const lut=cdf.map(v=>Math.round((v-cdfMin)/(totalPx-cdfMin)*255));
+  const outCtx=outC.getContext('2d');
+  const outData=new Uint8ClampedArray(pixels.length);
+  for(let i=0;i<pixels.length;i+=4){
+    const v=lut[pixels[i]];
+    outData[i]=outData[i+1]=outData[i+2]=v;outData[i+3]=255;
+  }
+  outCtx.putImageData(new ImageData(outData,w,h),0,0);
+}
+
+// ══════════════════════════════
+// SPATIAL FILTER DEMO
+// ══════════════════════════════
+const filterDefs={
+  mean:{name:'均值濾波（Mean Filter）',kernel:[1,1,1,1,1,1,1,1,1],norm:9,kernelLabel:'所有係數相等，除以9',desc:'把中心像素換成周圍9個像素的平均值。就像把影像「模糊化」——尖銳的邊緣和雜訊都被平滑掉。效果明顯但會讓邊緣也變模糊。',use:'✓ 一般雜訊去除  ✓ 前處理準備步驟'},
+  gaussian:{name:'高斯濾波（Gaussian Filter）',kernel:[1,2,1,2,4,2,1,2,1],norm:16,kernelLabel:'中心權重4，邊緣1，除以16',desc:'中心像素影響最大，距離越遠影響越小——和人類視覺對焦模糊很像。比均值濾波更自然，邊緣模糊程度較小。',use:'✓ 自然影像前處理  ✓ 去除高頻雜訊  ✓ 邊緣偵測前的預處理'},
+  median:{name:'中值濾波（Median Filter）',kernel:null,norm:null,kernelLabel:'非線性濾波——排序取中值',desc:'把3×3視窗內的9個像素排序，取中間那個值替換中心。對「胡椒鹽」雜訊（孤立的極亮/極暗點）最有效，同時能保留邊緣清晰度。',use:'✓ 胡椒鹽雜訊  ✓ IC板檢測前處理  ✓ 保留邊緣的平滑'},
+  sharpen:{name:'銳化濾波（Sharpen Filter）',kernel:[0,-1,0,-1,5,-1,0,-1,0],norm:1,kernelLabel:'中心+5，四鄰-1，強化邊緣',desc:'把中心像素的值加強，減去周圍像素的值。讓影像中的邊緣更明顯、細節更清晰。但會放大雜訊，通常在去噪之後使用。',use:'✓ 細節增強  ✓ 輪廓強化  ✓ 銳化模糊影像'},
+  laplacian:{name:'拉普拉斯（Laplacian）',kernel:[0,-1,0,-1,4,-1,0,-1,0],norm:null,kernelLabel:'二階導數——偵測強度變化率',desc:'計算二階導數，對所有方向的邊緣同等敏感（等向性）。輸出是邊緣的「輪廓圖」。對雜訊敏感，通常需要先做高斯平滑。',use:'✓ 邊緣偵測  ✓ 輪廓提取  ✓ 影像銳化（加回原圖）'},
+  sobel_x:{name:'Sobel X（垂直邊緣偵測）',kernel:[-1,0,1,-2,0,2,-1,0,1],norm:null,kernelLabel:'偵測水平方向的強度變化',desc:'計算水平方向上的強度梯度，讓垂直邊緣（左右有明暗差異的地方）變得亮起來。中間那行的係數是±2，加強了中心像素的影響。',use:'✓ 垂直邊緣偵測  ✓ 左右輪廓提取'},
+  sobel_y:{name:'Sobel Y（水平邊緣偵測）',kernel:[1,2,1,0,0,0,-1,-2,-1],norm:null,kernelLabel:'偵測垂直方向的強度變化',desc:'計算垂直方向上的強度梯度，讓水平邊緣（上下有明暗差異的地方）變得亮起來。與 Sobel X 合用可得到完整的邊緣資訊。',use:'✓ 水平邊緣偵測  ✓ 上下輪廓提取'},
+};
+
+function renderKernelGrid(filter){
+  const kd=filterDefs[filter];
+  const el=document.getElementById('kernelDisplay');
+  if(!el)return;
+  if(!kd.kernel){
+    el.innerHTML='<div style="font-size:.85rem;color:var(--accent2);padding:.5rem 0">排序取中值，不使用固定係數</div>';
+    document.getElementById('kernelNote').textContent='非線性操作，無法用卷積表示';
+    return;
+  }
+  const maxV=Math.max(...kd.kernel.map(Math.abs));
+  let html='<div class="kernel-grid" style="margin-top:.3rem">';
+  kd.kernel.forEach(v=>{
+    let cls='kc';
+    if(v===maxV&&v>0)cls='kc kh';
+    else if(v>0)cls='kc kp';
+    else if(v<0)cls='kc kn';
+    html+=`<div class="${cls}">${v>0?'+'+v:v}</div>`;
+  });
+  html+='</div>';
+  el.innerHTML=html;
+  document.getElementById('kernelNote').textContent=kd.kernelLabel;
+}
+
+let filtOrigData=null;
+function initFilterDemo(){
+  const origC=document.getElementById('filtOrig');
+  const outC=document.getElementById('filtOut');
+  if(!origC||!outC)return;
+  const w=origC.width,h=origC.height;
+  // Draw synthetic image with edges and noise
+  const ctx=origC.getContext('2d');
+  // salt & pepper noise base
+  const imgData=origC.getContext('2d').createImageData(w,h);
+  const data=imgData.data;
+  for(let y=0;y<h;y++){
+    for(let x=0;x<w;x++){
+      const i=(y*w+x)*4;
+      let v=50;
+      if(x>w*0.25&&x<w*0.75&&y>h*0.2&&y<h*0.8)v=180;
+      if(x>w*0.55&&x<w*0.9&&y>h*0.55&&y<h*0.9)v=220;
+      // edge lines
+      if(Math.abs(x-w*0.25)<2||Math.abs(y-h*0.2)<2||Math.abs(x-w*0.75)<2||Math.abs(y-h*0.8)<2)v=255;
+      // random salt pepper noise
+      const rnd=Math.random();
+      if(rnd<0.04)v=255;
+      else if(rnd<0.08)v=0;
+      else v+=Math.floor((Math.random()-0.5)*15);
+      v=Math.max(0,Math.min(255,v));
+      data[i]=data[i+1]=data[i+2]=v;data[i+3]=255;
+    }
+  }
+  origC.getContext('2d').putImageData(imgData,0,0);
+  filtOrigData=data.slice();
+  setFilter('mean');
+}
+
+function setFilter(name){
+  document.querySelectorAll('.f-btn').forEach(b=>b.classList.toggle('active',b.onclick&&b.onclick.toString().includes(`'${name}'`)));
+  const kd=filterDefs[name];
+  if(!kd)return;
+  const origC=document.getElementById('filtOrig');
+  const outC=document.getElementById('filtOut');
+  if(!origC||!outC||!filtOrigData)return;
+  const w=origC.width,h=origC.height;
+  let outData;
+  if(name==='median'){
+    outData=applyMedian(filtOrigData,w,h);
+  } else if(name==='laplacian'||name.startsWith('sobel')){
+    const absKernel=kd.kernel.slice();
+    outData=applyKernel(filtOrigData,w,h,absKernel,kd.norm);
+  } else {
+    outData=applyKernel(filtOrigData,w,h,kd.kernel,kd.norm);
+  }
+  putGray(outC,outData);
+  document.getElementById('filtOutLabel').textContent=kd.name.split('（')[0]+'輸出';
+  document.getElementById('filtDesc').innerHTML=kd.desc;
+  document.getElementById('filtUse').textContent=kd.use;
+  renderKernelGrid(name);
+}
+
+// ══════════════════════════════
+// FREQUENCY FILTER DEMO
+// ══════════════════════════════
+function drawFreqSamples(){
+  const hC=document.getElementById('freqHigh');
+  const lC=document.getElementById('freqLow');
+  if(!hC||!lC)return;
+  // High frequency: alternating stripes
+  let ctx=hC.getContext('2d');
+  const hw=hC.width,hh=hC.height;
+  for(let x=0;x<hw;x++){
+    const v=Math.floor((Math.sin(x*0.6)+1)/2*200+30);
+    ctx.fillStyle=`rgb(${v},${v},${v})`;
+    ctx.fillRect(x,0,1,hh);
+  }
+  // Low frequency: smooth gradient
+  ctx=lC.getContext('2d');
+  const lw=lC.width,lh=lC.height;
+  const grad=ctx.createLinearGradient(0,0,lw,0);
+  grad.addColorStop(0,'#1a2535');grad.addColorStop(0.5,'#7090a0');grad.addColorStop(1,'#d0e8f0');
+  ctx.fillStyle=grad;ctx.fillRect(0,0,lw,lh);
+}
+
+const freqFilterInfos={
+  ideal_lp:{name:'理想低通濾波器',desc:'在截斷頻率 D₀ 處完全截止，圓圈內（低頻）完全通過，圓圈外（高頻）完全截止。邊界是一道「硬牆」，效果極端。',ring:'⚠️ 會產生振鈴效應（Ringing）——頻率域的硬截止在空間域造成波紋狀干擾，影像邊緣周圍出現同心圓狀條紋。',type:'lp'},
+  butter_lp:{name:'巴特沃斯低通濾波器（BLF）',desc:'透過調整截斷頻率 D₀ 和階數 n 控制頻率響應。階數越高，截斷越銳利，但也越接近理想濾波器的振鈴問題。階數 < 2 時通常沒有振鈴。',ring:'✓ 適當階數下無振鈴效應，影像平滑自然，是低通濾波器的常用選擇。',type:'lp'},
+  gauss_lp:{name:'高斯低通濾波器（GLF）',desc:'使用高斯函數做頻率響應，從中心到邊緣自然衰減。σ 越大，截斷頻率越高（允許更多高頻通過）；σ 越小，影像越模糊。',ring:'✓ 絕對不會產生振鈴效應。高斯濾波器在空間域和頻率域都是高斯形狀，自然過渡無振鈴。',type:'lp'},
+  ideal_hp:{name:'理想高通濾波器',desc:'與理想低通相反——截斷頻率 D₀ 圓圈外的高頻完全通過，圓圈內的低頻完全截止。讓邊緣和細節清晰，但背景變黑。',ring:'⚠️ 同樣會產生振鈴效應，邊緣處出現波紋干擾。',type:'hp'},
+  butter_hp:{name:'巴特沃斯高通濾波器（BHF）',desc:'高通版本的巴特沃斯濾波器，從截斷頻率開始平滑過渡，逐漸衰減低頻。調整 D₀ 和階數 n 控制效果強度。',ring:'✓ 階數 < 2 時無振鈴，提升細節清晰度的同時保持自然外觀。',type:'hp'},
+  gauss_hp:{name:'高斯高通濾波器（GHF）',desc:'高斯低通的補集：H_hp = 1 - H_lp。自然的頻率衰減讓高頻增強看起來最自然，無振鈴效應。',ring:'✓ 無振鈴效應，效果和巴特沃斯高通類似，適合需要自然銳化的場合。',type:'hp'},
+};
+
+function drawFreqFilterShape(canvas,type,filterType){
+  const ctx=canvas.getContext('2d');
+  const w=canvas.width,h=canvas.height;
+  ctx.clearRect(0,0,w,h);
+  // axes
+  ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(0,h/2);ctx.lineTo(w,h/2);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(w/2,0);ctx.lineTo(w/2,h);ctx.stroke();
+  // Labels
+  ctx.fillStyle='rgba(184,204,224,0.5)';ctx.font='9px Share Tech Mono,monospace';
+  ctx.fillText('低頻',w/2-16,h/2-4);ctx.fillText('高頻',w-30,h/2-4);
+  // Draw frequency response curve
+  const isLP=(filterType==='lp');
+  ctx.strokeStyle=isLP?'#4fc3f7':'#00e5cc';ctx.lineWidth=2;ctx.beginPath();
+  const D0=w*0.35;
+  for(let x=0;x<w;x++){
+    const D=Math.abs(x-w/2);
+    let H;
+    if(type.startsWith('ideal')){H=isLP?(D<=D0?1:0):(D<=D0?0:1);}
+    else if(type.startsWith('butter')){const n=2;const ratio=D/D0;H=isLP?1/(1+Math.pow(ratio,2*n)):1/(1+Math.pow(D0/Math.max(D,0.1),2*n));}
+    else{const sigma=D0*0.6;H=isLP?Math.exp(-D*D/(2*sigma*sigma)):1-Math.exp(-D*D/(2*sigma*sigma));}
+    const y=(1-H)*(h*0.8)+h*0.1;
+    x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  // D0 marker
+  ctx.strokeStyle='rgba(251,191,36,.5)';ctx.lineWidth=1;ctx.setLineDash([3,2]);
+  ctx.beginPath();ctx.moveTo(w/2+D0,h*0.1);ctx.lineTo(w/2+D0,h*0.9);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='rgba(251,191,36,0.7)';ctx.font='8px Share Tech Mono,monospace';
+  ctx.fillText('D₀',w/2+D0+2,h*0.12);
+  // fill area
+  const grad=ctx.createLinearGradient(0,0,0,h);
+  grad.addColorStop(0,isLP?'rgba(79,195,247,.2)':'rgba(0,229,204,.2)');
+  grad.addColorStop(1,'transparent');
+  ctx.fillStyle=grad;ctx.beginPath();
+  for(let x=0;x<w;x++){
+    const D=Math.abs(x-w/2);
+    let H;
+    if(type.startsWith('ideal')){H=isLP?(D<=D0?1:0):(D<=D0?0:1);}
+    else if(type.startsWith('butter')){const n=2;const ratio=D/D0;H=isLP?1/(1+Math.pow(ratio,2*n)):1/(1+Math.pow(D0/Math.max(D,0.1),2*n));}
+    else{const sigma=D0*0.6;H=isLP?Math.exp(-D*D/(2*sigma*sigma)):1-Math.exp(-D*D/(2*sigma*sigma));}
+    const y=(1-H)*(h*0.8)+h*0.1;
+    x===0?ctx.moveTo(x,h):ctx.lineTo(x,y);
+  }
+  ctx.lineTo(w,h);ctx.closePath();ctx.fill();
+}
+
+function setFreqFilter(type){
+  document.querySelectorAll('#freqFilterBtns .f-btn').forEach(b=>b.classList.toggle('active',b.onclick&&b.onclick.toString().includes(`'${type}'`)));
+  const info=freqFilterInfos[type];
+  if(!info)return;
+  document.getElementById('freqFilterName').textContent=info.name;
+  document.getElementById('freqFilterDesc').textContent=info.desc;
+  const ringEl=document.getElementById('freqFilterRing');
+  ringEl.textContent=info.ring;
+  ringEl.style.color=info.ring.startsWith('✓')?'#4ade80':'#fbbf24';
+  ringEl.style.borderLeftColor=info.ring.startsWith('✓')?'#4ade80':'#fbbf24';
+  ringEl.style.background=info.ring.startsWith('✓')?'rgba(74,222,128,.05)':'rgba(251,191,36,.05)';
+  drawFreqFilterShape(document.getElementById('freqFilterCanvas'),type,info.type);
+}
+
+// ══════════════════════════════
+// EDGE TYPE VISUALIZATION
+// ══════════════════════════════
+function drawEdgeProfiles(){
+  const profiles=[
+    {id:'edgeStep',fn:x=>x<0.45?30:(x>0.55?220:x<0.5?30:220),color:'#4fc3f7'},
+    {id:'edgeRamp',fn:x=>x<0.3?30:(x>0.7?220:30+(x-0.3)/0.4*190),color:'#00e5cc'},
+    {id:'edgeRoof',fn:x=>{const c=0.5,w2=0.2;const d=Math.abs(x-c);return d<w2?30+((1-d/w2)*190):30;},color:'#a78bfa'},
+  ];
+  profiles.forEach(p=>{
+    const canvas=document.getElementById(p.id);
+    if(!canvas)return;
+    const ctx=canvas.getContext('2d');
+    const w=canvas.width,h=canvas.height;
+    ctx.clearRect(0,0,w,h);
+    // grid
+    ctx.strokeStyle='rgba(255,255,255,.08)';ctx.lineWidth=1;
+    for(let i=1;i<4;i++){ctx.beginPath();ctx.moveTo(i*w/4,0);ctx.lineTo(i*w/4,h);ctx.stroke();}
+    ctx.strokeStyle=p.color;ctx.lineWidth=2;ctx.beginPath();
+    for(let x=0;x<w;x++){const v=p.fn(x/w);const y=h-(v/255)*(h*0.8)-h*0.1;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+    ctx.stroke();
+    // fill
+    ctx.fillStyle=p.color+'22';ctx.beginPath();
+    for(let x=0;x<w;x++){const v=p.fn(x/w);const y=h-(v/255)*(h*0.8)-h*0.1;x===0?ctx.moveTo(x,h-h*0.1):ctx.lineTo(x,y);}
+    ctx.lineTo(w,h-h*0.1);ctx.closePath();ctx.fill();
+  });
+}
+
+// ══════════════════════════════
+// EDGE DETECTION INTERACTIVE
+// ══════════════════════════════
+let edgeOrigData=null;
+const edgeInfos={
+  sobel_x:{label:'Sobel X 輸出（垂直邊緣）',desc:'偵測水平方向的強度變化，讓垂直邊緣（左右明暗差異）亮起來。圖中垂直的線條和邊界都會清楚顯現。'},
+  sobel_y:{label:'Sobel Y 輸出（水平邊緣）',desc:'偵測垂直方向的強度變化，讓水平邊緣（上下明暗差異）亮起來。圖中水平的線條和邊界都會清楚顯現。'},
+  sobel_both:{label:'Sobel 合成輸出（所有邊緣）',desc:'同時計算 Gx 和 Gy，取合成量 √(Gx²+Gy²)。可以偵測到所有方向的邊緣，是實際應用中最常用的方式。'},
+  laplacian:{label:'Laplacian 輸出（二階導數）',desc:'偵測所有方向的邊緣，但對雜訊非常敏感。輸出是邊緣輪廓，通常在高斯平滑後使用（LoG = Laplacian of Gaussian）。'},
+};
+
+function initEdgeDemo(){
+  const origC=document.getElementById('edgeOrigCanvas');
+  if(!origC)return;
+  const w=origC.width,h=origC.height;
+  const ctx=origC.getContext('2d');
+  const imgData=ctx.createImageData(w,h);
+  const data=imgData.data;
+  for(let y=0;y<h;y++){
+    for(let x=0;x<w;x++){
+      const i=(y*w+x)*4;
+      let v=40;
+      if(x>w*0.2&&x<w*0.8&&y>h*0.2&&y<h*0.8)v=160;
+      if(x>w*0.5&&x<w*0.85&&y>h*0.5&&y<h*0.85)v=220;
+      // diagonal stripe
+      if(Math.abs(x-y*0.8-10)<5&&x<w*0.5)v=240;
+      v=Math.max(0,Math.min(255,v+(Math.random()-0.5)*8));
+      data[i]=data[i+1]=data[i+2]=v;data[i+3]=255;
+    }
+  }
+  ctx.putImageData(imgData,0,0);
+  edgeOrigData=data.slice();
+  setEdge('sobel_x');
+}
+
+function setEdge(type){
+  document.querySelectorAll('.filter-widget:last-child .f-btn').forEach(b=>b.classList.toggle('active',b.onclick&&b.onclick.toString().includes(`'${type}'`)));
+  const origC=document.getElementById('edgeOrigCanvas');
+  const outC=document.getElementById('edgeOutCanvas');
+  if(!origC||!outC||!edgeOrigData)return;
+  const w=origC.width,h=origC.height;
+  let outData;
+  if(type==='sobel_x'){outData=applyKernel(edgeOrigData,w,h,[-1,0,1,-2,0,2,-1,0,1],null);}
+  else if(type==='sobel_y'){outData=applyKernel(edgeOrigData,w,h,[1,2,1,0,0,0,-1,-2,-1],null);}
+  else if(type==='sobel_both'){outData=applySobelCombined(edgeOrigData,w,h);}
+  else{outData=applyKernel(edgeOrigData,w,h,[0,-1,0,-1,4,-1,0,-1,0],null);}
+  putGray(outC,outData);
+  const info=edgeInfos[type];
+  document.getElementById('edgeOutLabel').textContent=info.label.split('（')[0]+'輸出';
+  document.getElementById('edgeDesc').textContent=info.desc;
+}
+
+// ══════════════════════════════
+// INIT ALL
+// ══════════════════════════════
+setTimeout(()=>{
+  // Imaging module widgets (guarded inside functions)
+  updateAp(4);
+  calcFOV();
+  setLight('bright');
+
+  // Init transform demo
+  const origC=document.getElementById('trOrigCanvas');
+  if(origC){
+    drawTestGradient(origC);
+    setTransform('threshold');
+  }
+  initHistograms();
+  drawHeqDemo();
+  initFilterDemo();
+  drawFreqSamples();
+  setFreqFilter('ideal_lp');
+  drawEdgeProfiles();
+  initEdgeDemo();
+},400);
 </script>
 </body>
 </html>
