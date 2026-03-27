@@ -1350,9 +1350,193 @@ canvas#apCanvas{border-radius:50%}
       </div>
     </div>
 
+    <!-- ── Thresholding 完整版 ── -->
+    <div class="sec-divider"></div>
+    <div class="sec-header" style="margin-top:0">
+      <span class="sec-num">METHOD</span>
+      <span class="sec-title">門檻化（Thresholding）分割</span>
+    </div>
+    <p style="font-size:.9rem;line-height:1.78;color:var(--dim);margin-bottom:1rem">門檻化是最簡單直觀的分割方式：根據像素強度設定閾值 T，高於門檻設為白（前景），低於門檻設為黑（背景）。</p>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-bottom:1.2rem">
+      <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:6px;padding:1rem">
+        <div style="font-size:.8rem;font-weight:700;color:var(--accent);margin-bottom:.4rem">整體門檻化</div>
+        <div style="font-size:.82rem;line-height:1.7;color:var(--dim)">用單一固定門檻值處理整張影像。適合光照均勻、背景單純的場景。</div>
+      </div>
+      <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:6px;padding:1rem">
+        <div style="font-size:.8rem;font-weight:700;color:var(--accent2);margin-bottom:.4rem">局部門檻化</div>
+        <div style="font-size:.82rem;line-height:1.7;color:var(--dim)">根據影像局部區域的強度變化動態調整閾值。適合光照不均勻或背景複雜的影像。</div>
+      </div>
+      <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:6px;padding:1rem">
+        <div style="font-size:.8rem;font-weight:700;color:#a78bfa;margin-bottom:.4rem">動態門檻化</div>
+        <div style="font-size:.82rem;line-height:1.7;color:var(--dim)">與影像空間座標相關，適合光照不均或背景複雜的影像。</div>
+      </div>
+    </div>
+
+    <!-- 雜訊互動 demo -->
+    <div class="filter-widget">
+      <div class="aw-title">// 互動示意：雜訊對門檻化的影響</div>
+      <div class="filter-btns">
+        <button class="f-btn active" onclick="setThreshDemo('clean')">無雜訊</button>
+        <button class="f-btn" onclick="setThreshDemo('noise10')">高斯雜訊 σ=10</button>
+        <button class="f-btn" onclick="setThreshDemo('noise50')">高斯雜訊 σ=50</button>
+        <button class="f-btn" onclick="setThreshDemo('uneven')">光照不均勻</button>
+      </div>
+      <div style="display:flex;gap:1.2rem;flex-wrap:wrap;align-items:flex-start">
+        <div class="canvas-wrap">
+          <canvas id="threshImgCanvas" width="150" height="150" style="border-radius:5px;border:1px solid var(--border)"></canvas>
+          <div class="canvas-label">輸入影像</div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="threshHistCanvas" width="150" height="100" style="border-radius:5px;border:1px solid var(--border);background:#0d1117"></canvas>
+          <div class="canvas-label">直方圖</div>
+        </div>
+        <div style="display:flex;align-items:center;padding-top:50px;color:var(--accent);font-size:1.2rem">→</div>
+        <div class="canvas-wrap">
+          <canvas id="threshOutCanvas" width="150" height="150" style="border-radius:5px;border:1px solid var(--border)"></canvas>
+          <div class="canvas-label">固定門檻（T=127）</div>
+        </div>
+        <div class="filter-info-panel" style="min-width:160px">
+          <div id="threshDesc" style="font-size:.88rem;line-height:1.8;color:var(--dim)"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Otsu -->
+    <div class="sec-header" style="margin-top:1.5rem">
+      <span class="sec-num">OTSU</span>
+      <span class="sec-title">Otsu 最佳化整體門檻法</span>
+    </div>
+    <p style="font-size:.9rem;line-height:1.78;color:var(--dim);margin-bottom:1rem"><strong style="color:var(--text)">目標：</strong>自動找出使「類別間變異數」最大化的門檻值 k*。不需要人工選門檻，演算法自動計算出最佳分割點。</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:1rem;margin-bottom:1rem">
+      <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:6px;padding:1.1rem">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.12em;color:var(--accent2);margin-bottom:.7rem">// Otsu 演算法步驟</div>
+        <div style="display:flex;flex-direction:column;gap:.5rem">
+          <div style="background:var(--bg);border-radius:4px;padding:.6rem .8rem;display:flex;gap:.7rem;align-items:flex-start">
+            <span style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--accent);flex-shrink:0;margin-top:.1rem">01</span>
+            <span style="font-size:.85rem;color:var(--dim);line-height:1.6">計算影像直方圖，正規化為各灰階強度的機率分布 Pᵢ</span>
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:.6rem .8rem;display:flex;gap:.7rem;align-items:flex-start">
+            <span style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--accent);flex-shrink:0;margin-top:.1rem">02</span>
+            <span style="font-size:.85rem;color:var(--dim);line-height:1.6">計算群組 C₁（強度 ≤ k）的累積機率 ω(k) 和平均強度 m(k)</span>
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:.6rem .8rem;display:flex;gap:.7rem;align-items:flex-start">
+            <span style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--accent);flex-shrink:0;margin-top:.1rem">03</span>
+            <span style="font-size:.85rem;color:var(--dim);line-height:1.6">計算全影像平均強度 m_G，作為基準</span>
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:.6rem .8rem;display:flex;gap:.7rem;align-items:flex-start">
+            <span style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--accent);flex-shrink:0;margin-top:.1rem">04</span>
+            <span style="font-size:.85rem;color:var(--dim);line-height:1.6">對每個 k 計算類別間變異數 σ²_B(k)</span>
+          </div>
+          <div style="background:rgba(79,195,247,.08);border:1px solid rgba(79,195,247,.3);border-radius:4px;padding:.6rem .8rem;display:flex;gap:.7rem;align-items:flex-start">
+            <span style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--accent);flex-shrink:0;margin-top:.1rem">05</span>
+            <span style="font-size:.85rem;color:var(--text);line-height:1.6">選使 σ²_B(k) <strong>最大</strong>的 k 即為最佳門檻 k*</span>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:6px;padding:1.1rem">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.12em;color:var(--accent2);margin-bottom:.7rem">// 互動：拖拉門檻，看類別間變異數</div>
+        <canvas id="otsuCanvas" width="240" height="130" style="width:100%;border-radius:4px;border:1px solid var(--border);background:#0d1117;display:block"></canvas>
+        <div style="margin-top:.6rem">
+          <input id="otsuSlider" type="range" min="0" max="255" value="127" style="width:100%;accent-color:var(--accent)" oninput="updateOtsu(this.value)">
+          <div style="display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--dim)">
+            <span>T=0</span><span id="otsuTval" style="color:var(--accent)">T=127</span><span>T=255</span>
+          </div>
+        </div>
+        <div id="otsuSigma" style="margin-top:.6rem;font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--accent2)"></div>
+      </div>
+    </div>
+
+    <div class="info-box green">
+      <strong>✅ Otsu vs 人工選值：</strong>人工難以從直方圖精確判斷最佳門檻，尤其光照不均時。Otsu 透過最大化類別間變異數自動找到 k*，分割效果顯著優於基本方法，適用於多數場景。評估指標 η = σ²_B / σ²_G 越接近 1 表示分離效果越好。
+    </div>
+
+    <!-- ── 區域為基礎的分割 ── -->
+    <div class="sec-divider"></div>
+    <div class="sec-header" style="margin-top:0">
+      <span class="sec-num">METHOD</span>
+      <span class="sec-title">區域為基礎的影像分割</span>
+    </div>
+    <p style="font-size:.9rem;line-height:1.78;color:var(--dim);margin-bottom:1.2rem">利用像素或子區域的<strong style="color:var(--text)">相似性</strong>，從種子點開始進行聚合或拆分合併，達成更精細的分割效果。</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem">
+      <div style="background:var(--bg-light);border:1px solid rgba(0,229,204,.3);border-radius:6px;padding:1.2rem">
+        <div style="font-size:.95rem;font-weight:700;color:var(--accent2);margin-bottom:.6rem">1. 區域成長法（Region Growing）</div>
+        <p style="font-size:.85rem;line-height:1.75;color:var(--dim);margin-bottom:.8rem">從一個或多個<strong style="color:var(--text)">種子點</strong>出發，根據預先定義的相似性（強度、色度、紋理），不斷將相鄰相似的像素聚合，直到無法加入新的像素為止。</p>
+        <div style="background:var(--bg);border-radius:5px;padding:.8rem">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--accent2);margin-bottom:.5rem">// 演算法步驟</div>
+          <div style="font-size:.82rem;line-height:1.9;color:var(--dim)">
+            1. 找出影像中與述詞 Q 成立的連通區域<br>
+            2. 對這些連通區域進行侵蝕，縮至單一像素種子點<br>
+            3. 以<strong style="color:var(--text)">八連通</strong>方式，從種子點向外聚合滿足述詞的像素<br>
+            4. 輸出不同連通區域的標示，完成分割
+          </div>
+        </div>
+        <div style="margin-top:.7rem;background:rgba(0,229,204,.06);border-radius:4px;padding:.5rem .7rem;font-size:.8rem;color:var(--dim)">
+          <strong style="color:var(--text)">述詞判斷：</strong>若像素與種子點的強度差小於門檻值，述詞為真（加入區域），否則為假（停止）。
+        </div>
+      </div>
+      <div style="background:var(--bg-light);border:1px solid rgba(79,195,247,.3);border-radius:6px;padding:1.2rem">
+        <div style="font-size:.95rem;font-weight:700;color:var(--accent);margin-bottom:.6rem">2. 區域分裂與合併（Split &amp; Merge）</div>
+        <p style="font-size:.85rem;line-height:1.75;color:var(--dim);margin-bottom:.8rem">給定一個述詞 Q，判斷整張影像任一區域是否滿足條件。若述詞為假，將該區域分裂成四個象限；若鄰近區域都滿足述詞，則合併。</p>
+        <div style="background:var(--bg);border-radius:5px;padding:.8rem">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--accent2);margin-bottom:.5rem">// 四叉樹（Quadtree）結構</div>
+          <div style="font-size:.82rem;line-height:1.9;color:var(--dim)">
+            · 用四叉樹結構表示整個分裂過程<br>
+            · 每個節點代表一個區域<br>
+            · 節點不滿足述詞 → 分裂成 4 子節點<br>
+            · 利用樹狀結構管理區域層級與合併操作
+          </div>
+        </div>
+        <div style="margin-top:.7rem;background:rgba(79,195,247,.06);border-radius:4px;padding:.5rem .7rem;font-size:.8rem;color:var(--dim)">
+          <strong style="color:var(--text)">述詞範例：</strong>σ &gt; a 且 0 &lt; μ &lt; b，標示為真（TRUE）區域編為1，否則為0。
+        </div>
+      </div>
+    </div>
+
+    <!-- Region Growing 互動 -->
+    <div class="filter-widget">
+      <div class="aw-title">// 互動示意：點擊種子點，觀察區域成長</div>
+      <div style="display:flex;gap:1.2rem;flex-wrap:wrap;align-items:flex-start">
+        <div style="display:flex;flex-direction:column;gap:.5rem">
+          <div style="display:flex;gap:.5rem;align-items:center">
+            <span style="font-size:.8rem;color:var(--dim);font-family:'Share Tech Mono',monospace">門檻值 T：</span>
+            <input id="rgThresh" type="range" min="5" max="80" value="30" style="width:100px;accent-color:var(--accent2)" oninput="updateRGThresh(this.value)">
+            <span id="rgThreshVal" style="font-family:'Share Tech Mono',monospace;font-size:.82rem;color:var(--accent2)">30</span>
+          </div>
+          <canvas id="rgCanvas" width="200" height="200" style="border-radius:6px;border:1px solid var(--border);cursor:crosshair" onclick="doRegionGrow(event)"></canvas>
+          <div style="font-size:.75rem;color:var(--dim);font-family:'Share Tech Mono',monospace;text-align:center">點擊任意位置設定種子點</div>
+        </div>
+        <div style="flex:1;min-width:160px">
+          <div id="rgInfo" style="font-size:.88rem;line-height:1.8;color:var(--dim);margin-bottom:.8rem">點擊影像中的任意位置作為種子點，演算法會根據門檻值 T 將強度相近的鄰近像素聚合成同一區域（以青色標示）。</div>
+          <div style="background:var(--bg);border-radius:5px;padding:.7rem 1rem;border-left:2px solid var(--accent2)">
+            <div style="font-size:.72rem;font-family:'Share Tech Mono',monospace;color:var(--accent2);margin-bottom:.3rem">// 連通性</div>
+            <div style="font-size:.85rem;color:var(--text)">採用<strong>八連通</strong>（8-connectivity）——考慮上下左右及四個對角鄰居，確保完整的區域聚合。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 比較表 -->
+    <div class="sec-header" style="margin-top:1.5rem">
+      <span class="sec-num">COMPARE</span>
+      <span class="sec-title">區域成長 vs 區域分裂與合併</span>
+    </div>
+    <table class="cmp-table">
+      <thead><tr><th>特點</th><th>區域成長</th><th>區域分裂與合併</th></tr></thead>
+      <tbody>
+        <tr><td><strong>起點</strong></td><td>種子點（局部出發）</td><td>整張影像（全域出發）</td></tr>
+        <tr><td><strong>分割策略</strong></td><td>從種子點往外擴展</td><td>從頂部向下分裂，從底部向上合併</td></tr>
+        <tr><td><strong>計算複雜度</strong></td><td class="good">較低</td><td class="warn">較高，需多次判斷</td></tr>
+        <tr><td><strong>對種子點依賴</strong></td><td class="warn">高，選錯影響大</td><td class="good">無需種子點</td></tr>
+        <tr><td><strong>適用影像結構</strong></td><td>局部區域明顯</td><td>複雜結構，需全域分析</td></tr>
+      </tbody>
+    </table>
+
     <div class="dyk">
       <div class="dyk-icon">💡</div>
-      <div><div class="dyk-label">// 分割方法選擇策略</div><div class="dyk-text">影像無雜訊且邊界清晰 → 邊緣偵測；影像有雜訊 → 區域相似性或自適應門檻；需要快速二值化 → Otsu 自動閾值；光照不均勻 → 自適應門檻化。通常在實際應用中會組合多種方法使用。</div></div>
+      <div><div class="dyk-label">// 分割方法選擇策略</div><div class="dyk-text">無雜訊且邊界清晰 → <strong>邊緣偵測</strong>；光照均勻單純 → <strong>Otsu 門檻化</strong>；光照不均勻 → <strong>局部門檻化</strong>；已知種子點 → <strong>區域成長法</strong>；複雜結構需全域分析 → <strong>區域分裂與合併</strong>。</div></div>
     </div>
   </div>
 
@@ -2112,6 +2296,208 @@ function setEdge(type){
   document.getElementById('edgeDesc').textContent=info.desc;
 }
 
+  // ══════════════════════════════
+// THRESHOLDING DEMO
+// ══════════════════════════════
+const threshInfos={
+  clean:'無雜訊時，直方圖呈現兩個清晰波峰（雙峰分布），背景與前景分明，可輕易選擇固定門檻（如127）完成分割。',
+  noise10:'加入標準差10的高斯雜訊後，直方圖波峰變成高斯分布形狀，但仍有明顯分界，固定門檻仍能較好地分割。',
+  noise50:'加入標準差50的高斯雜訊後，波峰消失，分界不明顯，固定門檻失效。此時需要進階方法（如Otsu或局部門檻化）。',
+  uneven:'光照不均勻時，影像各區域亮度差異大，整體門檻很難找到適合所有區域的閾值。解決方案：使用光照補償技術或局部門檻化。',
+};
+
+function genThreshImage(mode){
+  const w=150,h=150;
+  const data=new Uint8ClampedArray(w*h*4);
+  for(let y=0;y<h;y++){
+    for(let x=0;x<w;x++){
+      const i=(y*w+x)*4;
+      const dx=x-75,dy=y-75;
+      let v=dx*dx+dy*dy<40*40?200:50;
+      if(dx*dx+dy*dy<20*20)v=180;
+      if(mode==='noise10')v+=Math.round((Math.random()-0.5)*60);
+      else if(mode==='noise50')v+=Math.round((Math.random()-0.5)*300);
+      else if(mode==='uneven')v=Math.round(v*0.4+(x/w*120+30)*0.6);
+      v=Math.max(0,Math.min(255,v));
+      data[i]=data[i+1]=data[i+2]=v;data[i+3]=255;
+    }
+  }
+  return data;
+}
+
+function drawThreshHist(canvas,pixelData){
+  const ctx=canvas.getContext('2d');
+  const w=canvas.width,h=canvas.height;
+  ctx.clearRect(0,0,w,h);
+  const hist=new Array(256).fill(0);
+  for(let i=0;i<pixelData.length;i+=4)hist[pixelData[i]]++;
+  const maxV=Math.max(...hist);
+  for(let i=0;i<256;i++){
+    const bh=(hist[i]/maxV)*(h-15);
+    ctx.fillStyle=`rgba(79,195,247,${0.3+0.5*(hist[i]/maxV)})`;
+    ctx.fillRect(i*(w/256),h-15-bh,w/256+1,bh);
+  }
+  ctx.strokeStyle='#fbbf24';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(127*(w/256),0);ctx.lineTo(127*(w/256),h-15);ctx.stroke();
+  ctx.fillStyle='rgba(251,191,36,0.8)';ctx.font='8px Share Tech Mono,monospace';
+  ctx.fillText('T=127',127*(w/256)+2,10);
+  ctx.fillStyle='rgba(184,204,224,0.4)';ctx.font='7px Share Tech Mono,monospace';
+  ctx.fillText('0',2,h-4);ctx.fillText('255',w-18,h-4);
+}
+
+function setThreshDemo(mode){
+  document.querySelectorAll('#pp-segmentation .filter-widget .f-btn').forEach(b=>
+    b.classList.toggle('active',b.onclick&&b.onclick.toString().includes(`'${mode}'`))
+  );
+  const imgC=document.getElementById('threshImgCanvas');
+  const histC=document.getElementById('threshHistCanvas');
+  const outC=document.getElementById('threshOutCanvas');
+  if(!imgC)return;
+  const data=genThreshImage(mode);
+  imgC.getContext('2d').putImageData(new ImageData(data,150,150),0,0);
+  drawThreshHist(histC,data);
+  const out=new Uint8ClampedArray(data.length);
+  for(let i=0;i<data.length;i+=4){
+    const v=data[i]>127?255:0;
+    out[i]=out[i+1]=out[i+2]=v;out[i+3]=255;
+  }
+  outC.getContext('2d').putImageData(new ImageData(out,150,150),0,0);
+  document.getElementById('threshDesc').textContent=threshInfos[mode];
+}
+
+function initThreshDemo(){setThreshDemo('clean');}
+
+// ══════════════════════════════
+// OTSU INTERACTIVE
+// ══════════════════════════════
+function computeOtsuCurve(){
+  const hist=new Array(256).fill(0);
+  for(let i=0;i<256;i++)
+    hist[i]=Math.round(800*Math.exp(-Math.pow(i-60,2)/(2*30*30))+600*Math.exp(-Math.pow(i-180,2)/(2*25*25)));
+  const N=hist.reduce((a,b)=>a+b,0);
+  const P=hist.map(v=>v/N);
+  const mG=P.reduce((s,p,i)=>s+p*i,0);
+  const sigmas=[];
+  let w1=0,m1=0;
+  for(let k=0;k<256;k++){
+    w1+=P[k];m1+=k*P[k];
+    const w2=1-w1;
+    if(w1<=0||w2<=0){sigmas.push(0);continue;}
+    const mu1=m1/w1,mu2=(mG-m1)/w2;
+    sigmas.push(w1*w2*Math.pow(mu1-mu2,2));
+  }
+  return{hist,sigmas,mG};
+}
+var otsuData, otsuMax, otsuBestK;
+
+function drawOtsuCanvas(T){
+  const canvas=document.getElementById('otsuCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const w=canvas.width,h=canvas.height;
+  ctx.clearRect(0,0,w,h);
+  const pH=h*0.55,pSig=h*0.38,margin=8,bw=w-margin*2;
+  const maxH=Math.max(...otsuData.hist);
+  for(let i=0;i<256;i++){
+    const bh=(otsuData.hist[i]/maxH)*pH;
+    ctx.fillStyle=i<=T?'rgba(79,195,247,0.4)':'rgba(184,204,224,0.2)';
+    ctx.fillRect(margin+i*(bw/256),pH-bh,bw/256+.5,bh);
+  }
+  ctx.strokeStyle='#00e5cc';ctx.lineWidth=1.5;ctx.beginPath();
+  for(let i=0;i<256;i++){
+    const x=margin+i*(bw/256);
+    const y=pH+margin+(1-otsuData.sigmas[i]/otsuMax)*pSig;
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  const tx=margin+T*(bw/256);
+  ctx.strokeStyle='#fbbf24';ctx.lineWidth=1.5;ctx.setLineDash([3,2]);
+  ctx.beginPath();ctx.moveTo(tx,0);ctx.lineTo(tx,h);ctx.stroke();
+  ctx.setLineDash([]);
+  const kx=margin+otsuBestK*(bw/256);
+  ctx.strokeStyle='rgba(74,222,128,0.6)';ctx.lineWidth=1;ctx.setLineDash([2,3]);
+  ctx.beginPath();ctx.moveTo(kx,pH);ctx.lineTo(kx,h);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='rgba(74,222,128,0.8)';ctx.font='8px Share Tech Mono,monospace';
+  ctx.fillText('k*='+otsuBestK,kx+2,h-2);
+  ctx.fillStyle='rgba(184,204,224,0.6)';ctx.font='8px Share Tech Mono,monospace';
+  ctx.fillText('直方圖',margin+2,10);
+  ctx.fillStyle='rgba(0,229,204,0.7)';
+  ctx.fillText('σ²_B(k)',margin+2,pH+margin+10);
+}
+
+function updateOtsu(v){
+  const T=parseInt(v);
+  document.getElementById('otsuTval').textContent='T='+T;
+  const sig=otsuData.sigmas[T];
+  const pct=Math.round(sig/otsuMax*100);
+  document.getElementById('otsuSigma').textContent=
+    `σ²_B(${T}) = ${sig.toFixed(1)}  （最大值的 ${pct}%）${T===otsuBestK?' ← 最佳 k*！':''}`;
+  drawOtsuCanvas(T);
+}
+
+// ══════════════════════════════
+// REGION GROWING DEMO
+// ══════════════════════════════
+let rgOrigData=null;
+const RG_W=200,RG_H=200;
+
+function initRGDemo(){
+  const c=document.getElementById('rgCanvas');
+  if(!c)return;
+  const data=new Uint8ClampedArray(RG_W*RG_H*4);
+  for(let y=0;y<RG_H;y++){
+    for(let x=0;x<RG_W;x++){
+      const i=(y*RG_W+x)*4;
+      let v=40;
+      if(x>40&&x<120&&y>30&&y<110)v=170;
+      if(x>100&&x<180&&y>90&&y<170)v=210;
+      const dx=x-60,dy=y-150;
+      if(dx*dx+dy*dy<30*30)v=130;
+      v+=Math.round((Math.random()-0.5)*18);
+      v=Math.max(0,Math.min(255,v));
+      data[i]=data[i+1]=data[i+2]=v;data[i+3]=255;
+    }
+  }
+  c.getContext('2d').putImageData(new ImageData(data,RG_W,RG_H),0,0);
+  rgOrigData=data.slice();
+}
+
+function updateRGThresh(v){document.getElementById('rgThreshVal').textContent=v;}
+
+function doRegionGrow(evt){
+  if(!rgOrigData)return;
+  const c=document.getElementById('rgCanvas');
+  const rect=c.getBoundingClientRect();
+  const sx=Math.floor((evt.clientX-rect.left)*(RG_W/rect.width));
+  const sy=Math.floor((evt.clientY-rect.top)*(RG_H/rect.height));
+  const T=parseInt(document.getElementById('rgThresh').value);
+  const seedVal=rgOrigData[(sy*RG_W+sx)*4];
+  const visited=new Uint8Array(RG_W*RG_H);
+  const queue=[{x:sx,y:sy}];
+  visited[sy*RG_W+sx]=1;
+  const dirs=[{x:-1,y:0},{x:1,y:0},{x:0,y:-1},{x:0,y:1},{x:-1,y:-1},{x:1,y:-1},{x:-1,y:1},{x:1,y:1}];
+  while(queue.length){
+    const{x,y}=queue.shift();
+    for(const d of dirs){
+      const nx=x+d.x,ny=y+d.y;
+      if(nx<0||nx>=RG_W||ny<0||ny>=RG_H||visited[ny*RG_W+nx])continue;
+      visited[ny*RG_W+nx]=1;
+      if(Math.abs(rgOrigData[(ny*RG_W+nx)*4]-seedVal)<=T)queue.push({x:nx,y:ny});
+    }
+  }
+  const out=rgOrigData.slice();
+  let count=0;
+  for(let y=0;y<RG_H;y++)for(let x=0;x<RG_W;x++)if(visited[y*RG_W+x]){
+    const i=(y*RG_W+x)*4;
+    out[i]=0;out[i+1]=200;out[i+2]=180;out[i+3]=200;count++;
+  }
+  c.getContext('2d').putImageData(new ImageData(out,RG_W,RG_H),0,0);
+  const ctx=c.getContext('2d');
+  ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.arc(sx,sy,4,0,Math.PI*2);ctx.fill();
+  document.getElementById('rgInfo').textContent=
+    `種子點 (${sx},${sy})，強度 ${seedVal}，T=${T}。已聚合 ${count} 個像素（佔影像 ${Math.round(count/RG_W/RG_H*100)}%）。調整門檻值可控制擴展範圍。`;
+}
 // ══════════════════════════════
 // INIT ALL
 // ══════════════════════════════
@@ -2134,6 +2520,13 @@ setTimeout(()=>{
   setFreqFilter('ideal_lp');
   drawEdgeProfiles();
   initEdgeDemo();
+
+  otsuData=computeOtsuCurve();
+  otsuMax=Math.max(...otsuData.sigmas);
+  otsuBestK=otsuData.sigmas.indexOf(otsuMax);
+  initThreshDemo();
+  drawOtsuCanvas(127); updateOtsu(127);
+  initRGDemo();
 },400);
 </script>
 </body>
