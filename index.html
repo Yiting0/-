@@ -440,8 +440,7 @@ canvas#apCanvas{border-radius:50%}
       </div>
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">⚡</span><div><div class="etitle">Rolling Shutter vs Global Shutter——物件在動就一定要選對</div><div class="esum">拍移動中的物件，選錯快門類型，邊緣會歪掉</div></div></div><span class="earr">▼</span></div>
-        <div class="ebody">
-          <p>想像你用掃描機掃一張紙——掃描頭從上往下一行一行掃。如果掃到一半紙張突然移動，掃出來的影像就會錯位變形。Rolling Shutter 的原理和這個一樣，感光元件逐列曝光，物件只要在移動，邊緣就會歪斜——這在生產線上是很嚴重的問題。</p>
+        <div class="ebody"><p>想像你用掃描機掃一張紙——掃描頭從上往下一行一行掃。如果掃到一半紙張突然移動，掃出來的影像就會錯位變形。Rolling Shutter 的原理和這個一樣，感光元件逐列曝光，物件只要在移動，邊緣就會歪斜——這在生產線上是很嚴重的問題。</p>
           <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;margin:.9rem 0;background:#161c26;border-radius:6px;border:1px solid rgba(79,195,247,.15)">
             <text x="175" y="20" text-anchor="middle" fill="#f87171" font-family="Share Tech Mono,monospace" font-size="10" letter-spacing="1">ROLLING SHUTTER</text>
             <rect x="30" y="30" width="120" height="14" rx="1" fill="rgba(79,195,247,.55)"/>
@@ -480,7 +479,7 @@ canvas#apCanvas{border-radius:50%}
       </div>
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🔌</span><div><div class="etitle">傳輸介面——速度快，還是距離遠？</div><div class="esum">GigE 可以拉很遠，USB3 速度快好安裝，CoaXPress 兩個都要就選這個</div></div></div><span class="earr">▼</span></div>
-        <div class="ebody"><p><strong>GigE Vision</strong>：走一般網路線，最遠能拉 100 公尺，適合機台大的場合，但頻寬只有 1 Gbps。</p><p><strong>USB3 Vision</strong>：佈線最簡單，速度快（5 Gbps），缺點是距離只有 10 公尺。</p><p><strong>CoaXPress</strong>：頻寬最高達 25 Gbps，距離也可到 68 公尺，連接線整合電源。速度快、距離遠都要就選這個。</p></div>
+        <div class="ebody"><p>影像從相機傳到電腦就像水管送水——管子愈粗（頻寬愈大）每秒能傳的影像愈多，但管子拉得愈長阻力就愈大。</p><p><strong>GigE Vision</strong>：走一般網路線，最遠能拉 100 公尺，適合機台大、相機離電腦很遠的場合，但頻寬只有 1 Gbps，高速場合可能不夠用。</p><p><strong>USB3 Vision</strong>：就像電腦的 USB 插槽，佈線最簡單，速度也快（5 Gbps），缺點是距離只有 10 公尺，適合桌上型設備或實驗室快速建置。</p><p><strong>CoaXPress</strong>：高階選項，頻寬最高達 25 Gbps，距離也可以到 68 公尺，連接線本身還整合了電源，不用另外拉電線。速度快、距離遠都要就選這個，但成本最高。</p></div>
       </div>
 
       <div class="ecard">
@@ -653,29 +652,100 @@ canvas#apCanvas{border-radius:50%}
     <div class="elist">
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🎯</span><div><div class="etitle">Image Circle——鏡頭能投影多大的圓？</div><div class="esum">感光元件必須完整落在這個圓圈內，否則四角會黑掉</div></div></div><span class="earr">▼</span></div>
-        <div class="ebody"><p>鏡頭投影出來的清晰影像，形狀其實是一個圓，不是方形。相機裡的感光元件是矩形的，必須完整塞進這個圓裡面——如果感光元件的對角線比圓的直徑還長，四個角就會超出圓的範圍，那裡的影像會變暗、變模糊，這就是「暗角」。</p></div>
+        <div class="ebody"><p>鏡頭投影出來的清晰影像，形狀其實是一個圓，不是方形。相機裡的感光元件是矩形的，必須完整塞進這個圓裡面——如果感光元件的對角線比圓的直徑還長，四個角就會超出圓的範圍，那裡的影像會變暗、變模糊，這就是「暗角」。</p><p>選鏡頭時，確認感光元件的對角線長度小於鏡頭標示的 Image Circle 數值就沒問題。</p></div>
       </div>
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🔬</span><div><div class="etitle">遠心鏡頭——量測用鏡頭的最高規格</div><div class="esum">沒有透視失真，景深內倍率完全一致，精密量測的首選</div></div></div><span class="earr">▼</span></div>
         <div class="ebody">
-          <p>一般鏡頭有個無法避免的物理現象：近的東西看起來大、遠的東西看起來小。這在精密量測時就是致命缺陷——同一個零件放近一點和放遠一點，量出來的尺寸會不一樣。</p>
-          <p><strong>遠心鏡頭（Telecentric Lens）</strong>的光路設計讓景深範圍內的所有物件，不管距離遠近，倍率都完全一致。適合半導體元件、精密五金零件的尺寸量測。</p>
+          <p>一般鏡頭有個無法避免的物理現象：近的東西看起來大、遠的東西看起來小。這在看照片時很正常，但在精密量測時就是致命缺陷——同一個零件放近一點和放遠一點，量出來的尺寸會不一樣。</p>
+          <p><strong>遠心鏡頭（Telecentric Lens）</strong>解決了這個問題。它的光路設計讓只有平行於光軸的光線才能進入，使得景深範圍內的所有物件，不管距離遠近，倍率都完全一致。</p>
+          <div class="mcmp">
+            <div class="mc"><div class="mct">一般鏡頭</div><div class="mcn">有透視效應</div><div class="mcb">物件靠近時看起來變大，離遠時變小。量測時必須確保工件放置高度完全一致，否則數字會跑掉。</div></div>
+            <div class="mc"><div class="mct">遠心鏡頭</div><div class="mcn">無透視失真</div><div class="mcb">景深內倍率一致，工件就算有輕微的高低誤差，量測結果也不受影響。邊緣成像清晰穩定。</div></div>
+          </div>
+          <p>適合場景：半導體元件、精密五金零件、電子元件的尺寸量測。缺點是體積大且價格昂貴，FOV 也受限於鏡頭尺寸無法做太大。</p>
+          <div class="dyk" style="margin-top:1rem">
+            <div class="dyk-icon">🤔</div>
+            <div><div class="dyk-label">// 你知道嗎？</div><div class="dyk-text">遠心鏡頭的「Telecentric」字面意思是「遠處的中心」——光線必須平行進入，就好像光源在無限遠處一樣。這讓它的成本是一般鏡頭的 5～20 倍，但在精密量測場合無可替代。</div></div>
+          </div>
         </div>
       </div>
 
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🔩</span><div><div class="etitle">C-Mount vs CS-Mount——差 5mm，搭錯就對不了焦</div><div class="esum">相機接口和鏡頭接口必須匹配，否則無法正確成像</div></div></div><span class="earr">▼</span></div>
-        <div class="ebody"><p>C-Mount 和 CS-Mount 外觀幾乎一樣，差別在於鏡頭裝上去後到感光元件的距離不同：C-Mount 是 17.526 mm，CS-Mount 是 12.5 mm，差了 5 mm。這 5 mm 沒補上就會無法對焦。</p><p><strong>CS-Mount 相機</strong>通常可以用兩種鏡頭（裝 C-Mount 需加 5 mm 延伸環）；<strong>C-Mount 相機</strong>則只能直接用 C-Mount 鏡頭。</p></div>
+        <div class="ebody"><p>C-Mount 和 CS-Mount 是工業相機最常見的兩種鏡頭接口，外觀幾乎一樣，差別只在鏡頭裝上去之後，鏡片到感光元件的距離不同——C-Mount 是 17.526 mm，CS-Mount 是 12.5 mm，差了 5 mm。</p><p>這 5 mm 的差距如果沒有補上，鏡頭的焦點就不會落在感光元件上，整張影像都是模糊的。<strong>C-Mount 相機只能裝 C-Mount 鏡頭</strong>。CS-Mount 相機比較彈性，兩種都能用，但裝 C-Mount 鏡頭時，中間要夾一個 5 mm 的延伸環來補足。</p></div>
       </div>
 
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">📏</span><div><div class="etitle">焦距、工作距離、光圈、畸變</div><div class="esum">選鏡頭前必須確認的四個實際限制</div></div></div><span class="earr">▼</span></div>
-        <div class="ebody"><p><strong>焦距 f</strong>：焦距愈長，在相同倍率下工作距離通常更遠，有利於避開機構干涉。</p><p><strong>工作距離 WD</strong>：鏡頭到物件距離。想更近拍可加接寫環（Extension Tube）做近攝。</p><p><strong>光圈</strong>：決定進光量與景深。3D 物件通常需要縮小光圈提升景深。</p><p><strong>畸變</strong>：外觀檢測多可接受；精密量測需選低畸變鏡頭，避免尺寸誤差。</p></div>
+        <div class="ebody"><p><strong>焦距 f</strong>：焦距愈長，在相同倍率下工作距離就愈遠——這反而是好事。機台裡如果有障礙物擋住相機，選長焦距鏡頭可以把相機「退到更遠的地方」，繞開障礙還能保持同樣的拍攝倍率。</p><p><strong>工作距離 WD</strong>：鏡頭前端到物件的距離。如果想讓鏡頭在更近的距離對焦，可以在相機和鏡頭之間夾入<em>近攝接寫環（Extension Tube）</em>，不換鏡頭就能實現近距離拍攝。</p><p><strong>光圈</strong>：光圈開大，進光量多、景深淺（只有一個平面清楚）；光圈縮小，景深加大（前後範圍都清楚），但影像變暗。檢測 3D 立體物件通常需要縮小光圈。</p><p><strong>畸變</strong>：便宜的鏡頭會讓直線看起來微微彎曲。多數外觀檢測不在意這個，但如果要量測尺寸，就必須選低畸變的鏡頭，否則量出來的數字會有誤差。</p></div>
       </div>
 
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🧮</span><div><div class="etitle">FOV 計算器——輸入參數直接算出視野</div><div class="esum">Sensor 尺寸 ÷ 放大倍率 = FOV</div></div></div><span class="earr">▼</span></div>
         <div class="ebody">
+          <!-- 兩張示意圖並排 -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem">
+
+  <!-- 圖一：成像原理 物距/像距/焦距 -->
+  <div>
+    <div style="font-size:.75rem;font-family:'Share Tech Mono',monospace;color:var(--accent2);letter-spacing:.1em;margin-bottom:.5rem">// 成像原理</div>
+    <svg viewBox="0 0 240 245" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;display:block;background:#161c26;border-radius:6px;border:1px solid var(--border)">
+      <ellipse cx="120" cy="32" rx="34" ry="10" fill="rgba(255,230,150,.12)" stroke="#e8b84b" stroke-width="1.5"/>
+      <text x="158" y="36" fill="#e8b84b" font-family="Noto Sans TC,sans-serif" font-size="10" font-weight="700">像面</text>
+      <line x1="86" y1="22" x2="154" y2="22" stroke="#4fc3f7" stroke-width="1"/>
+      <line x1="86" y1="18" x2="86" y2="26" stroke="#4fc3f7" stroke-width="1"/>
+      <line x1="154" y1="18" x2="154" y2="26" stroke="#4fc3f7" stroke-width="1"/>
+      <text x="120" y="18" text-anchor="middle" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="10" font-style="italic">d</text>
+      <g transform="rotate(180, 120, 33)">
+        <rect x="114" y="27" width="6" height="11" fill="#e8b84b" opacity=".85"/>
+        <rect x="120" y="33" width="11" height="5" fill="#e8b84b" opacity=".85"/>
+      </g>
+      <ellipse cx="120" cy="120" rx="16" ry="24" fill="#263040" stroke="#4fc3f7" stroke-width="1.8"/>
+      <text x="142" y="114" fill="#4fc3f7" font-family="Noto Sans TC,sans-serif" font-size="9" font-weight="700">鏡頭</text>
+      <text x="142" y="126" fill="#b8cce0" font-family="Noto Sans TC,sans-serif" font-size="8">(焦距f)</text>
+      <ellipse cx="120" cy="208" rx="56" ry="14" fill="rgba(100,200,100,.12)" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="180" y="212" fill="#4ade80" font-family="Noto Sans TC,sans-serif" font-size="10" font-weight="700">物面</text>
+      <line x1="64" y1="226" x2="176" y2="226" stroke="#4fc3f7" stroke-width="1"/>
+      <line x1="64" y1="222" x2="64" y2="230" stroke="#4fc3f7" stroke-width="1"/>
+      <line x1="176" y1="222" x2="176" y2="230" stroke="#4fc3f7" stroke-width="1"/>
+      <text x="120" y="238" text-anchor="middle" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="10" font-style="italic">D</text>
+      <rect x="100" y="196" width="10" height="18" fill="#4ade80" opacity=".7"/>
+      <rect x="110" y="207" width="18" height="8" fill="#4ade80" opacity=".7"/>
+      <line x1="86" y1="42" x2="104" y2="96" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="154" y1="42" x2="136" y2="96" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="104" y1="144" x2="64" y2="194" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="136" y1="144" x2="176" y2="194" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="200" y1="32" x2="200" y2="120" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="195" y1="32" x2="205" y2="32" stroke="#ef4444" stroke-width="1"/>
+      <line x1="195" y1="120" x2="205" y2="120" stroke="#ef4444" stroke-width="1"/>
+      <text x="208" y="82" fill="#ef4444" font-family="Noto Sans TC,sans-serif" font-size="10" font-weight="700">像距v</text>
+      <line x1="200" y1="120" x2="200" y2="208" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="195" y1="208" x2="205" y2="208" stroke="#ef4444" stroke-width="1"/>
+      <text x="208" y="170" fill="#ef4444" font-family="Noto Sans TC,sans-serif" font-size="10" font-weight="700">物距u</text>
+    </svg>
+  </div>
+
+  <!-- 圖二：FOV 與感光元件對應關係 -->
+  <div>
+    <div style="font-size:.75rem;font-family:'Share Tech Mono',monospace;color:var(--accent2);letter-spacing:.1em;margin-bottom:.5rem">// FOV 與感光元件</div>
+    <svg viewBox="0 0 180 245" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:240px;display:block;background:#161c26;border-radius:6px;border:1px solid var(--border)">
+      <rect x="55" y="18" width="70" height="46" rx="4" fill="rgba(0,229,204,.15)" stroke="#00e5cc" stroke-width="1.8"/>
+      <text x="90" y="39" text-anchor="middle" fill="#00e5cc" font-family="Noto Sans TC,sans-serif" font-size="10" font-weight="700">感光元件</text>
+      <text x="90" y="53" text-anchor="middle" fill="rgba(0,229,204,.6)" font-family="Share Tech Mono,monospace" font-size="8">Sensor</text>
+      <ellipse cx="90" cy="124" rx="18" ry="14" fill="#263040" stroke="#4fc3f7" stroke-width="1.8"/>
+      <ellipse cx="90" cy="124" rx="10" ry="8" fill="#1a2535" stroke="rgba(79,195,247,.4)" stroke-width="1"/>
+      <text x="115" y="128" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="8">LENS</text>
+      <rect x="12" y="185" width="156" height="40" rx="4" fill="rgba(79,195,247,.12)" stroke="#4fc3f7" stroke-width="1.8"/>
+      <text x="90" y="210" text-anchor="middle" fill="#4fc3f7" font-family="Share Tech Mono,monospace" font-size="13" font-weight="700" letter-spacing="1">FOV</text>
+      <line x1="55" y1="64" x2="72" y2="110" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="125" y1="64" x2="108" y2="110" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="72" y1="138" x2="12" y2="185" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="108" y1="138" x2="168" y2="185" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="90" y="238" text-anchor="middle" fill="rgba(0,229,204,.65)" font-family="Share Tech Mono,monospace" font-size="8">FOV = Sensor ÷ α</text>
+    </svg>
+  </div>
+</div>
           <div class="aperture-widget">
             <div class="aw-title">// 互動計算：輸入你的參數</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1rem">
@@ -759,7 +829,7 @@ canvas#apCanvas{border-radius:50%}
         <div class="vwarn">💡 現代工業幾乎全用 LED——壽命長、亮度可精確控制，還能在快門瞬間閃出數倍亮度，凍結高速移動的物件。</div>
       </div>
     </div>
-    <p class="pdesc" style="margin-bottom:.9rem">打光的方向決定影像能呈現什麼資訊，點選下方模式看示意效果：</p>
+    <p class="pdesc" style="margin-bottom:.9rem">打光的方向決定影像能呈現什麼資訊，點選下方模式看實際效果：</p>
 
     <div class="aperture-widget" style="margin-bottom:1.8rem">
       <div class="aw-title">// 互動示意：切換照明方式，看影像如何變化</div>
@@ -785,8 +855,10 @@ canvas#apCanvas{border-radius:50%}
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🔦</span><div><div class="etitle">LED 光源的形狀——不同形狀解決不同問題</div><div class="esum">環形光、條形光、背光板……形狀不同，打出來的效果完全不一樣</div></div></div><span class="earr">▼</span></div>
         <div class="ebody">
           <div style="display:flex;flex-direction:column;gap:.55rem">
-            <div style="background:var(--bg-light);border-radius:5px;padding:.8rem 1rem;border-left:2px solid var(--accent)"><div style="font-size:.87rem;font-weight:700;color:var(--text);margin-bottom:.22rem">💍 無影環光（Dome Light）</div><div style="font-size:.9rem;line-height:1.7;color:var(--dim)">半球形漫射光源，從所有角度均勻打光，消除陰影和高反射面的眩光。</div></div>
-            <div style="background:var(--bg-light);border-radius:5px;padding:.8rem 1rem;border-left:2px solid var(--accent)"><div style="font-size:.87rem;font-weight:700;color:var(--text);margin-bottom:.22rem">⭕ 環形光（Ring Light）</div><div style="font-size:.9rem;line-height:1.7;color:var(--dim)">圍繞鏡頭一圈的 LED 陣列，正面均勻照射。是最常見的通用型光源。</div></div>
+            <div style="background:var(--bg-light);border-radius:5px;padding:.8rem 1rem;border-left:2px solid var(--accent)"><div style="font-size:.87rem;font-weight:700;color:var(--text);margin-bottom:.22rem">💍 無影環光（Dome Light）</div><div style="font-size:.9rem;line-height:1.7;color:var(--dim)">半球形漫射光源，從所有角度均勻打光，消除陰影和高反射面的眩光。適合金屬零件、電路板等高反光表面的外觀檢測。</div></div>
+            <div style="background:var(--bg-light);border-radius:5px;padding:.8rem 1rem;border-left:2px solid var(--accent)"><div style="font-size:.87rem;font-weight:700;color:var(--text);margin-bottom:.22rem">⭕ 環形光（Ring Light）</div><div style="font-size:.9rem;line-height:1.7;color:var(--dim)">圍繞鏡頭一圈的 LED 陣列，正面均勻照射。是最常見的通用型光源，適合一般表面外觀檢測。</div></div>
+            <div style="background:var(--bg-light);border-radius:5px;padding:.8rem 1rem;border-left:2px solid var(--accent)"><div style="font-size:.87rem;font-weight:700;color:var(--text);margin-bottom:.22rem">📏 條形光（Bar Light）</div><div style="font-size:.9rem;line-height:1.7;color:var(--dim)">單方向線性光源，強調特定方向的陰影與高度差。適合邊緣檢測、刮痕、焊錫高度量測，也常搭配線掃描相機使用。</div></div>
+            <div style="background:var(--bg-light);border-radius:5px;padding:.8rem 1rem;border-left:2px solid var(--accent)"><div style="font-size:.87rem;font-weight:700;color:var(--text);margin-bottom:.22rem">🎯 外同軸光（Coaxial Light）</div><div style="font-size:.9rem;line-height:1.7;color:var(--dim)">光線從鏡頭內部沿光軸方向射出，利用半反射鏡導光。適合極度平坦的高反光表面（如晶圓、金屬蓋板），能讓微細刮痕現形。</div></div>
             <div style="background:var(--bg-light);border-radius:5px;padding:.8rem 1rem;border-left:2px solid var(--accent)"><div style="font-size:.87rem;font-weight:700;color:var(--text);margin-bottom:.22rem">⬛ 背光板（Back Light）</div><div style="font-size:.9rem;line-height:1.7;color:var(--dim)">放在物件背面，產生均勻亮面讓物件呈現黑色剪影。尺寸量測的首選——輪廓最清晰，量測誤差最小。</div></div>
           </div>
         </div>
@@ -806,12 +878,11 @@ canvas#apCanvas{border-radius:50%}
 
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">🎨</span><div><div class="etitle">光的顏色也是工具</div><div class="esum">同色光讓背景消失，互補色光讓邊緣更銳利</div></div></div><span class="earr">▼</span></div>
-        <div class="ebody"><p>你有沒有注意到，在黃色路燈下，鮮豔的顏色看起來都變得暗淡？這是因為特定波長的光打在相同顏色的表面上，那個顏色的對比會被壓低、幾乎消失。反過來，用互補色的光，就能讓那個顏色的區域顯得更深更黑，邊緣更銳利。</p><p>實際案例：用<strong>紅色 LED</strong> 拍一個紅色物件上的黑色印刷文字，紅色背景幾乎消失，黑色文字反而跳出來更清楚。工業上常用紅、綠、藍、白、紅外（IR）和近紫外（NUV），各自在不同材質下有最佳效果——但沒有萬用答案，實際上還是要動手試。</p></div>
+         <div class="ebody"><p>你有沒有注意到，在黃色路燈下，鮮豔的顏色看起來都變得暗淡？這是因為特定波長的光打在相同顏色的表面上，那個顏色的對比會被壓低、幾乎消失。反過來，用互補色的光，就能讓那個顏色的區域顯得更深更黑，邊緣更銳利。</p><p>實際案例：用<strong>紅色 LED</strong> 拍一個紅色物件上的黑色印刷文字，紅色背景幾乎消失，黑色文字反而跳出來更清楚。工業上常用紅、綠、藍、白、紅外（IR）和近紫外（NUV），各自在不同材質下有最佳效果——但沒有萬用答案，實際上還是要動手試。</p></div>
       </div>
-
       <div class="ecard">
         <div class="etrig" onclick="tog(this)"><div class="etl"><span class="eico">⚡</span><div><div class="etitle">頻閃控制——讓光源在關鍵瞬間爆發</div><div class="esum">快門開啟的那一瞬，光源閃出平時數倍的亮度，凍結高速物件</div></div></div><span class="earr">▼</span></div>
-        <div class="ebody"><p>拍高速移動的物件時，曝光時間必須極短，否則影像會模糊；但曝光越短影像越暗。頻閃光源能在快門開啟的那一瞬間以數倍亮度閃光，讓影像既夠亮又不模糊。搭配 Global Shutter 相機效果最佳。</p></div>
+        <div class="ebody"><p>拍高速移動的物件時，曝光時間必須極短，否則影像會模糊。但曝光時間短，進光量就少，影像會太暗。頻閃光源解決了這個矛盾——在相機快門開啟的那一微秒，以平時數倍的強度猛烈閃光，讓影像既夠亮又不模糊。</p><p>這樣做還有一個好處：LED 光源平時處於低功率待機，只在必要時全力爆發，<strong>實際壽命比連續照明長好幾倍</strong>。搭配 Global Shutter 相機使用效果最佳。</p></div>
       </div>
     </div>
   </div>
@@ -1311,11 +1382,10 @@ canvas#apCanvas{border-radius:50%}
     <div class="filter-widget" style="margin-top:1.5rem">
       <div class="aw-title">// 互動示意：切換偵測器，觀察邊緣偵測效果</div>
       <div class="filter-btns">
-        <button class="f-btn active" onclick="setEdge('sobel_x')">Sobel X（垂直邊緣）</button>
-        <button class="f-btn" onclick="setEdge('sobel_y')">Sobel Y（水平邊緣）</button>
-        <button class="f-btn" onclick="setEdge('sobel_both')">Sobel 合成</button>
-        <button class="f-btn" onclick="setEdge('laplacian')">Laplacian</button>
-      </div>
+        <button class="f-btn active" data-edge-btn="sobel_x" onclick="setEdge('sobel_x')">Sobel X（垂直邊緣）</button>
+        <button class="f-btn" data-edge-btn="sobel_y" onclick="setEdge('sobel_y')">Sobel Y（水平邊緣）</button>
+        <button class="f-btn" data-edge-btn="sobel_both" onclick="setEdge('sobel_both')">Sobel 合成</button>
+        <button class="f-btn" data-edge-btn="laplacian" onclick="setEdge('laplacian')">Laplacian</button></div>
       <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-start">
         <div class="canvas-wrap">
           <canvas id="edgeOrigCanvas" width="160" height="160" style="border-radius:5px;border:1px solid var(--border)"></canvas>
@@ -1377,10 +1447,10 @@ canvas#apCanvas{border-radius:50%}
     <div class="filter-widget">
       <div class="aw-title">// 互動示意：雜訊對門檻化的影響</div>
       <div class="filter-btns">
-        <button class="f-btn active" onclick="setThreshDemo('clean')">無雜訊</button>
-        <button class="f-btn" onclick="setThreshDemo('noise10')">高斯雜訊 σ=10</button>
-        <button class="f-btn" onclick="setThreshDemo('noise50')">高斯雜訊 σ=50</button>
-        <button class="f-btn" onclick="setThreshDemo('uneven')">光照不均勻</button>
+        <button class="f-btn active" data-thresh-btn="clean" onclick="setThreshDemo('clean')">無雜訊</button>
+        <button class="f-btn" data-thresh-btn="noise10" onclick="setThreshDemo('noise10')">高斯雜訊 σ=10</button>
+        <button class="f-btn" data-thresh-btn="noise50" onclick="setThreshDemo('noise50')">高斯雜訊 σ=50</button>
+        <button class="f-btn" data-thresh-btn="uneven" onclick="setThreshDemo('uneven')">光照不均勻</button>
       </div>
       <div style="display:flex;gap:1.2rem;flex-wrap:wrap;align-items:flex-start">
         <div class="canvas-wrap">
@@ -2280,7 +2350,9 @@ function initEdgeDemo(){
 }
 
 function setEdge(type){
-  document.querySelectorAll('.filter-widget:last-child .f-btn').forEach(b=>b.classList.toggle('active',b.onclick&&b.onclick.toString().includes(`'${type}'`)));
+  document.querySelectorAll('[data-edge-btn]').forEach(b=>
+    b.classList.toggle('active', b.getAttribute('data-edge-btn')===type)
+  );
   const origC=document.getElementById('edgeOrigCanvas');
   const outC=document.getElementById('edgeOutCanvas');
   if(!origC||!outC||!edgeOrigData)return;
