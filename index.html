@@ -905,6 +905,7 @@ canvas#apCanvas{border-radius:50%}
     <button class="pp-tab" onclick="swPP(event,'pp-segmentation')">✂️ 影像分割</button>
     <button class="pp-tab" onclick="swPP(event,'pp-morphology')">🔷 形態學</button>
     <button class="pp-tab" onclick="swPP(event,'pp-features')">🔍 影像特徵</button>
+    <button class="pp-tab" onclick="swPP(event,'pp-matching')">🎯 影像匹配</button>
   </div>
 
   <!-- ── 強度轉換 ── -->
@@ -2150,6 +2151,241 @@ canvas#apCanvas{border-radius:50%}
       <tr><td><strong>紋理描述</strong></td><td>區域描述</td><td class="warn">依方法而異</td><td class="warn">中-高</td><td>材質辨識、表面檢測</td></tr>
     </tbody>
   </table>
+</div>
+
+<!-- ── 影像匹配 ── -->
+<div class="pp-section" id="pp-matching">
+  <div class="sec-header">
+    <span class="sec-num">STEP 07</span>
+    <span class="sec-title">影像匹配（Image Matching）</span>
+  </div>
+  <p style="font-size:.97rem;line-height:1.82;color:var(--dim);margin-bottom:1.2rem">影像匹配是自動化光學檢測（AOI）中的核心技術——在輸入影像中搜尋並辨識目標物件，輸出其位置、角度或辨識結果。分為<strong style="color:var(--text)">模板匹配</strong>（Template Matching）與<strong style="color:var(--text)">特徵點匹配</strong>兩大路線。</p>
+
+  <!-- 概念卡片 -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem">
+    <div style="background:var(--bg-light);border:1px solid rgba(79,195,247,.3);border-radius:6px;padding:1.2rem">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.15em;color:var(--accent);margin-bottom:.6rem">// 模板匹配</div>
+      <div style="font-size:1rem;font-weight:700;margin-bottom:.5rem">像素級直接比對</div>
+      <p style="font-size:.88rem;line-height:1.75;color:var(--dim)">在待測影像中滑動掃描，逐位置計算與模板的相似度。輸出相似度圖（Score Map），峰值即為最佳匹配位置。</p>
+      <div style="margin-top:.7rem;background:var(--bg);border-radius:4px;padding:.5rem .8rem;font-size:.8rem;color:var(--dim)">優點：直觀、無訓練；缺點：對尺度、旋轉敏感</div>
+    </div>
+    <div style="background:var(--bg-light);border:1px solid rgba(0,229,204,.3);border-radius:6px;padding:1.2rem">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.15em;color:var(--accent2);margin-bottom:.6rem">// 特徵點匹配</div>
+      <div style="font-size:1rem;font-weight:700;margin-bottom:.5rem">尺度不變特徵比對</div>
+      <p style="font-size:.88rem;line-height:1.75;color:var(--dim)">偵測影像中具有代表性的特徵點，提取描述向量，跨影像配對相同特徵。SIFT 是最經典的演算法。</p>
+      <div style="margin-top:.7rem;background:var(--bg);border-radius:4px;padding:.5rem .8rem;font-size:.8rem;color:var(--dim)">優點：對旋轉/縮放穩健；缺點：計算量較大</div>
+    </div>
+  </div>
+
+  <!-- SAD vs NCC 互動 -->
+  <div class="sec-header">
+    <span class="sec-num">METHOD</span>
+    <span class="sec-title">模板匹配相似度計算：SAD vs NCC</span>
+  </div>
+
+  <div class="filter-widget">
+    <div class="aw-title">// 互動示意：選擇比對方法，觀察分數圖與最佳位置</div>
+    <div class="filter-btns">
+      <button class="f-btn active" data-match-btn="sad" onclick="setMatchMethod('sad')">SAD 絕對差和</button>
+      <button class="f-btn" data-match-btn="ncc" onclick="setMatchMethod('ncc')">NCC 正規化互相關</button>
+      <button class="f-btn" data-match-btn="shape" onclick="setMatchMethod('shape')">形狀特徵匹配</button>
+    </div>
+    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;align-items:flex-start;margin-top:.8rem">
+      <div>
+        <div style="display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap">
+          <div class="canvas-wrap">
+            <canvas id="matchTemplCanvas" width="90" height="90" style="border-radius:5px;border:1px solid var(--border)"></canvas>
+            <div class="canvas-label">模板 T</div>
+          </div>
+          <div style="display:flex;align-items:center;padding-bottom:22px;color:var(--accent);font-size:1.2rem">⊕</div>
+          <div class="canvas-wrap">
+            <canvas id="matchSceneCanvas" width="160" height="160" style="border-radius:5px;border:1px solid var(--border)"></canvas>
+            <div class="canvas-label">待測影像 I</div>
+          </div>
+          <div style="display:flex;align-items:center;padding-bottom:22px;color:var(--accent);font-size:1.2rem">→</div>
+          <div class="canvas-wrap">
+            <canvas id="matchScoreCanvas" width="160" height="160" style="border-radius:5px;border:1px solid var(--border);background:#0d1117"></canvas>
+            <div class="canvas-label" id="matchScoreLabel">SAD 分數圖</div>
+          </div>
+        </div>
+        <div style="margin-top:.8rem;font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--dim)">
+          最佳匹配位置：<span id="matchBestPos" style="color:var(--accent2)">計算中…</span>
+          &nbsp;&nbsp;分數：<span id="matchBestScore" style="color:var(--accent)">—</span>
+        </div>
+      </div>
+      <div class="filter-info-panel">
+        <div id="matchMethodName" style="font-size:1rem;font-weight:700;color:var(--accent);margin-bottom:.5rem"></div>
+        <div id="matchMethodFormula" style="font-family:'Share Tech Mono',monospace;font-size:.82rem;color:var(--accent2);margin-bottom:.6rem;line-height:1.7"></div>
+        <div id="matchMethodDesc" style="font-size:.9rem;line-height:1.8;color:var(--dim);margin-bottom:.7rem"></div>
+        <div id="matchMethodNote" style="background:var(--bg);border-radius:5px;padding:.6rem .9rem;border-left:2px solid var(--accent2);font-size:.85rem;color:var(--text);line-height:1.7"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAD vs NCC 比較說明 -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.2rem 0">
+    <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:6px;padding:1.1rem">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.12em;color:var(--accent);margin-bottom:.5rem">// SAD 公式</div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.85rem;color:var(--text);margin-bottom:.5rem;line-height:1.8">SAD(u,v) = Σᵢⱼ |T(i,j) − I(u+i, v+j)|</div>
+      <p style="font-size:.85rem;line-height:1.7;color:var(--dim)">計算模板與候選區域各像素差值的絕對值總和。<strong style="color:var(--text)">數值越小</strong>代表越相似，最小值位置即最佳匹配。</p>
+    </div>
+    <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:6px;padding:1.1rem">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.12em;color:var(--accent2);margin-bottom:.5rem">// NCC 公式</div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.85rem;color:var(--text);margin-bottom:.5rem;line-height:1.8">NCC ∈ [−1, 1]，值越大越相似</div>
+      <p style="font-size:.85rem;line-height:1.7;color:var(--dim)">計算模板與候選區域的<strong style="color:var(--text)">正規化互相關值</strong>，消除光照強度差異的影響，值域為 [−1, 1]，<strong style="color:var(--text)">最大值</strong>位置即最佳匹配。</p>
+    </div>
+  </div>
+
+  <!-- 影像金字塔策略 -->
+  <div class="sec-divider"></div>
+  <div class="sec-header" style="margin-top:0">
+    <span class="sec-num">STRATEGY</span>
+    <span class="sec-title">影像金字塔（Image Pyramid）加速策略</span>
+  </div>
+
+  <div class="filter-widget">
+    <div class="aw-title">// 互動示意：切換金字塔層級，看搜尋範圍縮小的過程</div>
+    <div style="display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap">
+      <button class="f-btn active" data-pyr-btn="3" onclick="setPyramidLevel(3)">第3層（最小）</button>
+      <button class="f-btn" data-pyr-btn="2" onclick="setPyramidLevel(2)">第2層</button>
+      <button class="f-btn" data-pyr-btn="1" onclick="setPyramidLevel(1)">第1層</button>
+      <button class="f-btn" data-pyr-btn="0" onclick="setPyramidLevel(0)">第0層（原始）</button>
+    </div>
+    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;align-items:flex-start">
+      <div class="canvas-wrap">
+        <canvas id="pyrCanvas" width="200" height="200" style="border-radius:6px;border:1px solid var(--border);background:#0d1117"></canvas>
+        <div class="canvas-label">搜尋示意</div>
+      </div>
+      <div style="flex:1;min-width:180px">
+        <div id="pyrDesc" style="font-size:.9rem;line-height:1.82;color:var(--dim);margin-bottom:.8rem"></div>
+        <div style="background:var(--bg);border-radius:5px;padding:.7rem 1rem;border-left:2px solid var(--accent2);font-size:.85rem;line-height:1.7">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--accent2);margin-bottom:.4rem">// 金字塔策略效益</div>
+          <div style="color:var(--text)">先在小影像（⅛ 尺寸）快速找到粗略位置，再逐層細化到原始解析度——搜尋速度可提升 <span style="color:var(--accent);font-weight:700">8×</span> 以上。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIFT 特徵點匹配 -->
+  <div class="sec-divider"></div>
+  <div class="sec-header" style="margin-top:0">
+    <span class="sec-num">SIFT</span>
+    <span class="sec-title">SIFT 特徵點匹配流程</span>
+  </div>
+  <p style="font-size:.9rem;line-height:1.78;color:var(--dim);margin-bottom:1.2rem">SIFT（Scale Invariant Feature Transform）對縮放、旋轉、光照變化具備不變性，是特徵點匹配的經典演算法。點擊各步驟查看說明：</p>
+
+  <div class="proc-pipeline" id="siftPipeline">
+    <div class="proc-step active" onclick="setSIFTStep(0)">
+      <div class="proc-sn">STEP 01</div>
+      <div class="proc-st">高斯金字塔</div>
+      <div class="proc-sb">多尺度影像縮放，σ依序增大</div>
+    </div>
+    <div class="proc-step" onclick="setSIFTStep(1)">
+      <div class="proc-sn">STEP 02</div>
+      <div class="proc-st">DoG 差分</div>
+      <div class="proc-sb">相鄰層差分，強調特徵點</div>
+    </div>
+    <div class="proc-step" onclick="setSIFTStep(2)">
+      <div class="proc-sn">STEP 03</div>
+      <div class="proc-st">特徵點偵測</div>
+      <div class="proc-sb">找 DoG 局部極值點</div>
+    </div>
+    <div class="proc-step" onclick="setSIFTStep(3)">
+      <div class="proc-sn">STEP 04</div>
+      <div class="proc-st">方向確定</div>
+      <div class="proc-sb">梯度方向直方圖取主方向</div>
+    </div>
+    <div class="proc-step" onclick="setSIFTStep(4)">
+      <div class="proc-sn">STEP 05</div>
+      <div class="proc-st">描述向量</div>
+      <div class="proc-sb">16×16區域，128維向量</div>
+    </div>
+    <div class="proc-step" onclick="setSIFTStep(5)">
+      <div class="proc-sn">STEP 06</div>
+      <div class="proc-st">特徵匹配</div>
+      <div class="proc-sb">最近鄰距離比測試</div>
+    </div>
+  </div>
+  <div id="siftStepDetail" style="background:var(--bg-light);border:1px solid var(--border);border-radius:0 0 6px 6px;padding:1.3rem;margin-bottom:1.5rem">
+    <div id="siftStepTitle" style="font-size:.95rem;font-weight:700;color:var(--accent);margin-bottom:.5rem"></div>
+    <div id="siftStepDesc" style="font-size:.9rem;line-height:1.82;color:var(--dim);margin-bottom:.7rem"></div>
+    <div id="siftStepFormula" style="font-family:'Share Tech Mono',monospace;font-size:.82rem;color:var(--accent2);line-height:1.8"></div>
+  </div>
+
+  <!-- 關聯特徵匹配 -->
+  <div class="sec-divider"></div>
+  <div class="sec-header" style="margin-top:0">
+    <span class="sec-num">RELATIONAL</span>
+    <span class="sec-title">關聯特徵匹配（Relational Feature Matching）</span>
+  </div>
+  <p style="font-size:.9rem;line-height:1.78;color:var(--dim);margin-bottom:1.2rem">針對影像中多個封閉輪廓物件進行結構化描述，以<strong style="color:var(--text)">樹狀結構</strong>描述子（tree-structured descriptor）來實現多物件的辨識與匹配，適合商標防偽、多物件場景等應用。</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem">
+    <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:6px;padding:1.2rem">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.12em;color:var(--accent2);margin-bottom:.6rem">// 樹狀結構分層</div>
+      <div style="display:flex;flex-direction:column;gap:.4rem">
+        <div style="background:var(--bg);border-radius:4px;padding:.55rem .8rem;display:flex;gap:.7rem;align-items:center">
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--accent);width:36px;flex-shrink:0">層0</span>
+          <span style="font-size:.83rem;color:var(--dim)">根節點 O01：最外層綠色框（整個影像的最大包覆物件）</span>
+        </div>
+        <div style="background:var(--bg);border-radius:4px;padding:.55rem .8rem;display:flex;gap:.7rem;align-items:center">
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--accent);width:36px;flex-shrink:0">層1</span>
+          <span style="font-size:.83rem;color:var(--dim)">O11（黑）：主要黑色物件，包含子物件</span>
+        </div>
+        <div style="background:var(--bg);border-radius:4px;padding:.55rem .8rem;display:flex;gap:.7rem;align-items:center">
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--accent);width:36px;flex-shrink:0">層2</span>
+          <span style="font-size:.83rem;color:var(--dim)">O21（白）：黑色物件內的三個白色子物件</span>
+        </div>
+        <div style="background:var(--bg);border-radius:4px;padding:.55rem .8rem;display:flex;gap:.7rem;align-items:center">
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--accent);width:36px;flex-shrink:0">層3</span>
+          <span style="font-size:.83rem;color:var(--dim)">O31~33：底層細長條狀物件</span>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:6px;padding:1.2rem">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.12em;color:var(--accent2);margin-bottom:.6rem">// 幾何特徵指標</div>
+      <div style="display:flex;flex-direction:column;gap:.4rem">
+        <div style="background:var(--bg);border-radius:4px;padding:.5rem .8rem;display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:.83rem;color:var(--text)">凸包性 f₁</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--accent2)">物件面積/凸包面積</span>
+        </div>
+        <div style="background:var(--bg);border-radius:4px;padding:.5rem .8rem;display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:.83rem;color:var(--text)">軸線比 f₂</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--accent2)">最短軸/最長軸</span>
+        </div>
+        <div style="background:var(--bg);border-radius:4px;padding:.5rem .8rem;display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:.83rem;color:var(--text)">圓形性 f₃</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--accent2)">面積/重心距平均距²</span>
+        </div>
+        <div style="background:var(--bg);border-radius:4px;padding:.5rem .8rem;display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:.83rem;color:var(--text)">緊密性 f₄</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--accent2)">物件周長²/物件面積</span>
+        </div>
+      </div>
+      <div style="margin-top:.7rem;font-size:.78rem;color:var(--dim)">以四個幾何特徵計算節點相似度分數</div>
+    </div>
+  </div>
+
+  <!-- 匹配流程比較表 -->
+  <div class="sec-header">
+    <span class="sec-num">COMPARE</span>
+    <span class="sec-title">三種影像匹配方法比較</span>
+  </div>
+  <table class="cmp-table">
+    <thead><tr><th>方法</th><th>原理</th><th>旋轉不變</th><th>尺度不變</th><th>計算速度</th><th>適用場景</th></tr></thead>
+    <tbody>
+      <tr><td><strong>SAD</strong></td><td>像素絕對差和</td><td class="bad">✗</td><td class="bad">✗</td><td class="good">極快</td><td>靜態固定目標快速定位</td></tr>
+      <tr><td><strong>NCC</strong></td><td>正規化互相關</td><td class="bad">✗</td><td class="bad">✗</td><td class="good">快</td><td>光照不均的樣板匹配</td></tr>
+      <tr><td><strong>形狀特徵</strong></td><td>梯度方向匹配</td><td class="good">✓</td><td class="warn">部分</td><td class="warn">中等</td><td>允許旋轉的工業零件</td></tr>
+      <tr><td><strong>SIFT</strong></td><td>尺度不變特徵</td><td class="good">✓</td><td class="good">✓</td><td class="warn">較慢</td><td>全景拼接、多視角匹配</td></tr>
+      <tr><td><strong>關聯特徵</strong></td><td>樹狀結構描述</td><td class="good">✓</td><td class="good">✓</td><td class="warn">中等</td><td>多物件商標防偽辨識</td></tr>
+    </tbody>
+  </table>
+
+  <div class="dyk" style="margin-top:1rem">
+    <div class="dyk-icon">💡</div>
+    <div><div class="dyk-label">// 實務選擇策略</div><div class="dyk-text">固定角度、無縮放 → <strong>SAD/NCC</strong>（最快）；允許旋轉 → <strong>形狀特徵匹配</strong>；多視角、不同光照 → <strong>SIFT</strong>；多物件結構辨識 → <strong>關聯特徵匹配</strong>。加速技巧：所有方法皆可搭配<strong>影像金字塔</strong>策略，先在低解析度找粗略位置再精細定位。</div></div>
+  </div>
 </div>
 
 
@@ -3779,6 +4015,293 @@ function initFeaturesSection() {
   setCompact('circle');
   setTexture('smooth');
 }
+
+// ══════════════════════════════
+// IMAGE MATCHING DEMO
+// ══════════════════════════════
+
+// ── 生成測試用影像 ──
+function initMatchDemo(){
+  const tc=document.getElementById('matchTemplCanvas');
+  const sc=document.getElementById('matchSceneCanvas');
+  if(!tc||!sc)return;
+  // 模板：小方塊 + L形狀
+  const tCtx=tc.getContext('2d');
+  const tw=tc.width,th=tc.height;
+  tCtx.fillStyle='#1a2535';tCtx.fillRect(0,0,tw,th);
+  tCtx.fillStyle='rgba(220,220,220,0.9)';
+  tCtx.fillRect(15,15,60,60);
+  tCtx.fillStyle='rgba(100,100,100,0.9)';
+  tCtx.fillRect(25,25,40,15);
+  tCtx.fillRect(25,25,15,40);
+  // 待測影像：包含多個區域 + 目標
+  const sCtx=sc.getContext('2d');
+  const sw=sc.width,sh=sc.height;
+  sCtx.fillStyle='#1a2535';sCtx.fillRect(0,0,sw,sh);
+  // 背景雜訊方塊
+  sCtx.fillStyle='rgba(80,80,80,0.5)';sCtx.fillRect(10,10,40,35);
+  sCtx.fillStyle='rgba(60,60,60,0.4)';sCtx.fillRect(110,90,50,40);
+  sCtx.fillStyle='rgba(70,70,70,0.3)';sCtx.fillRect(20,120,35,30);
+  // 目標物件（與模板相同，放在 (60,50)）
+  sCtx.fillStyle='rgba(210,210,210,0.9)';sCtx.fillRect(60,50,60,60);
+  sCtx.fillStyle='rgba(100,100,100,0.9)';
+  sCtx.fillRect(70,60,40,15);sCtx.fillRect(70,60,15,40);
+  setMatchMethod('sad');
+}
+
+const matchMethodData={
+  sad:{
+    name:'SAD（Sum of Absolute Difference）',
+    formula:'SAD(u,v) = Σᵢⱼ |T(i,j) − I(u+i, v+j)|',
+    desc:'在待測影像的每個位置，計算模板與候選區域各像素差的絕對值總和。分數越小代表越相似。掃描完成後，分數最小的位置就是最佳匹配點。',
+    note:'✓ 計算最快  ✓ 實作簡單  ✗ 對光照變化敏感  ✗ 不支援旋轉',
+    label:'SAD 分數圖（越暗越相似）',
+    findMin:true,
+  },
+  ncc:{
+    name:'NCC（Normalized Cross Correlation）',
+    formula:'NCC(u,v) ∈ [−1, 1]，越大越相似',
+    desc:'計算模板與候選區域像素強度的正規化相關係數，消除了絕對亮度差異的影響。NCC = 1 代表完全相符，對光源強度變化有較佳的穩健性。',
+    note:'✓ 光照不均仍穩定  ✓ 值域標準化  ✗ 速度比 SAD 慢  ✗ 同樣不支援旋轉',
+    label:'NCC 分數圖（越亮越相似）',
+    findMin:false,
+  },
+  shape:{
+    name:'形狀特徵匹配（Shape-Based Matching）',
+    formula:'相似度 = Σ cos(∇Tᵢ · ∇Iᵢ) / N',
+    desc:'不比較像素灰階，而是比較模板與候選區域的梯度方向。只要邊緣方向一致即視為匹配，可容忍光照大幅變化，且可在一定角度範圍內進行旋轉搜尋。',
+    note:'✓ 允許旋轉搜尋  ✓ 對光照不敏感  ✓ 工業最常用  ✗ 計算量較大',
+    label:'形狀相似度圖（越亮越相似）',
+    findMin:false,
+  },
+};
+
+function computeMatchScore(tData,sData,tw,th,sw,sh,method){
+  const scoreW=sw-tw+1,scoreH=sh-th+1;
+  const scores=new Float32Array(scoreW*scoreH);
+  for(let v=0;v<scoreH;v++){
+    for(let u=0;u<scoreW;u++){
+      if(method==='sad'){
+        let sum=0;
+        for(let j=0;j<th;j++)for(let i=0;i<tw;i++){
+          sum+=Math.abs(tData[(j*tw+i)*4]-sData[((v+j)*sw+(u+i))*4]);
+        }
+        scores[v*scoreW+u]=sum/(tw*th);
+      } else if(method==='ncc'){
+        const n=tw*th;
+        let tSum=0,sSum=0;
+        for(let j=0;j<th;j++)for(let i=0;i<tw;i++){
+          tSum+=tData[(j*tw+i)*4];sSum+=sData[((v+j)*sw+(u+i))*4];
+        }
+        const tMean=tSum/n,sMean=sSum/n;
+        let num=0,tVar=0,sVar=0;
+        for(let j=0;j<th;j++)for(let i=0;i<tw;i++){
+          const td=tData[(j*tw+i)*4]-tMean;
+          const sd=sData[((v+j)*sw+(u+i))*4]-sMean;
+          num+=td*sd;tVar+=td*td;sVar+=sd*sd;
+        }
+        const denom=Math.sqrt(tVar*sVar);
+        scores[v*scoreW+u]=denom>0?num/denom:0;
+      } else {
+        // shape: approximate gradient-direction similarity
+        let sim=0,cnt=0;
+        for(let j=1;j<th-1;j++)for(let i=1;i<tw-1;i++){
+          const tgx=tData[(j*tw+(i+1))*4]-tData[(j*tw+(i-1))*4];
+          const tgy=tData[((j+1)*tw+i)*4]-tData[((j-1)*tw+i)*4];
+          const tm=Math.sqrt(tgx*tgx+tgy*tgy);
+          if(tm<8)continue;
+          const ny=v+j,nx=u+i;
+          const sgx=sData[(ny*sw+(nx+1))*4]-sData[(ny*sw+(nx-1))*4];
+          const sgy=sData[((ny+1)*sw+nx)*4]-sData[((ny-1)*sw+nx)*4];
+          const sm=Math.sqrt(sgx*sgx+sgy*sgy);
+          if(sm<8)continue;
+          sim+=(tgx*sgx+tgy*sgy)/(tm*sm);cnt++;
+        }
+        scores[v*scoreW+u]=cnt>0?sim/cnt:0;
+      }
+    }
+  }
+  return{scores,scoreW,scoreH};
+}
+
+function setMatchMethod(method){
+  document.querySelectorAll('[data-match-btn]').forEach(b=>
+    b.classList.toggle('active',b.getAttribute('data-match-btn')===method)
+  );
+  const info=matchMethodData[method];
+  if(!info)return;
+  document.getElementById('matchMethodName').textContent=info.name;
+  document.getElementById('matchMethodFormula').textContent=info.formula;
+  document.getElementById('matchMethodDesc').textContent=info.desc;
+  document.getElementById('matchMethodNote').textContent=info.note;
+  document.getElementById('matchScoreLabel').textContent=info.label;
+
+  const tc=document.getElementById('matchTemplCanvas');
+  const sc=document.getElementById('matchSceneCanvas');
+  const scoreC=document.getElementById('matchScoreCanvas');
+  if(!tc||!sc||!scoreC)return;
+  const tw=tc.width,th=tc.height,sw=sc.width,sh=sc.height;
+  const tData=tc.getContext('2d').getImageData(0,0,tw,th).data;
+  const sData=sc.getContext('2d').getImageData(0,0,sw,sh).data;
+  const{scores,scoreW,scoreH}=computeMatchScore(tData,sData,tw,th,sw,sh,method);
+
+  // Normalize and draw score map
+  let minS=Infinity,maxS=-Infinity,bestU=0,bestV=0;
+  for(let i=0;i<scores.length;i++){
+    if(scores[i]<minS){minS=scores[i];bestU=i%scoreW;bestV=Math.floor(i/scoreW);}
+    if(scores[i]>maxS)maxS=scores[i];
+  }
+  if(info.findMin){const t=bestU;bestU=t;} // already set
+  else{
+    // find max
+    for(let i=0;i<scores.length;i++){
+      if(scores[i]>maxS-0.001){bestU=i%scoreW;bestV=Math.floor(i/scoreW);break;}
+    }
+  }
+
+  const scoreCtx=scoreC.getContext('2d');
+  const scoreImgData=scoreCtx.createImageData(scoreC.width,scoreC.height);
+  const scaleX=scoreC.width/scoreW,scaleY=scoreC.height/scoreH;
+  for(let v=0;v<scoreH;v++){
+    for(let u=0;u<scoreW;u++){
+      const s=scores[v*scoreW+u];
+      let norm=maxS===minS?0.5:(s-minS)/(maxS-minS);
+      if(info.findMin)norm=1-norm; // invert for SAD (lower=better → brighter)
+      const bright=Math.round(norm*255);
+      const px=Math.round(u*scaleX),py=Math.round(v*scaleY);
+      const pw=Math.ceil(scaleX),ph=Math.ceil(scaleY);
+      for(let dy=0;dy<ph;dy++)for(let dx=0;dx<pw;dx++){
+        const idx=((py+dy)*scoreC.width+(px+dx))*4;
+        scoreImgData.data[idx]=bright;
+        scoreImgData.data[idx+1]=Math.round(bright*0.8);
+        scoreImgData.data[idx+2]=0;
+        scoreImgData.data[idx+3]=255;
+      }
+    }
+  }
+  // Mark best position
+  const bx=Math.round(bestU*scaleX),by=Math.round(bestV*scaleY);
+  for(let dy=-3;dy<=3;dy++)for(let dx=-3;dx<=3;dx++){
+    if(Math.abs(dx)>1&&Math.abs(dy)>1)continue;
+    const idx=((by+dy)*scoreC.width+(bx+dx))*4;
+    if(idx>=0&&idx<scoreImgData.data.length){
+      scoreImgData.data[idx]=0;scoreImgData.data[idx+1]=220;scoreImgData.data[idx+2]=180;scoreImgData.data[idx+3]=255;
+    }
+  }
+  scoreCtx.putImageData(scoreImgData,0,0);
+
+  // Draw match result on scene canvas copy
+  const resCtx=sc.getContext('2d');
+  // re-draw scene
+  resCtx.clearRect(0,0,sw,sh);
+  resCtx.putImageData(new ImageData(sData.slice(),sw,sh),0,0);
+  // draw bounding box at best match
+  resCtx.strokeStyle='#00e5cc';resCtx.lineWidth=2;
+  resCtx.strokeRect(bestU,bestV,tw,th);
+  resCtx.fillStyle='rgba(0,229,204,0.15)';
+  resCtx.fillRect(bestU,bestV,tw,th);
+
+  document.getElementById('matchBestPos').textContent=`(${bestU}, ${bestV})`;
+  const bestScore=info.findMin?minS.toFixed(1):maxS.toFixed(3);
+  document.getElementById('matchBestScore').textContent=bestScore;
+}
+
+// ── 影像金字塔互動 ──
+const pyrLevelData=[
+  {label:'第0層（原始解析度）',scale:1,searchPct:1.0,desc:'以完整解析度在整張影像搜尋，精度最高但速度最慢。通常是從第3層粗定位後，追蹤至此層做精細定位的最終步驟。'},
+  {label:'第1層（½ 縮小）',scale:2,searchPct:0.4,desc:'影像縮小為 ½，搜尋範圍集中在上一層找到的粗略位置附近，快速過濾大部分無效位置，計算量大幅降低。'},
+  {label:'第2層（¼ 縮小）',scale:4,searchPct:0.2,desc:'影像縮小為 ¼，搜尋空間更小，快速縮小候選區域範圍。此層結果作為下一層的搜尋起點。'},
+  {label:'第3層（⅛ 縮小，最小）',scale:8,searchPct:1.0,desc:'從最小的影像開始全域搜尋，速度最快。雖然解析度最低，但能快速找到目標的大致位置，作為後續層的搜尋中心點。'},
+];
+
+function setPyramidLevel(level){
+  document.querySelectorAll('[data-pyr-btn]').forEach(b=>
+    b.classList.toggle('active',parseInt(b.getAttribute('data-pyr-btn'))===level)
+  );
+  const data=pyrLevelData[level];
+  document.getElementById('pyrDesc').textContent=data.desc;
+  drawPyramidCanvas(level);
+}
+
+function drawPyramidCanvas(level){
+  const cv=document.getElementById('pyrCanvas');
+  if(!cv)return;
+  const ctx=cv.getContext('2d'),w=cv.width,h=cv.height;
+  ctx.clearRect(0,0,w,h);
+  // Draw pyramid levels
+  const levels=[
+    {label:'Layer 0',size:160,x:20,y:155},
+    {label:'Layer 1',size:80,x:20,y:60},
+    {label:'Layer 2',size:40,x:110,y:60},
+    {label:'Layer 3',size:20,x:160,y:60},
+  ];
+  levels.forEach((lv,i)=>{
+    const active=(i===level)||(level===0&&i===0);
+    const isActive=i===level;
+    ctx.fillStyle=isActive?'rgba(79,195,247,0.2)':'rgba(255,255,255,0.04)';
+    ctx.strokeStyle=isActive?'#4fc3f7':'rgba(255,255,255,0.15)';
+    ctx.lineWidth=isActive?1.5:1;
+    ctx.beginPath();ctx.rect(lv.x,lv.y,lv.size,lv.size);ctx.fill();ctx.stroke();
+    ctx.fillStyle=isActive?'#4fc3f7':'rgba(184,204,224,0.4)';
+    ctx.font='8px Share Tech Mono,monospace';ctx.textAlign='center';
+    ctx.fillText(lv.label,lv.x+lv.size/2,lv.y-4);
+    // Show search region
+    if(isActive&&level<3){
+      const sp=pyrLevelData[level].searchPct;
+      const sx=lv.x+lv.size*(0.5-sp*0.5);
+      const sy=lv.y+lv.size*(0.5-sp*0.5);
+      const ss=lv.size*sp;
+      ctx.strokeStyle='#fbbf24';ctx.lineWidth=1.5;ctx.setLineDash([3,2]);
+      ctx.strokeRect(sx,sy,ss,ss);ctx.setLineDash([]);
+      ctx.fillStyle='rgba(251,191,36,0.1)';ctx.fillRect(sx,sy,ss,ss);
+    }
+    if(isActive&&level===3){
+      ctx.strokeStyle='#fbbf24';ctx.lineWidth=1.5;ctx.setLineDash([2,2]);
+      ctx.strokeRect(lv.x,lv.y,lv.size,lv.size);ctx.setLineDash([]);
+    }
+  });
+  // Arrows between levels
+  if(level<3){
+    ctx.strokeStyle='rgba(0,229,204,0.5)';ctx.lineWidth=1.2;
+    for(let i=0;i<level;i++){
+      const from=levels[i+1],to=levels[i];
+      ctx.beginPath();
+      ctx.moveTo(from.x+from.size/2,from.y+from.size);
+      ctx.lineTo(to.x+to.size/2,to.y);
+      ctx.stroke();
+    }
+  }
+  // Scale indicator
+  const scaleTxt='1/'+ pyrLevelData[level].scale;
+  ctx.fillStyle='rgba(0,229,204,0.8)';
+  ctx.font='bold 11px Share Tech Mono,monospace';ctx.textAlign='center';
+  ctx.fillText('縮小比：'+scaleTxt,w/2,h-8);
+}
+
+// ── SIFT 步驟說明 ──
+const siftSteps=[
+  {title:'高斯金字塔建立（Gaussian Pyramid）',desc:'將原始影像以不同標準差 σ 進行高斯模糊，形成多組不同尺度的影像序列。每組金字塔的 σ 依序為 σ, kσ, k²σ，用以模擬影像在不同距離下的外觀。',formula:'L(x,y,σ) = G(x,y,σ) * I(x,y)\nG(x,y,σ) = 1/(2πσ²) · exp(−(x²+y²)/2σ²)'},
+  {title:'DoG 差分金字塔（Difference of Gaussian）',desc:'計算相鄰高斯模糊影像之間的差值，強調影像中在特定尺度下最明顯的特徵點（如邊角、斑點）。DoG 是拉普拉斯運算子（LoG）的良好近似，計算效率高。',formula:'D(x,y,σ) = L(x,y,kσ) − L(x,y,σ)'},
+  {title:'特徵點偵測（Keypoint Detection）',desc:'在 DoG 金字塔中，找出每個像素點與其 26 個鄰居（同層 8 個 + 上下層各 9 個）的比較，若為局部極大值或極小值，則視為候選特徵點，再進行精確定位與低對比過濾。',formula:'比較 26 個鄰域像素 → 局部極值 → 特徵點候選'},
+  {title:'方向確定（Orientation Assignment）',desc:'以特徵點為中心，計算周圍鄰域的梯度方向直方圖（HOG），選取最多數方向作為特徵點的主方向。確保描述向量對旋轉具備不變性。',formula:'梯度方向：θ(x,y) = atan2(L(x,y+1)−L(x,y−1), L(x+1,y)−L(x−1,y))'},
+  {title:'特徵描述向量建立（Feature Descriptor）',desc:'以特徵點為中心，取 16×16 像素區域，分成 16 個 4×4 小塊，每塊計算 8 方向梯度直方圖，合併後得到 128 維特徵向量。所有計算以主方向為基準，確保旋轉不變性。',formula:'16×16 區域 → 16 個 4×4 小塊 → 8 方向 HOG → 128 維向量 ω'},
+  {title:'特徵點匹配（Feature Matching）',desc:'使用歐幾里德距離計算兩張影像間特徵向量的相似度，以最近鄰距離比（ratio test）過濾錯誤匹配：若最近鄰距離 / 次近鄰距離 < 閾值（通常 0.6–0.8），則接受此匹配對。',formula:'ratio = d_min / d_second_min < 0.8  → 接受匹配'},
+];
+
+function setSIFTStep(idx){
+  document.querySelectorAll('#siftPipeline .proc-step').forEach((el,i)=>
+    el.classList.toggle('active',i===idx)
+  );
+  const s=siftSteps[idx];
+  document.getElementById('siftStepTitle').textContent=s.title;
+  document.getElementById('siftStepDesc').textContent=s.desc;
+  document.getElementById('siftStepFormula').textContent=s.formula;
+}
+
+// 影像匹配初始化（加入到 setTimeout 最末）
+initMatchDemo();
+setPyramidLevel(3);
+setSIFTStep(0);
 
 
 // ══════════════════════════════
